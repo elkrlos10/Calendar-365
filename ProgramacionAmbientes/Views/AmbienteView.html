@@ -1,0 +1,438 @@
+﻿<div>
+    <div id="Prueba" class="Principal Transicion" style="padding-top: 75px !important;">
+        <div class="col-md-12">
+            <div class="col-md-3" style="float:right; margin-left:0%; padding-right:0px;">
+                <button class="btn btn-primary" id="boton" style="width:100%; height:42px;" ng-click="AbrirModal()">Registrar Ambientes Sedes</button>
+            </div>
+            <div class="col-md-3" style="float:right; margin-left:-1%; padding-right:0px;">
+                <button class="btn btn-primary" id="boton1" style="width:100%; height:42px;" ng-click="AbrirModal1()">Registrar Ambientes Colegios </button>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-3" style="float:right;">
+                        <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
+                        <input class="form-control" ng-keyup="Filter($event)" id="Buscar" />
+                    </div>
+                    <input id="fileUploadWeb" type="file" accept=".xlsx" style="display: none;" />
+                    <button class="btn btn-default" id="excel" ng-click="UploadFileWeb()" title="Subir Archivo Excel " style="height: 34px;">
+                        <i class="glyphicon glyphicon-folder-open"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Inhabilitar Registros" style="height: 34px;">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="modificar" ng-click="Modificar()" title="Editar Registro" style="height: 34px;">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                   
+                    <button class="btn btn-default" type="button" id="descargar" title="Descargar Plantillas" ng-click="DescargarReporte()" style="height: 34px;">
+                        <a class="glyphicon glyphicon-download-alt" href="C:/UploadedFiles/plantilla Ambiente.xlsx"></a>
+                    </button>
+                    <button class="btn btn-default" type="button" id="reporte" ng-click="reporteDisoponibilidad()" title="Reporte Ambientes Disponibles" style="height: 34px;">
+                        <i class="glyphicon glyphicon-registration-mark"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="colegio" ng-click="ConsultarColegios()" title="Ambientes Colegios" style="height: 34px;">
+                        <i class="glyphicon glyphicon-home"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="atras" ng-click="atras()" title="Atrás" style="height: 34px;">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </button>
+                    <br />
+                    <br />
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold; width:17%">Sede</th>
+                                <th class="paginationclass" style="font-weight:bold; width:30%">Area</th>
+                                <th class="paginationclass" style="font-weight:bold; width:7%">
+                                    Piso
+                                    <i ng-click="OrganizarPisoAsc()" class="glyphicon glyphicon-menu-up" style="float:right; margin-top:0px; margin-left:-15px;"></i>
+                                    <i ng-click="OrganizarPisoDesc()"  class="glyphicon glyphicon-menu-down" style="float:right;margin-top:10px;"></i>
+                                </th>
+                                <th class="paginationclass" style="font-weight:bold; width:12%">
+                                    N°Ambiente
+                                    <i ng-click="OrganizarNumeroAsc()" class="glyphicon glyphicon-menu-up" style="float:right; margin-top:0px; margin-left:-15px;"></i>
+                                    <i ng-click="OrganizarNumeroDesc()" class="glyphicon glyphicon-menu-down" style="float:right;margin-top:10px;"></i>
+                                </th>
+                                <th class="paginationclass" style="font-weight:bold; width:8%">N°Equipos</th>
+                                <th class="paginationclass" style="font-weight:bold; width:9%">N°Mesas</th>
+                                <th class="paginationclass" style="font-weight:bold; width:8%">N°Sillas</th>
+                                <th class="paginationclass" style="font-weight:bold; width:9%">Pantalla</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize | uppercase">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.Id}}" /></td>
+                                <td>{{datalist.Parametro8 | uppercase}}</td>
+                                <td>{{datalist.Parametro2 | uppercase}}</td>
+                                <td>{{datalist.Parametro7 | uppercase}}</td>
+                                <td>{{datalist.Parametro3 | uppercase}}</td>
+                                <td>{{datalist.Parametro4 | uppercase}}</td>
+                                <td>{{datalist.Parametro9 | uppercase}}</td>
+                                <td>{{datalist.Parametro10 | uppercase}}</td>
+                                <td>
+                                    <div>
+                                        <label ng-show="datalist.Parametro6 == 'True'">Sí</label>
+                                        <label ng-show="datalist.Parametro6 == 'False'">No</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination pagination-centered" ng-show="datalists.length" style="float:right">
+                        <ul class="pagination-controle pagination">
+                            <li>
+                                <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                        ng-click="curPage=curPage-1">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li>
+                                <span>Pág {{curPage + 1}} de {{ numberOfPages() }}</span>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-primary"
+                                        ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                        ng-click="curPage = curPage+1">
+                                    Siguiente
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal regitrar ambiente-->
+<div class="modal fade" id="ModalAmbiente" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Registrar Ambiente</h4></center>
+            </div>
+            <div class="modal-body">
+                <form name="ambiente2" id="ambiente2">
+                    <div class="form-group">
+                        <label>Seleccione Sede</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="Sede.IdSede" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="sede in Sede" class="{{sede.Nombre_Sede}}" value="{{sede.IdSede}}">{{sede.Nombre_Sede | uppercase}}</option>
+                        </select>
+                    </div>
+                    <br />
+                    <div>
+                        <div style="float:left;">
+                            <div class="form-group">
+                                <div ng-class="{'has-error':ambiente2.piso.$invalid && ambiente2.piso.$touched, 'has-error2':ambiente2.piso.$error.maxlength}">
+                                    <label>Número de Piso</label>
+                                    <input class="form-control" ng-required="true" id="piso" name="piso" type="number" ng-maxlength="5" style="width:250px;" ng-model="Ambiente.Piso" />
+                                    <span ng-hide="ambiente2.piso.$error.maxlength">
+                                        <span ng-if="ambiente2.piso.$invalid && ambiente2.piso.$dirty" class="help-block">Ingrese el número del piso</span>
+                                    </span>
+                                    <span ng-if="ambiente2.piso.$error.maxlength" class="help-block">El # de piso puede tener máximo 5 caracteres </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <div class="form-group">
+                                <div ng-class="{'has-error':ambiente2.numero.$invalid && ambiente2.numero.$touched, 'has-error2':ambiente2.numero.$error.maxlength}">
+                                    <label>Número Ambiente</label>
+                                    <input class="form-control" ng-required="true" name="numero" id="numero" type="number" ng-maxlength="5" style="width:250px;" ng-model="Ambiente.Numero" />
+                                    <span ng-hide="ambiente2.numero.$error.maxlength">
+                                        <span ng-if="ambiente2.numero.$invalid && ambiente2.numero.$dirty" class="help-block">Ingrese el número de ambiente</span>
+                                    </span>
+                                    <span ng-if="ambiente2.numero.$error.maxlength" class="help-block">El # ambiente puede tener máximo 5 caracteres </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label>Seleccione Área</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="Area.IdArea" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="areas in Area" class="{{areas.Nombre}}" value="{{areas.IdArea}}">{{areas.Nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':ambiente2.numeroEquipos.$invalid && ambiente2.numeroEquipos.$touched, 'has-error2':ambiente2.numeroEquipos.$error.maxlength}">
+                            <label>Número de equipos</label>
+                            <input class="form-control" name="numeroEquipos" id="numeroEquipos" ng-required="true" type="number" ng-maxlength="5" ng-model="Ambiente.NumeroEquipos" />
+                            <span ng-hide="ambiente2.numeroEquipos.$error.maxlength">
+                                <span ng-if="ambiente2.numeroEquipos.$invalid && ambiente2.numeroEquipos.$dirty" class="help-block">Ingrese el número de equipos del ambiente</span>
+                            </span>
+                            <span ng-if="ambiente2.numeroEquipos.$error.maxlength" class="help-block">El # de equipos puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':ambiente2.numeroMesas.$invalid && ambiente2.numeroMesas.$touched, 'has-error2':ambiente2.numeroMesas.$error.maxlength}">
+                            <label>Número de mesas</label>
+                            <input class="form-control" name="numeroMesas" id="numeroMesas" ng-required="true" type="number" ng-maxlength="5" ng-model="Ambiente.NumeroMesas" />
+                            <span ng-hide="ambiente2.numeroMesas.$error.maxlength">
+                                <span ng-if="ambiente2.numeroMesas.$invalid && ambiente2.numeroMesas.$dirty" class="help-block">Ingrese el número de mesas del ambiente</span>
+                            </span>
+                            <span ng-if="ambiente2.numeroMesas.$error.maxlength" class="help-block">El # de mesas puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':ambiente2.numeroSillas.$invalid && ambiente2.numeroSillas.$touched, 'has-error2':ambiente2.numeroSillas.$error.maxlength}">
+                            <label>Número de sillas</label>
+                            <input class="form-control" name="numeroSillas" id="numeroSillas" ng-required="true" ng-maxlength="5" type="number" ng-model="Ambiente.NumeroSillas" />
+                            <span ng-hide="ambiente2.numeroSillas.$error.maxlength">
+                                <span ng-if="ambiente2.numeroSillas.$invalid && ambiente2.numeroMesas.$dirty" class="help-block">Ingrese el número de sillas del ambiente</span>
+                            </span>
+                            <span ng-if="ambiente2.numeroSillas.$error.maxlength" class="help-block">El # de sillas puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>¿Tiene Pantalla?</label>
+                        <input type="checkbox" style="margin-left:20px;" ng-model="Ambiente.Pantalla" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Eliminar Registro-->
+<div class="modal fade" id="modalInhabilitar" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB;">
+                        CONFIRMAR INHABILITACIÓN
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Está seguro que desea inhabilitar el registro? </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="inhabilitar()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Editar Registro-->
+<div class="modal fade" id="ModalEditar" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Editar Ambiente</h4></center>
+            </div>
+            <div class="modal-body">
+                <form name="ambiente1" id="ambiente1">
+                    <div class="form-group">
+                        <label>Seleccione Sede</label>
+                        <select class="form-control" id="SedesLista" ng-required="true" ng-model="Sede.IdSede" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="sede in Sede" class="{{sede.Nombre_Sede}}" value="{{sede.IdSede}}">{{sede.Nombre_Sede}}</option>
+                        </select>
+                        <!--<input id="sede6" ng-model="Sede.Nombre_Sede" />-->
+                    </div>
+                    <br />
+                    <div>
+                        <div style="float:left;">
+                            <div class="form-group">
+                                <div ng-class="{'has-error':ambiente1.piso.$invalid && ambiente1.piso.$touched, 'has-error2':ambiente1.piso.$error.maxlength}">
+                                    <label>Número de Piso</label>
+                                    <input class="form-control" ng-required="true" id="piso" name="piso" type="number" ng-maxlength="5" style="width:250px;" ng-model="Ambiente.Piso" />
+                                    <span ng-hide="ambiente1.piso.$error.maxlength">
+                                        <span ng-if="ambiente1.piso.$invalid && ambiente1.piso.$dirty" class="help-block">Ingrese el número del piso</span>
+                                    </span>
+                                    <span ng-if="ambiente1.piso.$error.maxlength" class="help-block">El # de piso puede tener máximo 5 caracteres </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <div class="form-group">
+                                <div ng-class="{'has-error':ambiente1.numero.$invalid && ambiente1.numero.$touched, 'has-error2':ambiente1.numero.$error.maxlength}">
+                                    <label>Número Ambiente</label>
+                                    <input class="form-control" ng-required="true" name="numero" id="numero" type="number" ng-maxlength="5" style="width:250px;" ng-model="Ambiente.Numero" />
+                                    <span ng-hide="ambiente1.numero.$error.maxlength">
+                                        <span ng-if="ambiente1.numero.$invalid && ambiente1.numero.$dirty" class="help-block">Ingrese el número de ambiente</span>
+                                    </span>
+                                    <span ng-if="ambiente1.numero.$error.maxlength" class="help-block">El # ambiente puede tener máximo 5 caracteres </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label>Seleccione Área</label>
+                        <select class="form-control" id="AreaLista" ng-required="true" ng-model="Area.IdArea" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="areas in Area" class="{{areas.Nombre}}" value="{{areas.IdArea}}">{{areas.Nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':ambiente1.numeroEquipos.$invalid && ambiente1.numeroEquipos.$touched, 'has-error2':ambiente1.numeroEquipos.$error.maxlength}">
+                            <label>Número de equipos</label>
+                            <input class="form-control" name="numeroEquipos" id="numeroEquipos" ng-required="true" type="number" ng-maxlength="5" ng-model="Ambiente.NumeroEquipos" />
+                            <span ng-hide="ambiente1.numeroEquipos.$error.maxlength">
+                                <span ng-if="ambiente1.numeroEquipos.$invalid && ambiente1.numeroEquipos.$dirty" class="help-block">Ingrese el número de equipos del ambiente</span>
+                            </span>
+                            <span ng-if="ambiente1.numeroEquipos.$error.maxlength" class="help-block">El # de equipos puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':ambiente1.numeroMesas.$invalid && ambiente1.numeroMesas.$touched, 'has-error2':ambiente1.numeroMesas.$error.maxlength}">
+                            <label>Número de mesas</label>
+                            <input class="form-control" name="numeroMesas" id="numeroMesas" ng-required="true" type="number" ng-maxlength="5" ng-model="Ambiente.NumeroMesas" />
+                            <span ng-hide="ambiente1.numeroMesas.$error.maxlength">
+                                <span ng-if="ambiente1.numeroMesas.$invalid && ambiente1.numeroMesas.$dirty" class="help-block">Ingrese el número de mesas del ambiente</span>
+                            </span>
+                            <span ng-if="ambiente1.numeroMesas.$error.maxlength" class="help-block">El # de mesas puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':ambiente1.numeroSillas.$invalid && ambiente1.numeroSillas.$touched, 'has-error2':ambiente1.numeroSillas.$error.maxlength}">
+                            <label>Número de sillas</label>
+                            <input class="form-control" name="numeroSillas" id="numeroSillas" ng-required="true" ng-maxlength="5" type="number" ng-model="Ambiente.NumeroSillas" />
+                            <span ng-hide="ambiente1.numeroSillas.$error.maxlength">
+                                <span ng-if="ambiente1.numeroSillas.$invalid && ambiente1.numeroMesas.$dirty" class="help-block">Ingrese el número de sillas del ambiente</span>
+                            </span>
+                            <span ng-if="ambiente1.numeroSillas.$error.maxlength" class="help-block">El # de sillas puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>¿Tiene Pantalla?</label>
+                        <input type="checkbox" style="margin-left:20px;" ng-model="Ambiente.Pantalla" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="GuardarEdicionAmbiente()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal para descargar reporte-->
+<div class="modal fade" id="ModalReporte" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Reporte Disponibilidad Ambientes</h4></center>
+            </div>
+            <div class="modal-body" style="height:315px;">
+                <div>
+                    <div style="float:left;">
+                        <div class="form-group">
+                            <label>Fecha Inicio</label>
+                            <input class="form-control" style="width:250px;" ng-model="Fechas.FechaInicio" id="FechaInicio" />
+                        </div>
+                    </div>
+                    <div style="float:right;">
+                        <div class="form-group">
+                            <label>Fecha Fin</label>
+                            <input class="form-control" style="width:250px;" ng-model="Fechas.FechaFin" id="FechaFin" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="dias" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margenTop">
+                        <div id="semana" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <label style="font-size:13px;" class="checkbox-inline"><input type="checkbox" class="OcultarPanelDatos" ng-model="DiasProgramacion.Lunes">Lunes</label>
+                            <label style="font-size:13px;" class="checkbox-inline"><input type="checkbox" class="OcultarPanelDatos" ng-model="DiasProgramacion.Martes">Martes</label>
+                            <label style="font-size:13px;" class="checkbox-inline"><input type="checkbox" class="OcultarPanelDatos" ng-model="DiasProgramacion.Miercoles">Miércoles</label>
+                            <label style="font-size:13px;" class="checkbox-inline"><input type="checkbox" class="OcultarPanelDatos" ng-model="DiasProgramacion.Jueves">Jueves</label>
+                            <label style="font-size:13px;" class="checkbox-inline"><input type="checkbox" class="OcultarPanelDatos" ng-model="DiasProgramacion.Viernes">Viernes</label>
+                            <label style="font-size:13px;" class="checkbox-inline"><input type="checkbox" class="OcultarPanelDatos" ng-model="TodosDias" ng-click="SeleccionarTodosDias()">Todos</label>
+                        </div>
+                        <!--<div id="finsemana" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <label style="font-size:13px;" class="checkbox-inline OcultarPanelDatos"><input type="checkbox" ng-model="SabadoDomingo.Sabado">Sábado</label>
+                            <label style="font-size:13px;" class="checkbox-inline OcultarPanelDatos"><input type="checkbox" ng-model="SabadoDomingo.Domingo">Domingo</label>
+                        </div>-->
+                    </div>
+                </div>
+                <br />
+                <div class="col-md-6">
+                    <div style="float:left;">
+                        <div class="form-group">
+                            <label>¿Desea filtrar por horas?</label>
+                            <input type="checkbox" style="margin-left:20px;" id="abrir" ng-model="Rango.rango" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="float:left;">
+                        <div class="form-group">
+                            <label>¿Desea filtrar por jornada?</label>
+                            <input type="checkbox" style="margin-left:20px;" id="jornada1" ng-model="Jornada.jornada" />
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="horas" style="display:none;">
+                        <div style="float:left;">
+                            <div class="form-group">
+                                <label>Hora Inicio</label>
+                                <input class="form-control" style="width:250px;" ng-model="Fechas.HoraInicio" id="HoraInicio" />
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <div class="form-group">
+                                <label>Hora Fin</label>
+                                <input class="form-control" style="width:250px;" ng-model="Fechas.HoraFin" id="HoraFin" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="jornada" style="display:none;">
+                        <div class="form-group">
+                            <label style="margin-top:20px;"> Rango Horario</label>
+                            <select class="form-control" id="listas" ng-required="true" ng-model="RangoHoras.Jornada" style="float:right;">
+                                <option value="" disabled selected>Seleccione un rango</option>
+                                <option ng-repeat="rangoHoras in RangoHoras" class="{{rangoHoras.Nombre}}" value="{{rangoHoras.Jornada}}">{{rangoHoras.Nombre}}&nbsp;{{instructor.Apellido}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--<div>
+                    <div style="float:right;">
+
+                    </div>
+                </div>-->
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="descargarReporteAmbientes()">Descargar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="position:absolute; margin-top:96vh; margin-left:50%; transform:translateX(-50%)">
+    <footer class="text-center" style="color:white; font-weight:600; font-size:18px;">Fábrica de Software - 2017</footer>
+</div>

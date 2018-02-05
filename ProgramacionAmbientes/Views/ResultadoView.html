@@ -1,0 +1,196 @@
+﻿<div>
+    <div style="position:absolute; margin-top:96vh; margin-left:50%; transform:translateX(-50%);">
+        <footer class="text-center" style="color:white; font-weight:600; font-size:18px; z-index:5;">Fábrica de Software - 2017</footer>
+    </div>
+    <div class="Principal Transicion" style="padding-top: 75px !important;">
+        <div class="col-md-12">
+            <div class="col-md-3" style="float:right; margin-left:-1%; padding-right:0px;">
+                <button class="btn btn-primary" id="boton" style="width:100%; height:42px;" ng-click="AbrirModal()">Registrar Resultado</button>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="panel panel-default" id="tablapdf">
+                <div class="panel-body">
+                    <div class="col-md-3" style="float:right;">
+                        <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
+                        <input class="form-control" ng-keyup="Filter($event)" id="Buscar" />
+                    </div>
+                    <input id="fileUploadWeb" type="file" accept=".xlsx" style="display: none;" />
+                    <button class="btn btn-default" id="excel" ng-click="UploadFileWeb()" title="Subir Archivo Excel " style="height: 34px;">
+                        <i class="glyphicon glyphicon-folder-open"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Inhabilitar Registros" style="height: 34px;">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="modificar" ng-click="Modificar()" title="Editar Registro" style="height: 34px;">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="descargar" title="Descargar Plantilla" ng-click="DescargarReporte()" style="height: 34px;">
+                        <a class="glyphicon glyphicon-download-alt" href="C:/UploadedFiles/plantilla Resultado.xlsx"></a>
+                    </button>
+                    <br />
+                    <br />
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold;">Competencia</th>
+                                <th class="paginationclass" style="font-weight:bold;">Código</th>
+                                <th class="paginationclass" style="font-weight:bold;">Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.Parametro1}}" /></td>
+                                <td>{{datalist.Parametro2 | uppercase}}</td>
+                                <td>{{datalist.Parametro3 | uppercase}}</td>
+                                <td>{{datalist.Parametro4 | uppercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination pagination-centered" ng-show="datalists.length" style="float:right">
+                        <ul class="pagination-controle pagination">
+                            <li>
+                                <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                        ng-click="curPage=curPage-1">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li>
+                                <span>Pág {{curPage + 1}} de {{ numberOfPages() }}</span>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-primary"
+                                        ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                        ng-click="curPage = curPage+1">
+                                    Siguente
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal registrar-->
+<div class="modal fade" id="ModalResultado" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Registrar Resultado de Aprendizaje</h4></center>
+            </div>
+            <div class="modal-body">
+                <form name="resultado" id="resultado">
+                    <div class="form-group">
+                        <label>Seleccione una Competencia</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="Competencia.IdCompetencia" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="competencia in Competencia" class="{{competencia.Nombre}}" value="{{competencia.IdCompetencia}}">{{competencia.Nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':resultado.codigo.$invalid && resultado.codigo.$touched, 'has-error2':resultado.codigo.$error.maxlength}">
+                            <label>Código</label>
+                            <input class="form-control" ng-required="true" id="codigo" name="codigo" type="number" ng-maxlength="10" ng-model="Resultado.Codigo" />
+                            <span ng-hide="resultado.codigo.$error.maxlength">
+                                <span ng-if="resultado.codigo.$invalid && resultado.codigo.$dirty" class="help-block">Ingrese el código del resultado</span>
+                            </span>
+                            <span ng-if="resultado.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':resultado.resultado1.$invalid && resultado.resultado1.$touched, 'has-error2':resultado.resultado1.$error.maxlength}">
+                            <label>Nombre Resultado</label>
+                            <textarea class="form-control" ng-required="true" id="resultado1" name="resultado1" type="text" ng-maxlength="1000" ng-model="Resultado.Resultado"></textarea>
+                            <span ng-hide="resultado.resultado1.$error.maxlength">
+                                <span ng-if="resultado.resultado1.$invalid && resultado.resultado1.$dirty" class="help-block">Ingrese el nombre del resultado</span>
+                            </span>
+                            <span ng-if="resultado.resultado1.$error.maxlength" class="help-block">El resultado puede tener máximo 1000 caracteres </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Eliminar Registro-->
+<div class="modal fade" id="modalInhabilitar" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog" style="width: 400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB;">
+                        CONFIRMAR INHABILITACIÓN
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Está seguro que desea inhabilitar el registro? </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="inhabilitar()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Editar Registro-->
+<div class="modal fade" id="ModalEditar" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Editar Resultado de Aprendizaje</h4></center>
+            <div class="modal-body">
+                <form name="resultado2" id="resultado2">
+                    <div class="form-group">
+                        <label>Seleccione una Competencia</label>
+                        <select class="form-control" id="CompetenciaLista" ng-required="true" ng-model="Competencia.IdCompetencia" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="competencia in Competencia" class="{{competencia.Nombre}}" value="{{competencia.IdCompetencia}}">{{competencia.Nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':resultado2.codigo.$invalid && resultado2.codigo.$touched, 'has-error2':resultado2.codigo.$error.maxlength}">
+                            <label>Código</label>
+                            <input class="form-control" ng-required="true" id="codigo" name="codigo" type="number" ng-maxlength="10" ng-model="Resultado.Codigo" />
+                            <span ng-hide="resultado2.codigo.$error.maxlength">
+                                <span ng-if="resultado2.codigo.$invalid && resultado2.codigo.$dirty" class="help-block">Ingrese el código del resultado</span>
+                            </span>
+                            <span ng-if="resultado2.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':resultado2.resultado1.$invalid && resultado2.resultado1.$touched, 'has-error2':resultado2.resultado1.$error.maxlength}">
+                            <label>Nombre Resultado</label>
+                            <textarea class="form-control" ng-required="true" id="resultado1" name="resultado1" type="text" ng-maxlength="1000" ng-model="Resultado.Resultado"></textarea>
+                            <span ng-hide="resultado2.resultado1.$error.maxlength">
+                                <span ng-if="resultado2.resultado1.$invalid && resultado2.resultado1.$dirty" class="help-block">Ingrese el nombre del resultado</span>
+                            </span>
+                            <span ng-if="resultado2.resultado1.$error.maxlength" class="help-block">El resultado puede tener máximo 1000 caracteres </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="GuardarEdicionResultado()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

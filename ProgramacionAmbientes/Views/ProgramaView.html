@@ -1,0 +1,346 @@
+﻿<div>
+    <div class="Principal Transicion" style="padding-top: 75px !important;">
+        <div class="col-md-12">
+            <div class="col-md-3 botones" style="float:right; margin-left:-1%;padding-right:0px;">
+                <button class="btn btn-primary " id="boton" style="width:100%; height:42px;" ng-click="AbrirModal()">Registrar Programa</button>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <div class="col-md-3" style="float:right;">
+                        <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
+                        <input class="form-control" ng-keyup="Filter($event)" id="Buscar" />
+                    </div>
+                    <input id="fileUploadWeb" type="file" accept=".xlsx" style="display: none;" />
+                    <button class="btn btn-default botones" id="excel" ng-click="UploadFileWeb()" title="Subir Archivo Excel " style="height: 34px;">
+                        <i class="glyphicon glyphicon-folder-open"></i>
+                    </button>
+                    <button class="btn btn-default botones" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Inhabilitar Registros" style="height: 34px;">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button class="btn btn-default botones" type="button" id="modificar" ng-click="Modificar()" title="Editar Registro" style="height: 34px;">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                    <button class="btn btn-default botones" type="button" id="descargar" title="Descargar Plantilla" ng-click="DescargarReporte()" style="height: 34px;">
+                        <a class="glyphicon glyphicon-download-alt" href="C:/UploadedFiles/plantilla Programa.xlsx"></a>
+                    </button>
+                    <button class="btn btn-default" type="button" id="ReProgramas" title="Descargar programas, competencias y resultados" ng-click="ReporteProgramas()" style="height: 34px;">
+                        <i class="glyphicon glyphicon-circle-arrow-down"></i>
+                    </button>
+                    <br />
+                    <br />
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold;">Código</th>
+                                <th class="paginationclass" style="font-weight:bold;">Nombre</th>
+                                <th class="paginationclass" style="font-weight:bold;">Nivel</th>
+                                <th class="paginationclass" style="font-weight:bold;">Red Tecnológica</th>
+                                <th class="paginationclass" style="font-weight:bold;">Versión</th>
+                                <th class="paginationclass" style="font-weight:bold;">Área</th>
+                                <!--<th class="paginationclass" style="font-weight:bold;">Perfil Instructor</th>-->
+
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.Id}}" /></td>
+                                <td>{{datalist.Parametro2 | uppercase}}</td>
+                                <td>{{datalist.Parametro9 | uppercase}}</td>
+                                <td>{{datalist.Parametro3 | uppercase}}</td>
+                                <td>{{datalist.Parametro5 | uppercase}}</td>
+                                <td>{{datalist.Parametro7 | uppercase}}</td>
+                                <td>{{datalist.Parametro8 | uppercase}}</td>
+                                <!--<td>{{datalist.Parametro6}}</td>-->
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div>
+
+                        <div class="pagination pagination-centered" ng-show="datalists.length" style="float:right">
+                            <ul class="pagination-controle pagination">
+                                <li>
+                                    <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                            ng-click="curPage=curPage-1">
+                                        Anterior
+                                    </button>
+                                </li>
+                                <li>
+                                    <span>Pág {{curPage + 1}} de {{ numberOfPages() }}</span>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-primary"
+                                            ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                            ng-click="curPage = curPage+1">
+                                        Siguiente
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal registrar-->
+<div class="modal fade" id="ModalPrograma" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Registrar Programa</h4></center>
+            </div>
+            <div class="modal-body" style="height:560px;">
+                <form name="programa1" id="programa1">
+                    <div>
+                        <div style="float:left;">
+                            <div class="form-group">
+                                <label>Seleccione un área</label>
+                                <select class="form-control" id="listas" ng-required="true" ng-model="Area.IdArea" style="width:250px;">
+                                    <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                                    <option ng-repeat="area in Area" class="{{area.Nombre}}" value="{{area.IdArea}}">{{area.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <div class="form-group">
+                                <div ng-class="{'has-error':programa1.codigo.$invalid && programa1.codigo.$touched, 'has-error2':programa1.codigo.$error.maxlength}">
+                                    <label>Código</label>
+                                    <input class="form-control" ng-required="true" id="codigo" name="codigo" style="width:250px;" ng-maxlength="10" type="number" ng-model="Programa.CodigoPrograma" />
+                                    <span ng-hide="programa1.codigo.$error.maxlength">
+                                        <span ng-if="programa1.codigo.$invalid && programa1.codigo.$dirty" class="help-block">Ingrese el código del programa</span>
+                                    </span>
+                                    <span ng-if="programa1.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa1.nombre.$invalid && programa1.nombre.$touched, 'has-error2':programa1.nombre.$error.maxlength}">
+                            <label>Nombre Programa</label>
+                            <input class="form-control" name="nombre" id="nombre" ng-required="true" type="text" ng-maxlength="100" ng-model="Programa.NombrePrograma" />
+                            <span ng-hide="programa1.nombre.$error.maxlength">
+                                <span ng-if="programa1.nombre.$invalid && programa1.nombre.$dirty" class="help-block">Ingrese el nombre del programa</span>
+                            </span>
+                            <span ng-if="programa1.nombre.$error.maxlength" class="help-block">El nombre puede tener máximo 100 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccione Nivel Académico</label>
+                        <select class="form-control" id="lista" ng-required="true" ng-model="Programa.Nivel" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option>AUXILIAR</option>
+                            <option>CURSO ESPECIAL</option>
+                            <option>CURSO VIRTUAL</option>
+                            <option>ESPECIALIZACIÓN TECNOLÓGICA</option>
+                            <option>ESPECIALIZACIÓN TECNOLÓGICA VIRTUAL</option>
+                            <option>MEDIA TÉCNICA</option>
+                            <option>OPERARIO</option>
+                            <option>TÉCNICO</option>
+                            <option>TECNÓLOGO</option>
+                            <option>TECNÓLOGO VIRTUAL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa1.linea.$invalid && programa1.linea.$touched, 'has-error2':programa1.linea.$error.maxlength}">
+                            <label>Línea Tecnológica</label>
+                            <input class="form-control" name="linea" id="linea" ng-required="true" type="text" ng-maxlength="200" ng-model="Programa.LineaTecnologica" />
+                            <span ng-hide="programa1.linea.$error.maxlength">
+                                <span ng-if="programa1.linea.$invalid && programa1.linea.$dirty" class="help-block">Ingrese la línea tecnológica</span>
+                            </span>
+                            <span ng-if="programa1.linea.$error.maxlength" class="help-block">La línea puede tener máximo 200 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa1.red.$invalid && programa1.red.$touched, 'has-error2':programa1.red.$error.maxlength}">
+                            <label>Red Tecnológica</label>
+                            <input class="form-control" name="red" id="red" ng-required="true" type="text" ng-maxlength="200" ng-model="Programa.Red_Tecnologica" />
+                            <span ng-hide="programa1.red.$error.maxlength">
+                                <span ng-if="programa1.red.$invalid && programa1.red.$dirty" class="help-block">Ingrese la red tecnológica</span>
+                            </span>
+                            <span ng-if="programa1.red.$error.maxlength" class="help-block">La red puede tener máximo 200 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa1.version.$invalid && programa1.version.$touched, 'has-error2':programa1.version.$error.maxlength}">
+                            <label>Versión Programa</label>
+                            <input class="form-control" name="version" id="version" ng-required="true" type="number" ng-maxlength="5" ng-model="Programa.Version_Programa" />
+                            <span ng-hide="programa1.version.$error.maxlength">
+                                <span ng-if="programa1.version.$invalid && programa1.version.$dirty" class="help-block">Ingrese la versión tecnológica</span>
+                            </span>
+                            <span ng-if="programa1.version.$error.maxlength" class="help-block">La versión puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa1.perfil.$invalid && programa1.perfil.$touched, 'has-error2':programa1.perfil.$error.maxlength}">
+                            <label>Perfil Instructor</label>
+                            <textarea class="form-control" name="perfil" id="perfil" ng-required="true" type="text" ng-maxlength="1500" ng-model="Programa.Perfil_Instructor" />
+                            <span ng-hide="programa1.perfil.$error.maxlength">
+                                <span ng-if="programa1.perfil.$invalid && programa1.perfil.$dirty" class="help-block">Ingrese el perfil del instructor</span>
+                            </span>
+                            <span ng-if="programa1.perfil.$error.maxlength" class="help-block">La perfil puede tener máximo 1500 caracteres </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Eliminar Registro-->
+<div class="modal fade" id="modalInhabilitar" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog" style="height:560px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB;">
+                        CONFIRMAR INHABILITACIÓN
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Está seguro que desea inhabilitar el registro? </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="inhabilitar()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Editar Registro-->
+<div class="modal fade" id="ModalEditar" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Editar Programa</h4></center>
+            </div>
+            <div class="modal-body" style="height:534px;">
+                <form name="programa" id="programa">
+                    <div>
+                        <div style="float:left;">
+                            <div class="form-group">
+                                <label>Seleccione un área</label>
+                                <select class="form-control" id="AreaLista" ng-required="true" ng-model="Area.IdArea" style="width:250px;">
+                                    <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                                    <option ng-repeat="area in Area" class="{{area.Nombre}}" value="{{area.IdArea}}">{{area.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <div class="form-group">
+                                <div ng-class="{'has-error':programa.codigo.$invalid && programa.codigo.$touched, 'has-error2':programa.codigo.$error.maxlength}">
+                                    <label>Código</label>
+                                    <input class="form-control" ng-required="true" id="codigo" name="codigo" style="width:250px;" ng-maxlength="10" type="number" ng-model="Programa.CodigoPrograma" />
+                                    <span ng-hide="programa.codigo.$error.maxlength">
+                                        <span ng-if="programa.codigo.$invalid && programa.codigo.$dirty" class="help-block">Ingrese el código del programa</span>
+                                    </span>
+                                    <span ng-if="programa.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa.nombre.$invalid && programa.nombre.$touched, 'has-error2':programa.nombre.$error.maxlength}">
+                            <label>Nombre Programa</label>
+                            <input class="form-control" name="nombre" id="nombre" ng-required="true" type="text" ng-maxlength="100" ng-model="Programa.NombrePrograma" />
+                            <span ng-hide="programa.nombre.$error.maxlength">
+                                <span ng-if="programa.nombre.$invalid && programa.nombre.$dirty" class="help-block">Ingrese el nombre del programa</span>
+                            </span>
+                            <span ng-if="programa.nombre.$error.maxlength" class="help-block">El nombre puede tener máximo 100 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccione Nivel Académico</label>
+                        <select class="form-control" id="NivelLista" ng-required="true" ng-model="Programa.Nivel" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option>AUXILIAR</option>
+                            <option>CURSO ESPECIAL</option>
+                            <option>CURSO VIRTUAL</option>
+                            <option>ESPECIALIZACIÓN TECNOLÓGICA</option>
+                            <option>ESPECIALIZACIÓN TECNOLÓGICA VIRTUAL</option>
+                            <option>MEDIA TÉCNICA</option>
+                            <option>OPERARIO</option>
+                            <option>TÉCNICO</option>
+                            <option>TECNÓLOGO</option>
+                            <option>TECNÓLOGO VIRTUAL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa.linea.$invalid && programa.linea.$touched, 'has-error2':programa.linea.$error.maxlength}">
+                            <label>Línea Tecnológica</label>
+                            <input class="form-control" name="linea" id="linea" ng-required="true" type="text" ng-maxlength="200" ng-model="Programa.LineaTecnologica" />
+                            <span ng-hide="programa.linea.$error.maxlength">
+                                <span ng-if="programa.linea.$invalid && programa.linea.$dirty" class="help-block">Ingrese la línea tecnológica</span>
+                            </span>
+                            <span ng-if="programa.linea.$error.maxlength" class="help-block">La línea puede tener máximo 200 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa.red.$invalid && programa.red.$touched, 'has-error2':programa.red.$error.maxlength}">
+                            <label>Red Tecnológica</label>
+                            <input class="form-control" name="red" id="red" ng-required="true" type="text" ng-maxlength="200" ng-model="Programa.Red_Tecnologica" />
+                            <span ng-hide="programa.red.$error.maxlength">
+                                <span ng-if="programa.red.$invalid && programa.red.$dirty" class="help-block">Ingrese la red tecnológica</span>
+                            </span>
+                            <span ng-if="programa.red.$error.maxlength" class="help-block">La red puede tener máximo 200 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa.version.$invalid && programa.version.$touched, 'has-error2':programa.version.$error.maxlength}">
+                            <label>Versión Programa</label>
+                            <input class="form-control" name="version" id="version" ng-required="true" type="number" ng-maxlength="5" ng-model="Programa.Version_Programa" />
+                            <span ng-hide="programa.version.$error.maxlength">
+                                <span ng-if="programa.version.$invalid && programa.version.$dirty" class="help-block">Ingrese la versión tecnológica</span>
+                            </span>
+                            <span ng-if="programa.version.$error.maxlength" class="help-block">La versión puede tener máximo 5 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':programa.perfil.$invalid && programa.perfil.$touched, 'has-error2':programa.perfil.$error.maxlength}">
+                            <label>Perfil Instructor</label>
+                            <textarea class="form-control" name="perfil" id="perfil" ng-required="true" type="text" ng-maxlength="1500" ng-model="Programa.Perfil_Instructor" />
+                            <span ng-hide="programa.perfil.$error.maxlength">
+                                <span ng-if="programa.perfil.$invalid && programa.perfil.$dirty" class="help-block">Ingrese el perfil del instructor</span>
+                            </span>
+                            <span ng-if="programa.perfil.$error.maxlength" class="help-block">La perfil puede tener máximo 1500 caracteres </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="GuardarEdicionPrograma()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="position:absolute; margin-top:96vh; margin-left:50%; transform:translateX(-50%)">
+    <footer class="text-center" style="color:white; font-weight:600; font-size:18px;">Fábrica de Software - 2017</footer>
+</div>

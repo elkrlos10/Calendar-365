@@ -1,0 +1,262 @@
+﻿<div>
+    <div class="Principal Transicion" style="padding-top: 75px !important;">
+        <div class="col-md-12">
+            <div class="col-md-3" style="float:right; margin-left:-1%; padding-right:0px;">
+                <button class="btn btn-primary" id="boton" style="width:100%; height:42px;" ng-click="AbrirModal()">Registrar Sede</button>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-3" style="float:right;">
+                        <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
+                        <input class="form-control" id="Buscar" ng-keyup="Filter($event)" />
+
+                    </div>
+                    <input id="fileUploadWeb" type="file" accept=".xlsx" style="display: none;" />
+                    <button class="btn btn-default" id="excel" ng-click="UploadFileWeb()" title="Subir Archivo Excel " style="height: 34px;">
+                        <i class="glyphicon glyphicon-folder-open"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Inhabilitar Registros" style="height: 34px;">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="modificar" ng-click="Modificar()" title="Editar Registro" style="height: 34px;">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="modificar" ng-click="MostrarColegios()" title="Colegios" style="height: 34px;">
+                        <i class="glyphicon glyphicon-home"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="atras" ng-click="atras()" title="Atrás" style="height: 34px;">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </button>
+                    <br />
+                    <br />
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold;">Nombre</th>
+                                <th class="paginationclass" style="font-weight:bold;">Dirección</th>
+                                <th class="paginationclass" style="font-weight:bold;">Municipio</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.Id}}" /></td>
+                                <td>{{ datalist.Parametro3 | uppercase}}</td>
+                                <td>{{ datalist.Parametro4 | uppercase}}</td>
+                                <td>{{ datalist.Parametro2 | uppercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination pagination-centered" ng-show="datalists.length" style="float:right">
+                        <ul class="pagination-controle pagination">
+                            <li>
+                                <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                        ng-click="curPage=curPage-1">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li>
+                                <span>Pág {{curPage + 1}} de {{ numberOfPages() }}</span>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-primary"
+                                        ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                        ng-click="curPage = curPage+1">
+                                    Siguiente
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal registrar-->
+<div class="modal fade" id="ModalSede" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Registar Sede</h4></center>
+            </div>
+            <div class="modal-body" style="height:450px;">
+                <form name="sede" id="sede">
+                    <div class="form-group">
+                        <div ng-class="{'has-error':sede.codigo.$invalid && sede.codigo.$touched, 'has-error2':sede.codigo.$error.maxlength}">
+                            <label>Código</label>
+                            <input type="number" name="codigo" id="codigo" ng-required="true" class="form-control" ng-maxlength="10" ng-model="Sede.Codigo" readonly/>
+                            <span ng-hide="sede.codigo.$error.maxlength">
+                                <span ng-if="sede.codigo.$invalid && sede.codigo.$dirty" class="help-block">Ingrese el código de la sede</span>
+                            </span>
+                            <span ng-if="sede.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':sede.nombreSede.$invalid && sede.nombreSede.$touched, 'has-error2':sede.nombreSede.$error.maxlength}">
+                            <label>Nombre Sede</label>
+                            <input type="text" name="nombreSede" id="nombreSede" ng-required="true" class="form-control" ng-maxlength="50" ng-model="Sede.Nombre_Sede" />
+                            <span ng-hide="sede.nombreSede.$error.maxlength">
+                                <span ng-if="sede.nombreSede.$invalid && sede.nombreSede.$dirty" class="help-block">Ingrese el nombre de la sede</span>
+                            </span>
+                            <span ng-if="sede.nombreSede.$error.maxlength" class="help-block">El nombre de la sede puede tener máximo 50 caracteres</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':sede.direccionSede.$invalid && sede.direccionSede.$touched, 'has-error2':sede.direccionSede.$error.maxlength}">
+                            <label>Dirección</label>
+                            <input type="text" name="direccionSede" id="direccionSede" ng-required="true" class="form-control" ng-maxlength="50" ng-model="Sede.Direccion" />
+                            <span ng-hide="sede.direccionSede.$error.maxlength">
+                                <span ng-if="sede.direccionSede.$invalid && sede.direccionSede.$dirty" class="help-block">Ingrese la dirección de la sede</span>
+                            </span>
+                            <span ng-if="sede.direccionSede.$error.maxlength" class="help-block">La dirección de la sede puede tener máximo 50 caracteres</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Seleccione Departamento</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="departamento" ng-change="ConsultarMunicipiosDepartamento(departamento)" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="departamento in Departamento" class="{{departamento.NombreDepartamento}}" value="{{departamento.IdDepartamento}}">{{departamento.NombreDepartamento}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Seleccione Municipio</label>
+                        <select class="form-control" id="lista" ng-required="true" ng-model="Municipio.IdMunicipio" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="municipio in Municipio" class="{{municipio.NombreMunicipio}}" value="{{municipio.IdMunicipio}}">{{municipio.NombreMunicipio}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo Sede</label>
+                        <select class="form-control" id="lista" ng-required="true" ng-model="Sede.TipoSede" style="float:right;">
+                            <option value="3">COLEGIO</option>
+                            <option value="2">EMPRESA</option>
+                            <option value="1">NORMAL</option>
+                            <option value="4">VIRTUAL</option>
+                        </select>
+                    </div>
+                    <!--<div class="form-group">
+                       
+                        <label>¿La sede es un colegio?</label>
+                        <input style="margin-left:5px;" type="checkbox" ng-model="Sede.Colegio" />
+                    </div>-->
+                </form>
+            </div>
+
+
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Eliminar Registro-->
+<div class="modal fade" id="modalInhabilitar" role="dialog">
+    <div class="modal-dialog" style="width:400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB;">
+                        CONFIRMAR INHABILITACIÓN
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Está seguro que desea inhabilitar el registro? </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="inhabilitar()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Editar Registro-->
+<div class="modal fade" id="ModalEditar" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Editar Sede</h4></center>
+            </div>
+            <div class="modal-body" style="height:450px;">
+                <form name="sede1" id="sede1">
+                    <div class="form-group">
+                        <div ng-class="{'has-error':sede1.codigo.$invalid && sede1.codigo.$touched, 'has-error2':sede1.codigo.$error.maxlength}">
+                            <label>Código</label>
+                            <input type="number" name="codigo" id="codigo" ng-required="true" class="form-control" ng-maxlength="10" ng-model="Sede.Codigo" />
+                            <span ng-hide="sede1.codigo.$error.maxlength">
+                                <span ng-if="sede1.codigo.$invalid && sede1.codigo.$dirty" class="help-block">Ingrese el código de la sede</span>
+                            </span>
+                            <span ng-if="sede1.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':sede1.nombreSede.$invalid && sede1.nombreSede.$touched, 'has-error2':sede1.nombreSede.$error.maxlength}">
+                            <label>Nombre Sede</label>
+                            <input type="text" name="nombreSede" id="nombreSede" ng-required="true" class="form-control" ng-maxlength="50" ng-model="Sede.Nombre_Sede" />
+                            <span ng-hide="sede1.nombreSede.$error.maxlength">
+                                <span ng-if="sede1.nombreSede.$invalid && sede1.nombreSede.$dirty" class="help-block">Ingrese el nombre de la sede</span>
+                            </span>
+                            <span ng-if="sede1.nombreSede.$error.maxlength" class="help-block">El nombre de la sede puede tener máximo 50 caracteres</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':sede1.direccionSede.$invalid && sede1.direccionSede.$touched, 'has-error2':sede1.direccionSede.$error.maxlength}">
+                            <label>Dirección</label>
+                            <input type="text" name="direccionSede" id="direccionSede" ng-required="true" class="form-control" ng-maxlength="50" ng-model="Sede.Direccion" />
+                            <span ng-hide="sede1.direccionSede.$error.maxlength">
+                                <span ng-if="sede1.direccionSede.$invalid && sede1.direccionSede.$dirty" class="help-block">Ingrese la dirección de la sede</span>
+                            </span>
+                            <span ng-if="sede1.direccionSede.$error.maxlength" class="help-block">La dirección de la sede puede tener máximo 50 caracteres</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccione Departamento</label>
+                        <select class="form-control" id="departamento" ng-required="true" ng-model="departamento" ng-change="ConsultarMunicipiosDepartamento(departamento)" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="departamento in Departamento" class="{{departamento.NombreDepartamento}}" value="{{departamento.IdDepartamento}}">{{departamento.NombreDepartamento}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccione Municipio</label>
+                        <select class="form-control" id="municipio" ng-required="true" ng-model="Municipio.IdMunicipio" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="municipio in Municipio" class="{{municipio.NombreMunicipio}}" value="{{municipio.IdMunicipio}}">{{municipio.NombreMunicipio}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo Sede</label>
+                        <select class="form-control" id="TipoSede" ng-required="true" ng-model="Sede.TipoSede" style="float:right;">
+                            <option value="3">COLEGIO</option>
+                            <option value="2">EMPRESA</option>
+                            <option value="1">NORMAL</option>
+                            <option value="4">VIRTUAL</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="GuardarEdicionSede()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="position:absolute; margin-top:96vh; margin-left:50%; transform:translateX(-50%)">
+    <footer class="text-center" style="color:white; font-weight:600; font-size:18px;">Fábrica de Software - 2017</footer>
+</div>

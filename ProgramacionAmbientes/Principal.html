@@ -1,0 +1,682 @@
+﻿<!DOCTYPE html>
+<html ng-app="ProgramacionApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+
+
+    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">-->
+    <link href="css/font-awesome.css" rel="stylesheet" />
+    <link href="css/jquery-ui.min.css" rel="stylesheet" />
+
+
+    <link href="css/ng-table.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="css/fullcalendar.css" rel="stylesheet" />
+    <link href="css/fullcalendar.print.css" rel="stylesheet" />
+    <link href="css/normalize.css" rel="stylesheet" />
+    <link href="css/demo.css" rel="stylesheet" />
+    <link href="css/component.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/estilos.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-multiselect.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+
+    <!--Estilos-->
+    <style>
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .fc-orden-act {
+            width: 100% !important;
+        }
+
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .navegador {
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            z-index: 10;
+            -webkit-box-shadow: 2px 6px 5px -4px rgba(0,0,0,0.75);
+            -moz-box-shadow: 2px 6px 5px -4px rgba(0,0,0,0.75);
+            box-shadow: 2px 6px 5px -4px rgba(0,0,0,0.75);
+            margin-bottom: 20px;
+            position: fixed;
+        }
+
+            .navegador > .perfil {
+                width: 60px;
+                height: 60px;
+                position: absolute;
+                right: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+                .navegador > .perfil > i {
+                    font-size: 30px;
+                    cursor: pointer;
+                    transition: all ease .5s;
+                }
+
+                .navegador > .perfil:hover > i {
+                    color: rgba(0,0,0,0.5);
+                }
+
+        .menu-perfil-act {
+            width: 300px;
+            height: 220px;
+            background: #fff;
+            position: fixed;
+            z-index: 5;
+            top: -1000px;
+            right: 20px;
+            -webkit-box-shadow: 0px 11px 29px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 11px 29px 0px rgba(0,0,0,0.75);
+            box-shadow: 0px 11px 29px 0px rgba(0,0,0,0.75);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+            .menu-perfil-act > .header {
+                width: 100%;
+                height: 100px;
+                background-image: url(img/portada.jpg);
+                background-position: center;
+                background-size: cover;
+            }
+
+            .menu-perfil-act > .foto-perfil {
+                width: 50px;
+                height: 50px;
+                border-radius: 100%;
+                border: 3px solid #fff;
+                position: absolute;
+                top: 50%;
+                margin-top: -35px;
+                left: 50%;
+                margin-left: -25px;
+                -webkit-box-shadow: 0px 11px 29px 0px rgba(0,0,0,0.75);
+                -moz-box-shadow: 0px 11px 29px 0px rgba(0,0,0,0.75);
+                box-shadow: 0px 11px 29px 0px rgba(0,0,0,0.75);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .menu-perfil-act > .foto-perfil > img {
+                    border-radius: 100%;
+                    width: 50px;
+                    height: 50px;
+                }
+
+            .menu-perfil-act > .header {
+                width: 100%;
+                height: 100px;
+                background-image: url(img/portada.jpg);
+                background-position: center;
+                background-size: cover;
+            }
+
+        .nombre-usuario {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            align-items: center;
+            color: rgba(0,0,0,.5);
+        }
+
+        .botones-perfil {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+            .botones-perfil > .cont-botones {
+                width: 50%;
+                height: 100%;
+                background: rgba(0,0,0,.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all ease .5s;
+            }
+
+                .botones-perfil > .cont-botones:hover {
+                    background: rgba(0,0,0,.2);
+                }
+
+
+        .header-navegador {
+            width: 100%;
+            height: 100vh;
+            z-index: 2;
+            color: rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .items-menu-principal {
+            width: 70px;
+            height: 100vh;
+            background: #fff;
+            position: fixed;
+            z-index: 9;
+            left: 0;
+            top: 0;
+            -webkit-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+            box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.75);
+            padding-top: 60px;
+            overflow-x: hidden;
+        }
+
+        .item-mm {
+            width: 250px;
+            height: 59px;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all ease .5s;
+            text-decoration: none;
+        }
+
+        .icomo-item-mm {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icomo-item-mm {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+            .icomo-item-mm > i {
+                color: rgba(0,0,0,.5);
+                font-size: 30px;
+            }
+
+        .item-mm:hover > .icomo-item-mm > i {
+            color: #fff;
+        }
+
+        .item-mm:hover > .titulo-item-mm {
+            color: #fff;
+        }
+
+        .item-mm:hover {
+            background: #34495e;
+            color: #fff;
+        }
+
+        .titulo-item-mm {
+            width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0,0,0,0.5);
+            height: 100%;
+        }
+
+        .contenedor-tooltip {
+            width: 200px;
+            height: 59px;
+            position: fixed;
+            background: #337ab7;
+            top: 200px;
+            left: 64px;
+            z-index: 1000;
+            -webkit-box-shadow: 2px 3px 38px -13px rgba(0,0,0,0.75);
+            -moz-box-shadow: 2px 3px 38px -13px rgba(0,0,0,0.75);
+            box-shadow: 2px 3px 38px -13px rgba(0,0,0,0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .header-tooltip {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: transparent;
+            display: none;
+            top: 0;
+            left: 0;
+        }
+
+        .logo-nav {
+            width: 5%;
+            height:4%;
+            margin-left:-10px;
+            
+        }
+    </style>
+
+
+</head>
+
+<body ng-controller="PrincipalController">
+    <div id="BodyPrincipal">
+        <div class="header-navegador">
+
+        </div>
+        <div class="navegador">
+            <div class="col-md-7">
+
+                <img class="logo-nav" src="img/logo.png" />
+            </div>
+            <div class="perfil">
+                <i class="material-icons">&#xE853;</i>
+            </div>
+
+
+        </div>
+
+        <div class="menu-perfil-act">
+            <div class="header"></div>
+            <div class="foto-perfil">
+                <img src="img/logo_sena.jpg" />
+            </div>
+            <div class="nombre-usuario">
+
+                <label id="username"></label>&ensp;
+            </div>
+            <div class="botones-perfil">
+                <div class="cont-botones" ng-click="AbrirModalCambiarPass()">
+                    <i class="material-icons">&#xE8B8;</i>
+                </div>
+                <div class="cont-botones" ng-click="CerrarSesion()">
+                    <i class="material-icons">&#xE8AC;</i>
+                </div>
+            </div>
+        </div>
+        <div class="items-menu-principal">
+            <div class="item-mm not-coor" ng-click="AbrirCoodinador()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Coordinación"><i class="material-icons md-48">face</i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm not-coor" ng-click="AbrirSede()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Sede"><i class="material-icons md-48">account_balance </i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm not-coor" ng-click="AbrirArea()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Área"><i class="material-icons md-48">link </i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm" ng-click="AbrirAmbiente()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Ambiente"><i class="material-icons md-48">store</i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm" ng-click="AbrirPrograma()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Programa"><i class="material-icons md-48" style="z-index:10">computer</i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm not-coor" ng-click="AbrirCompetencia()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Competencia"><i class="material-icons md-48"> book </i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm not-coor" ng-click="AbrirResultado()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Resultado"><i class="material-icons md-48">content_paste</i></i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm" ng-click="AbrirFicha()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Ficha"><i class="material-icons md-48"> mode_edit </i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm" ng-click="AbrirInstructor()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Instructor"><i class="material-icons md-48"> person </i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+            <div class="item-mm" ng-click="AbrirProgramacion()">
+                <div class="icomo-item-mm tooltip-panchana" toltip-texto="Programación"><i class="material-icons md-48">event</i></div>
+                <div class="titulo-item-mm"></div>
+            </div>
+        </div>
+    </div>
+    <header>
+        <div id="main" style="float:right; width:100%;">
+            <div ng-view style="margin:0px auto;"></div>
+        </div>
+    </header>
+    <div class="contenedor-tooltip">
+
+    </div>
+    <div class="header-tooltip">
+
+    </div>
+    <script src="scripts/classie.js"></script>
+  
+
+    <label class="ejemplo"></label>
+
+    <div class="modal fade" id="ModalCambiarPass" role="dialog">
+        <div class="modal-dialog" style="width: 400px;">
+            <!--Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4>Recuperar Contraseña</h4>
+                </div>
+                <div class="modal-body" style="overflow: auto;">
+                    <div class="form-group">
+                        <label>Ingrese Contraseña Anterior</label>
+                        <input class="form-control" ng-model="UsuarioCambiarPass.Password" />
+                    </div>
+                    <div class="form-group">
+                        <label>Ingrese Contraseña Nueva</label>
+                        <input class="form-control" ng-model="UsuarioCambiarPass.newPass" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-dismiss="modal" ng-click="CambiarPass()">Aceptar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<!--<script src="scripts/jquery-1.10.2.js"></script>-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+    $("#menu-perfil").click(function () {
+        $(".sobre-menu-perfil").fadeIn();
+        $(".menu-perfil").fadeIn();
+    });
+
+
+    var ancho = 0;
+    var anchocelda = 0;
+    var martes = 0;
+    var miercoles = 0;
+    var jueves = 0;
+    var viernes = 0;
+    var sabado = 0;
+    var domingo = 0;
+    function cerrarMenuPerfil() {
+        $(".sobre-menu-perfil").fadeOut();
+        $(".menu-perfil").fadeOut();
+    }
+    var estadoBarra = true;
+    $(".icono-menu__").click(function () {
+
+        if (estadoBarra) {
+            $(".items-menu-principal").animate({
+                width: "250px"
+            }, 1200);
+            domingo = $(".fc-sun").position();
+
+
+            ancho = $(".Transicion").width();
+            var to = ancho - 200;
+            $(".Transicion").animate({
+                width: to
+            }, 100);
+
+            $(".fc-day").animate({
+                width: "14%"
+            }, 100);
+
+
+            $(".fc-orden-act").animate({
+                width: "100% !important"
+            }, 10);
+            $(".controlador-tamano").animate({
+                width: "100% !important"
+            }, 10);
+
+            setTimeout(function () {
+                console.log($(".items-menu-principal").width())
+                if ($(".items-menu-principal").width() >= 240) {
+
+                    rl = $(".fc-first").width();
+                    martes = rl / 7;
+                    miercoles = (rl / 7) * 2;
+                    jueves = (rl / 7) * 3;
+                    viernes = (rl / 7) * 4;
+                    sabado = (rl / 7) * 5;
+                    domingo = (rl / 7) * 6;
+
+                    $(".columnaMar").animate({
+                        left: martes + "px"
+                    }, 500);
+
+                    $(".columnaMier").animate({
+                        left: miercoles + "px"
+                    }, 500);
+
+                    $(".columnaJuev").animate({
+                        left: jueves + "px"
+                    }, 500);
+
+                    $(".columnaVier").animate({
+                        left: viernes + "px"
+                    }, 500);
+                    $(".columnaSab").animate({
+                        left: sabado + "px"
+                    }, 500);
+                    $(".columnaDom").animate({
+                        left: domingo + "px"
+                    }, 500);
+                    console.log(martes);
+                }
+            }, 1200)
+
+            estadoBarra = false;
+        } else {
+
+            $(".items-menu-principal").animate({
+                width: "70px"
+            }, 500);
+            $(".Transicion").animate({
+                width: ancho
+            }, 100);
+            $(".fc-orden-act").animate({
+                width: "100% !important"
+            }, 10);
+            $(".controlador-tamano").animate({
+                width: "50% !important"
+            }, 10);
+            setTimeout(function () {
+                console.log($(".items-menu-principal").width())
+                if ($(".items-menu-principal").width() == 70) {
+
+                    rl = $(".fc-first").width();
+                    martes = rl / 7;
+                    miercoles = (rl / 7) * 2;
+                    jueves = (rl / 7) * 3;
+                    viernes = (rl / 7) * 4;
+                    sabado = (rl / 7) * 5;
+                    domingo = (rl / 7) * 6;
+
+                    $(".columnaMar").animate({
+                        left: martes + "px"
+                    }, 500);
+
+                    $(".columnaMier").animate({
+                        left: miercoles + "px"
+                    }, 500);
+
+                    $(".columnaJuev").animate({
+                        left: jueves + "px"
+                    }, 500);
+
+                    $(".columnaVier").animate({
+                        left: viernes + "px"
+                    }, 500);
+                    $(".columnaSab").animate({
+                        left: sabado + "px"
+                    }, 500);
+                    $(".columnaDom").animate({
+                        left: domingo + "px"
+                    }, 500);
+                    console.log(martes);
+                }
+            }, 500)
+            estadoBarra = true;
+        }
+
+    });
+
+    $(".sobre-menu-perfil").click(function () {
+        cerrarMenuPerfil()
+    });
+    $(".header-navegador").click(function () {
+        $(".menu-perfil-act").animate({
+            top: "-1060px"
+        });
+        $(".header-navegador").fadeOut();
+    });
+
+    $(".perfil").click(function () {
+        $(".menu-perfil-act").animate({
+            top: "60px"
+        });
+        $(".header-navegador").fadeIn();
+    });
+    var fullDate = new Date();
+    var Mes = ((fullDate.getMonth().length + 1) === 1) ? (fullDate.getMonth() + 1) : +(fullDate.getMonth() + 1);
+
+    var currentDate = fullDate.getDate() + "/" + Mes + "/" + fullDate.getFullYear();
+    $("#FechaActual").text("Fecha: " + currentDate);
+</script>
+<script>
+
+    
+
+    $("#nav").click(function () {
+        var nav = $("#navbar").hasClass("gn-menu-wrapper gn-open-all");
+        if (nav == true) {
+            $(".Principal").css("width", "80%");
+
+        } else {
+            $(".Principal").css("width", "95%");
+        }
+    });
+    var actu;
+    $(".tooltip-panchana").hover(function () {
+        actu = $(this).attr("toltip-texto");
+        $(".header-tooltip").css("display", "block");
+        $(".contenedor-tooltip").fadeIn();
+        $(".contenedor-tooltip").css("display", "flex");
+        $(".contenedor-tooltip").css("top", $(this).position().top + 6);
+        $(".contenedor-tooltip").css("left", 70);
+        $(".contenedor-tooltip").html($(this).attr("toltip-texto"));
+    });
+
+    $(".header-tooltip").hover(function () {
+        $(".header-tooltip").css("display", "none");
+        $(".contenedor-tooltip").fadeOut();
+    });
+
+</script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+</script>
+
+<script src="scripts/modernizr.custom.js"></script>
+<script src="scripts/alasql.min.js"></script>
+<script src="scripts/xlsx.core.min.js"></script>
+
+<!--<script src="scripts/jquery-1.10.2.min.js"></script>-->
+
+<script src="scripts/bootstrap.min.js"></script>
+<script src="Scripts/angular.min.js"></script>
+<script src="Scripts/angular-animate.min.js"></script>
+<script src="Scripts/angular-aria.min.js"></script>
+<script src="Scripts/angular-material.min.js"></script>
+<script src="Scripts/angular-messages.min.js"></script>
+<script src="Scripts/Angular-Route.js"></script>
+<script src="Scripts/bootbox.min.js"></script>
+<script src="scripts/angular-route1.js"></script>
+<script src="scripts/angular-cookies.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/jsPDF.js"></script>
+<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>-->
+<script src="scripts/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dropdown/2.0.3/jquery.dropdown.js"></script>
+<script src="scripts/bootstrap-multiselect.js"></script>
+
+<!--Modelos-->
+<script src="Modelo/General.js"></script>
+<script src="Modelo/Principal.js"></script>
+<script src="Modelo/Login/Login.js"></script>
+<script src="Modelo/Login/LoginService.js"></script>
+<script src="Modelo/Area/Area.js"></script>
+<script src="Modelo/Area/AreaService.js"></script>
+<script src="Modelo/Instructor/Instructor.js"></script>
+<script src="Modelo/Instructor/InstructorService.js"></script>
+<script src="Modelo/Ficha/Ficha.js"></script>
+<script src="Modelo/Ficha/FichaService.js"></script>
+<script src="Modelo/Competencia/Competencia.js"></script>
+<script src="Modelo/Competencia/CompetenciaService.js"></script>
+<script src="Modelo/Ambiente/Ambiente.js"></script>
+<script src="Modelo/Ambiente/AmbienteService.js"></script>
+<script src="Modelo/Programacion/Programacion.js"></script>
+<script src="Modelo/Programacion/ProgramacionService.js"></script>
+<script src="Modelo/Coordinacion/Coordinacion.js"></script>
+<script src="Modelo/Coordinacion/CoordinacionService.js"></script>
+<script src="Modelo/Filter.js"></script>
+<script src="Modelo/Sede/Sede.js"></script>
+<script src="Modelo/Sede/SedeService.js"></script>
+<script src="Modelo/Programa/Programa.js"></script>
+<script src="Modelo/Programa/ProgramaService.js"></script>
+<script src="Modelo/Resultado/Resultado.js"></script>
+<script src="Modelo/Resultado/ResultadoService.js"></script>
+<script src="Modelo/Solicitud/Solicitud.js"></script>
+<script src="Modelo/Solicitud/SolicitudService.js"></script>
+<script src="scripts/dirPagination.js"></script>
+<script src="scripts/ng-table.js"></script>
+<script src="scripts/jquery-ui.custom.min.js"></script>
+<script src="scripts/bootstrap-datepicker.js"></script>
+<script src="scripts/bootstrap-datepicker.es.js"></script>
+<script src="scripts/moment.js"></script>
+<script src="scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.0.1/ui-bootstrap-tpls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-calendar/1.0.0/calendar.js"></script>-->
+<script src="scripts/fullcalendar.js"></script>
+<script src="scripts/angular-notify.js"></script>

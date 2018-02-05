@@ -1,0 +1,51 @@
+﻿<style>
+    .imagen-pl {
+    width:100%;
+    height:250px;
+        
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    }
+</style>
+
+    <div class="Principal Transicion" style="width: 100%;height: 500px;display: flex; align-items: center; justify-content: center;">
+        <div>
+            <div class="imagen-pl">
+                <img src="../img/logo_sena.jpg" id="avatar" />
+            </div>
+            <table class="table table-bordered" style="background-color:white">
+                <thead>
+                    <tr>
+                        <th class="paginationclass" style="font-weight:bold;">Sede</th>
+                        <th class="paginationclass" style="font-weight:bold;">Ambiente</th>
+                        <th class="paginationclass" style="font-weight:bold;">Fecha inicio</th>
+                        <th class="paginationclass" style="font-weight:bold;">Fecha Fin</th>
+                        <th class="paginationclass" style="font-weight:bold;">Hora inicio</th>
+                        <th class="paginationclass" style="font-weight:bold;">Hora Fin</th>
+                    </tr>
+                </thead>
+                <tbody class="searchable">
+                    <tr class="paginationclass">
+                        <td>{{ datalist.Sede | uppercase}}</td>
+                        <td>{{ datalist.Ambiente | uppercase}}</td>
+                        <td>{{ datalist.FechaInicio | uppercase}}</td>
+                        <td>{{ datalist.FechaFin | uppercase}}</td>
+                        <td>{{ datalist.HoraInicio | uppercase}}</td>
+                        <td>{{ datalist.HoraFin | uppercase}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row not-inst">
+                <div class="col-md-6">
+                    <button class="btn btn-primary" id="boton" style="width:100%; height:42px;" ng-click="AprovarSolicitud()">Aceptar Programación</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn" id="transversal" style="width:100%; height:42px; background:white;"  ng-click="CancelarSolicitud()">Rechazar Programación</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+

@@ -1,0 +1,220 @@
+﻿<div>
+    <div class="Principal Transicion" style="padding-top: 75px !important;">
+        <div class="col-md-12">
+            <div class="col-md-3" style="float:right; margin-left:-1%; padding-right:0px;">
+                <button class="btn btn-primary" id="boton" style="width:100%; height:42px;" ng-click="AbrirModal()">Registrar Competencia</button>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-3" style="float:right;">
+                        <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
+                        <input class="form-control" ng-keyup="Filter($event)" id="Buscar" />
+                    </div>
+                    <input id="fileUploadWeb" type="file" accept=".xlsx" style="display: none;" />
+                    <button class="btn btn-default" id="excel" ng-click="UploadFileWeb()" title="Subir Archivo Excel " style="height: 34px;">
+                        <i class="glyphicon glyphicon-folder-open"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Inhabilitar Registros" style="height: 34px;">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="modificar" ng-click="Modificar()" title="Editar Registro" style="height: 34px;">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" id="descargar" title="Descargar Plantilla" ng-click="DescargarReporte()" style="height: 34px;">
+                        <a class="glyphicon glyphicon-download-alt" href="C:/UploadedFiles/plantillaCompetencia.xlsx" rel="nofollow"></a>
+                    </button>
+                    <br />
+                    <br />
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold;">Programa</th>
+                                <th class="paginationclass" style="font-weight:bold;">Código</th>
+                                <th class="paginationclass" style="font-weight:bold;">Nombre</th>
+                                <th class="paginationclass" style="font-weight:bold;">Duración</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.Id}}" /></td>
+                                <td>{{datalist.Parametro2 | uppercase}}</td>
+                                <td>{{datalist.Parametro5 | uppercase}}</td>
+                                <td>{{datalist.Parametro3 | uppercase}}</td>
+                                <td>{{datalist.Parametro4 | uppercase}}&nbsp;<span>HORAS</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination pagination-centered" ng-show="datalists.length" style="float:right">
+                        <ul class="pagination-controle pagination">
+                            <li>
+                                <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                        ng-click="curPage=curPage-1">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li>
+                                <span>Pág {{curPage + 1}} de {{ numberOfPages() }}</span>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-primary"
+                                        ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                        ng-click="curPage = curPage+1">
+                                    Siguiente
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal registrar--> 
+<div class="modal fade" id="ModalCompetencia" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Registrar Competencia</h4></center>
+            </div>
+            <div class="modal-body">
+                <form name="competencia1" id="competencia1">
+                    <div class="form-group">
+                        <label>Seleccione Programa</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="Programa.IdPrograma" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="programa in Programa" class="{{programa.NombrePrograma}}" value="{{programa.IdPrograma}}">{{programa.NombrePrograma | uppercase}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':competencia1.codigo.$invalid && competencia1.codigo.$touched, 'has-error2':competencia1.codigo.$error.maxlength}">
+                            <label>Código</label>
+                            <input type="number" ng-required="true" class="form-control" name="codigo" id="codigo" ng-maxlength="10" ng-model="Competencia.Codigo" />
+                            <span ng-hide="competencia1.codigo.$error.maxlength">
+                                <span ng-if="competencia1.codigo.$invalid && competencia1.codigo.$dirty" class="help-block">Ingrese el código de la competencia</span>
+                            </span>
+                            <span ng-if="competencia1.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':competencia1.nombre.$invalid && competencia1.nombre.$touched, 'has-error2':competencia1.nombre.$error.maxlength}">
+                            <label>Nombre</label>
+                            <textarea class="form-control" id="nombre" ng-required="true" name="nombre" ng-maxlength="1000" ng-model="Competencia.Nombre"></textarea>
+                            <span ng-hide="competencia1.nombre.$error.maxlength">
+                                <span ng-if="competencia1.nombre.$invalid && competencia1.nombre.$dirty" class="help-block">Ingrese el nombre de la competencia</span>
+                            </span>
+                            <span ng-if="competencia1.nombre.$error.maxlength" class="help-block">El nombre puede tener máximo 1000 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':competencia1.horas.$invalid && competencia1.horas.$touched, 'has-error2':competencia1.horas.$error.maxlength}">
+                            <label>Duración en horas</label>
+                            <input type="number" ng-required="true" class="form-control" name="horas" id="horas" ng-maxlength="6" ng-model="Competencia.Horas" />
+                            <span ng-hide="competencia1.horas.$error.maxlength">
+                                <span ng-if="competencia1.horas.$invalid && competencia1.horas.$dirty" class="help-block">Ingrese la duración en horas de la competencia</span>
+                            </span>
+                            <span ng-if="competencia1.horas.$error.maxlength" class="help-block">Las horas pueden tener máximo 6 caracteres </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Eliminar Registro-->
+<div class="modal fade" id="modalInhabilitar" role="dialog" >
+    <div class="modal-dialog" style="width: 400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB;">
+                        CONFIRMAR INHABILITACIÓN
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Está seguro que desea inhabilitar el registro? </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="inhabilitar()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal Editar Registro-->
+<div class="modal fade" id="ModalEditar" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Editar Competencia</h4></center>
+
+            </div>
+            <div class="modal-body">
+                <form name="competencia" id="competencia">
+                    <div class="form-group">
+                        <label>Seleccione Programa</label>
+                        <select class="form-control" id="ProgramaLista" ng-required="true" ng-model="Programa.IdPrograma" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="programa in Programa" class="{{programa.NombrePrograma}}" value="{{programa.IdPrograma}}">{{programa.NombrePrograma}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':competencia.codigo.$invalid && competencia.codigo.$touched, 'has-error2':competencia.codigo.$error.maxlength}">
+                            <label>Código</label>
+                            <input type="number" ng-required="true" class="form-control" name="codigo" id="codigo" ng-maxlength="10" ng-model="Competencia.Codigo" />
+                            <span ng-hide="competencia.codigo.$error.maxlength">
+                                <span ng-if="competencia.codigo.$invalid && competencia.codigo.$dirty" class="help-block">Ingrese el código de la competencia</span>
+                            </span>
+                            <span ng-if="competencia.codigo.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':competencia.nombre.$invalid && competencia.nombre.$touched, 'has-error2':competencia.nombre.$error.maxlength}">
+                            <label>Nombre</label>
+                            <textarea class="form-control" id="nombre" ng-required="true" name="nombre" ng-maxlength="1000" ng-model="Competencia.Nombre"></textarea>
+                            <span ng-hide="competencia.nombre.$error.maxlength">
+                                <span ng-if="competencia.nombre.$invalid && competencia.nombre.$dirty" class="help-block">Ingrese el nombre de la competencia</span>
+                            </span>
+                            <span ng-if="competencia.nombre.$error.maxlength" class="help-block">El nombre puede tener máximo 1000 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':competencia.horas.$invalid && competencia.horas.$touched, 'has-error2':competencia.horas.$error.maxlength}">
+                            <label>Duración en horas</label>
+                            <input type="number" ng-required="true" class="form-control" name="horas" id="horas" ng-maxlength="6" ng-model="Competencia.Horas" />
+                            <span ng-hide="competencia.horas.$error.maxlength">
+                                <span ng-if="competencia.horas.$invalid && competencia.horas.$dirty" class="help-block">Ingrese la duración en horas de la competencia</span>
+                            </span>
+                            <span ng-if="competencia.horas.$error.maxlength" class="help-block">Las horas pueden tener máximo 6 caracteres </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="GuardarEdicionCompetencia()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="position:absolute; margin-top:96vh; margin-left:50%; transform:translateX(-50%)">
+    <footer class="text-center" style="color:white; font-weight:600; font-size:18px;">Fábrica de Software - 2017</footer>
+</div>
