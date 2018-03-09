@@ -440,5 +440,21 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc.Message });
             }
         }
+
+        public IHttpActionResult ConsultarPogramacionesInstructor(ParametrosDTO oParametrosDTO)
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.ConsultarPogramacionesInstructor(int.Parse(oParametrosDTO.Parametro1));
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

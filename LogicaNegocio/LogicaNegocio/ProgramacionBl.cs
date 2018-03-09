@@ -184,7 +184,7 @@ namespace LogicaNegocio.LogicaNegocio
                     }
                 }
 
-               
+
 
                 if (sede.TipoSede == 1)
                 {
@@ -1255,6 +1255,7 @@ namespace LogicaNegocio.LogicaNegocio
             return new Tuple<List<Instructor>, Ficha_Ambiente>(oListaInstructor.OrderBy(x => x.Nombre).ToList(), ProgramacionPrincipal);
         }
 
+        //Cambiar resultados por competencias para regresar a programar con los resultado nuevamente
         public List<Ficha_AmbienteDTO> ConsultarProgramacion(int IdCoordinador)
         {
             Model1 entity = new Model1();
@@ -1275,9 +1276,15 @@ namespace LogicaNegocio.LogicaNegocio
                 var DatosFicha = (from i in entity.Ficha
                                   where i.IdFicha == item.IdFicha
                                   select i).FirstOrDefault();
+
                 var DatosResultado = (from i in entity.Resultado_Aprendizaje
                                       where i.IdResultado == item.IdResultado
                                       select i).FirstOrDefault();
+                var DatosCompetencia = (from i in entity.Competencia
+                                        join r in entity.Resultado_Aprendizaje on i.IdCompetencia equals r.IdCompetencia
+                                        where r.IdResultado == item.IdResultado
+                                        select i).FirstOrDefault();
+
                 var DatosAmbiente = (from i in entity.Ambiente
                                      where i.IdAmbiente == item.IdAmbiente
                                      select i).FirstOrDefault();
@@ -1331,6 +1338,8 @@ namespace LogicaNegocio.LogicaNegocio
                 Ficha.Ficha = DatosFicha.Ficha1;
                 Ficha.CodigoResultado = DatosResultado.Codigo;
                 Ficha.Resultado = DatosResultado.Resultado;
+                Ficha.CodigoCompetencia = DatosCompetencia.Codigo.ToString();
+                Ficha.Competencia = DatosCompetencia.Nombre;
                 Ficha.IdInstructor = item.IdInstructor;
                 Ficha.FechaInicio = item.FechaInicio;
                 Ficha.FechaFin = item.FechaFin;
@@ -1371,6 +1380,11 @@ namespace LogicaNegocio.LogicaNegocio
                 var DatosResultado = (from i in entity.Resultado_Aprendizaje
                                       where i.IdResultado == item.IdResultado
                                       select i).FirstOrDefault();
+                var DatosCompetencia = (from i in entity.Competencia
+                                        join r in entity.Resultado_Aprendizaje on i.IdCompetencia equals r.IdCompetencia
+                                        where r.IdResultado == item.IdResultado
+                                        select i).FirstOrDefault();
+
                 var DatosAmbiente = (from i in entity.Ambiente
                                      where i.IdAmbiente == item.IdAmbiente
                                      select i).FirstOrDefault();
@@ -1397,6 +1411,8 @@ namespace LogicaNegocio.LogicaNegocio
                 Ficha.Ficha = DatosFicha.Ficha1;
                 Ficha.CodigoResultado = DatosResultado.Codigo;
                 Ficha.Resultado = DatosResultado.Resultado;
+                Ficha.CodigoCompetencia = DatosCompetencia.Codigo.ToString();
+                Ficha.Competencia = DatosCompetencia.Nombre;
                 Ficha.IdInstructor = item.IdInstructor;
                 Ficha.FechaInicio = item.FechaInicio;
                 Ficha.FechaFin = item.FechaFin;
@@ -1468,7 +1484,7 @@ namespace LogicaNegocio.LogicaNegocio
                                  where s.IdSede == DatosAmbiente.IdSede
                                  select s).FirstOrDefault();
 
-             
+
                 if (item.Transversal == true)
                 {
                     if (item.Lunes != null)
@@ -2767,6 +2783,56 @@ namespace LogicaNegocio.LogicaNegocio
                          select i).ToList();
 
             return Datos;
+        }
+
+        public List<Ficha_AmbienteDTO> ConsultarPogramacionesInstructor(int IdInstructor)
+        {
+            Model1 entity = new Model1();
+            var FechaActual = DateTime.Now;
+
+            var Programaciones = (from i in entity.Ficha_Ambiente
+                                  join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
+                                  join f in entity.Ficha on i.IdFicha equals f.IdFicha
+                                  join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
+                                  join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
+                                  join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+                                  where i.IdInstructor == IdInstructor
+                                  && i.FechaInicio.Year == FechaActual.Year
+                                  select new Ficha_AmbienteDTO
+                                  {
+                                      Id = i.Id,
+                                      IdFicha = i.IdFicha,
+                                      Ficha = f.Ficha1,
+                                      IdAmbiente = i.IdAmbiente,
+                                      Ambiente= a.Numero,
+                                      IdInstructor = i.IdInstructor,
+                                      NombreInstructor = t.Nombre +" "+ t.Apellido,
+                                      Resultado = r.Resultado,
+                                      CodigoResultado = r.Codigo,
+                                      Competencia= c.Nombre,
+                                      CodigoCompetencia = c.Codigo.ToString(),
+                                      FechaInicio = i.FechaInicio,
+                                      FechaFin = i.FechaFin,
+                                      HoraInicio = i.HoraInicio,
+                                      HoraFin = i.HoraFin,
+                                      Color = i.Color,
+                                      Lunes = i.Lunes,
+                                      Martes= i.Martes,
+                                      Miercoles= i.Miercoles,
+                                      Jueves= i.Jueves,
+                                      Viernes = i.Viernes
+                                  } ).ToList();
+
+            
+            foreach (var item in Programaciones)
+            {
+                if (!(FechaActual >= item.FechaInicio) && (FechaActual <= item.FechaFin))
+                {
+                    Programaciones.Remove(item);
+                }
+               
+            }
+            return Programaciones;
         }
 
     }
