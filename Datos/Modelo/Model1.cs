@@ -26,6 +26,7 @@ namespace Datos.Modelo
         public virtual DbSet<Sede> Sede { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Solicitud> Solicitud { get; set; }
+        public virtual DbSet<PrestamoLlaves> PrestamoLlaves { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

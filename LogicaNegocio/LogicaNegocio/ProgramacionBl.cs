@@ -2785,10 +2785,14 @@ namespace LogicaNegocio.LogicaNegocio
             return Datos;
         }
 
-        public List<Ficha_AmbienteDTO> ConsultarPogramacionesInstructor(int IdInstructor)
+        public List<Ficha_AmbienteDTO> ConsultarPogramacionesInstructor(int CedulaInstructor)
         {
             Model1 entity = new Model1();
             var FechaActual = DateTime.Now;
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var instructor = (from i in entity.Instructor
+                              where i.Cedula == CedulaInstructor.ToString()
+                              select i).FirstOrDefault();
 
             var Programaciones = (from i in entity.Ficha_Ambiente
                                   join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
@@ -2796,20 +2800,20 @@ namespace LogicaNegocio.LogicaNegocio
                                   join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
                                   join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
                                   join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
-                                  where i.IdInstructor == IdInstructor
-                                  && i.FechaInicio.Year == FechaActual.Year
+                                  where i.IdInstructor == instructor.IdInstructor
+                                  && (i.FechaInicio.Year == FechaActual.Year && i.FechaFin.Year <= FechaActual.Year)
                                   select new Ficha_AmbienteDTO
                                   {
                                       Id = i.Id,
                                       IdFicha = i.IdFicha,
                                       Ficha = f.Ficha1,
                                       IdAmbiente = i.IdAmbiente,
-                                      Ambiente= a.Numero,
+                                      Ambiente = a.Numero,
                                       IdInstructor = i.IdInstructor,
-                                      NombreInstructor = t.Nombre +" "+ t.Apellido,
+                                      NombreInstructor = t.Nombre + " " + t.Apellido,
                                       Resultado = r.Resultado,
                                       CodigoResultado = r.Codigo,
-                                      Competencia= c.Nombre,
+                                      Competencia = c.Nombre,
                                       CodigoCompetencia = c.Codigo.ToString(),
                                       FechaInicio = i.FechaInicio,
                                       FechaFin = i.FechaFin,
@@ -2817,23 +2821,252 @@ namespace LogicaNegocio.LogicaNegocio
                                       HoraFin = i.HoraFin,
                                       Color = i.Color,
                                       Lunes = i.Lunes,
-                                      Martes= i.Martes,
-                                      Miercoles= i.Miercoles,
-                                      Jueves= i.Jueves,
+                                      Martes = i.Martes,
+                                      Miercoles = i.Miercoles,
+                                      Jueves = i.Jueves,
                                       Viernes = i.Viernes
-                                  } ).ToList();
+                                  }).ToList();
 
-            
-            foreach (var item in Programaciones)
+            //Clonar lista
+            List<Ficha_AmbienteDTO> newList = Programaciones.GetRange(0, Programaciones.Count);
+
+            TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour);
+            string fromTimeString = Hora.ToString("hh':'mm");
+
+            foreach (var item in newList)
             {
-                if (!(FechaActual >= item.FechaInicio) && (FechaActual <= item.FechaFin))
+
+                if (!(FechaActual >= item.FechaInicio && FechaActual <= item.FechaFin) || !(Hora >= item.HoraInicio && Hora <= item.HoraFin))
                 {
                     Programaciones.Remove(item);
                 }
+
+            }
+            foreach (var item in Programaciones.Select((value, i) => new { i, value }))
+            {
+                var FechaPrestamo = (from i in entity.PrestamoLlaves
+                                     where i.IdFicha_Ambiente == item.value.Id && i.Fecha == fecha
+                                     select i).FirstOrDefault();
+                if (FechaPrestamo != null)
+                {
+                    Programaciones[item.i].EntregoLLaves = FechaPrestamo.Entrego;
+                    Programaciones[item.i].RecibioLLaves = FechaPrestamo.Recibio;
+                }
+                else
+                {
+                    Programaciones[item.i].EntregoLLaves = false;
+                    Programaciones[item.i].RecibioLLaves = false;
+                }
                
+
+                if (item.value.Lunes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Lunes -";
+                }
+                if (item.value.Martes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Martes -";
+                }
+                if (item.value.Miercoles == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Miercoles -";
+                }
+                if (item.value.Jueves == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Jueves -";
+                }
+                if (item.value.Viernes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Viernes -";
+                }
+                if (item.value.Jornada == "2")
+                {
+                    Programaciones[item.i].DiasProgramados += "Sábado -";
+                }
+                if (item.value.Jornada == "3")
+                {
+                    Programaciones[item.i].DiasProgramados += "Domingo -";
+                }
             }
             return Programaciones;
         }
 
+        public List<Ficha_AmbienteDTO> GuardarPrestamoLLaves(Ficha_AmbienteDTO oProgramacion)
+        {
+            Model1 entity = new Model1();
+            var oPrestamo = new PrestamoLlaves();
+
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var prestamo = (from i in entity.PrestamoLlaves
+                            where i.IdFicha_Ambiente == oProgramacion.Id && i.Fecha == fecha
+                            select i).FirstOrDefault();
+            if (prestamo == null)
+            {
+                if (oProgramacion.RecibioLLaves)
+                {
+                    oPrestamo.Recibio = true;
+                    oPrestamo.Entrego = false;
+                }
+                oPrestamo.IdFicha_Ambiente = oProgramacion.Id;
+                oPrestamo.Fecha = DateTime.Now;
+
+                entity.PrestamoLlaves.Add(oPrestamo);
+                entity.SaveChanges();
+            }
+            else
+            {
+                prestamo.Entrego = true;
+                entity.SaveChanges();
+            }
+
+            var Programaciones = (from i in entity.Ficha_Ambiente
+                                  join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
+                                  join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
+                                  join f in entity.Ficha on i.IdFicha equals f.IdFicha
+                                  join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
+                                  join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
+                                  join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+                                  where p.Fecha == fecha
+                                  select new Ficha_AmbienteDTO
+                                  {
+                                      Id = i.Id,
+                                      IdFicha = i.IdFicha,
+                                      Ficha = f.Ficha1,
+                                      IdAmbiente = i.IdAmbiente,
+                                      Ambiente = a.Numero,
+                                      IdInstructor = i.IdInstructor,
+                                      CedulaIns = t.Cedula,
+                                      NombreInstructor = t.Nombre + " " + t.Apellido,
+                                      Resultado = r.Resultado,
+                                      CodigoResultado = r.Codigo,
+                                      Competencia = c.Nombre,
+                                      CodigoCompetencia = c.Codigo.ToString(),
+                                      FechaInicio = i.FechaInicio,
+                                      FechaFin = i.FechaFin,
+                                      HoraInicio = i.HoraInicio,
+                                      HoraFin = i.HoraFin,
+                                      Color = i.Color,
+                                      Lunes = i.Lunes,
+                                      Martes = i.Martes,
+                                      Miercoles = i.Miercoles,
+                                      Jueves = i.Jueves,
+                                      Viernes = i.Viernes,
+                                      EntregoLLaves = p.Entrego,
+                                      RecibioLLaves = p.Recibio
+                                  }).ToList();
+
+            foreach (var item in Programaciones.Select((value, i) => new { i, value }))
+            {
+                if (item.value.Lunes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Lunes -";
+                }
+                if (item.value.Martes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Martes -";
+                }
+                if (item.value.Miercoles == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Miercoles -";
+                }
+                if (item.value.Jueves == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Jueves -";
+                }
+                if (item.value.Viernes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Viernes -";
+                }
+                if (item.value.Jornada == "2")
+                {
+                    Programaciones[item.i].DiasProgramados += "Sábado -";
+                }
+                if (item.value.Jornada == "3")
+                {
+                    Programaciones[item.i].DiasProgramados += "Domingo -";
+                }
+            }
+
+            return Programaciones;
+
+        }
+
+        public List<Ficha_AmbienteDTO> EntregaLlaves(string cedulaIns)
+        {
+            Model1 entity = new Model1();
+
+            var instructor = (from i in entity.Instructor
+                              where i.Cedula == cedulaIns
+                              select i).FirstOrDefault();
+
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var Programaciones = (from i in entity.Ficha_Ambiente
+                                  join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
+                                  join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
+                                  join f in entity.Ficha on i.IdFicha equals f.IdFicha
+                                  join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
+                                  join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
+                                  join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+                                  where p.Entrego == false && p.Fecha == fecha && i.IdInstructor == instructor.IdInstructor
+                                  select new Ficha_AmbienteDTO
+                                  {
+                                      Id = i.Id,
+                                      IdFicha = i.IdFicha,
+                                      Ficha = f.Ficha1,
+                                      IdAmbiente = i.IdAmbiente,
+                                      Ambiente = a.Numero,
+                                      IdInstructor = i.IdInstructor,
+                                      CedulaIns = t.Cedula,
+                                      NombreInstructor = t.Nombre + " " + t.Apellido,
+                                      Resultado = r.Resultado,
+                                      CodigoResultado = r.Codigo,
+                                      Competencia = c.Nombre,
+                                      CodigoCompetencia = c.Codigo.ToString(),
+                                      FechaInicio = i.FechaInicio,
+                                      FechaFin = i.FechaFin,
+                                      HoraInicio = i.HoraInicio,
+                                      HoraFin = i.HoraFin,
+                                      Color = i.Color,
+                                      Lunes = i.Lunes,
+                                      Martes = i.Martes,
+                                      Miercoles = i.Miercoles,
+                                      Jueves = i.Jueves,
+                                      Viernes = i.Viernes
+                                  }).ToList();
+
+            foreach (var item in Programaciones.Select((value, i) => new { i, value }))
+            {
+                if (item.value.Lunes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Lunes -";
+                }
+                if (item.value.Martes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Martes -";
+                }
+                if (item.value.Miercoles == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Miercoles -";
+                }
+                if (item.value.Jueves == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Jueves -";
+                }
+                if (item.value.Viernes == true)
+                {
+                    Programaciones[item.i].DiasProgramados += "Viernes -";
+                }
+                if (item.value.Jornada == "2")
+                {
+                    Programaciones[item.i].DiasProgramados += "Sábado -";
+                }
+                if (item.value.Jornada == "3")
+                {
+                    Programaciones[item.i].DiasProgramados += "Domingo -";
+                }
+            }
+
+            return Programaciones;
+        }
     }
 }

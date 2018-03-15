@@ -441,6 +441,7 @@ namespace ProgramacionAmbientes.Controllers
             }
         }
 
+        [HttpPost]
         public IHttpActionResult ConsultarPogramacionesInstructor(ParametrosDTO oParametrosDTO)
         {
             try
@@ -449,12 +450,43 @@ namespace ProgramacionAmbientes.Controllers
                 var datos = oProgramacionBl.ConsultarPogramacionesInstructor(int.Parse(oParametrosDTO.Parametro1));
                 return Ok(new { success = true, datos });
             }
-            catch (Exception)
+            catch (Exception exc)
             {
 
-                throw;
+                return Ok(new { success = false, exc.Message });
             }
         }
 
+        [HttpPost]
+        public IHttpActionResult GuardarPrestamoLLaves(Ficha_AmbienteDTO oProgramacion)
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.GuardarPrestamoLLaves(oProgramacion);
+                return Ok(new { success = true, datos});
+            }
+            catch (Exception exc)
+            {
+
+                return Ok(new { success = false, exc.Message });
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult EntregaLlaves(ParametrosDTO oParametroDTO)
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.EntregaLlaves(oParametroDTO.Parametro1);
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
+
+                return Ok(new { success = false, exc.Message });
+            }
+        }
     }
 }

@@ -18,6 +18,8 @@ namespace Datos.DTO
 
         public int IdInstructor { get; set; }
 
+        public string CedulaIns { get; set; }
+
         public string NombreInstructor { get; set; }
 
         public DateTime FechaInicio { get; set; }
@@ -75,6 +77,9 @@ namespace Datos.DTO
         public bool? Viernes { get; set; }
 
         public string Area { get; set; }
+
+        public bool RecibioLLaves { get; set; }
+        public bool EntregoLLaves { get; set; }
 
     }
 }

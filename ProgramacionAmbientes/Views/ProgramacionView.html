@@ -36,7 +36,7 @@
             <div class="col-md-3" style="padding-right:0px;" ng-click="filtrarProgramacion()">
                 <button class="btn btn-primary consulta" style="width:100%; height:42px;">Filtrar Programación</button>
             </div>
-           
+
             <!--<div class="col-md-3" style="float:right; padding-right:0px;">
                 <div>
                     <select class="form-control" ng-required="true" ng-model="AmbienteFiltro.IdAmbiente" ng-change="FiltroAmbiente(AmbienteFiltro)" style="float:right;">
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            <input class= "OcultarPanelDatos ocultar" type="checkbox" ng-model="ObjetoSedes.Colegio" ng-click="ConsultarColegios()" />
+                            <input class="OcultarPanelDatos ocultar" type="checkbox" ng-model="ObjetoSedes.Colegio" ng-click="ConsultarColegios()" />
                             <label style="font-size:13px;" class="ocultar">Colegios</label>
                         </div>
 
@@ -121,7 +121,7 @@
                         <!--Renglon1-->
                         <div class="row" style="margin-top:20px;">
                             <div class="form-group col-lg-5 col-md-5 col-sm-5 col-xs-5" id="form1">
-                                <input class= "OcultarPanelDatos ocultar" type="checkbox" ng-model="ObjetoPrograma.Titulado" ng-click="ProgramasTitulados1()" />
+                                <input class="OcultarPanelDatos ocultar" type="checkbox" ng-model="ObjetoPrograma.Titulado" ng-click="ProgramasTitulados1()" />
                                 <label style="font-size:13px;" class="ocultar">Titulados</label>
                             </div>
                             <div class="form-group col-lg-7 col-md-7 col-sm-7 col-xs-7" id="form2">
@@ -133,7 +133,7 @@
                         <!--Renglon2-->
                         <select class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12 OcultarPanelDatos" id="listas" ng-required="true" ng-model="Programa.IdPrograma" ng-change="ConsultarCompetenciasxPrograma(Programa)">
                             <option value="" disabled selected>Seleccione Programa</option>
-                            <option ng-repeat="programa in Programa"  title="{{programa.Nivel}}" class="{{programa.NombrePrograma}}" value="{{programa.IdPrograma}}">{{programa.NombrePrograma | uppercase}}</option>
+                            <option ng-repeat="programa in Programa" title="{{programa.Nivel}}" class="{{programa.NombrePrograma}}" value="{{programa.IdPrograma}}">{{programa.NombrePrograma | uppercase}}</option>
                         </select>
 
                         <!--Renglon3-->
@@ -229,7 +229,7 @@
                                 </select>-->
                             </div>
                         </div>
-                
+
                         <div style="float:right; display:none" id="Empresa">
                             <div class="form-group">
                                 <!--<label>Fecha Fin</label>-->
@@ -251,7 +251,7 @@
 
 
 <!--modal para días sábado-->
-<div class="modal fade" id="ModalSabado" style="margin-top:-2%" role="dialog" >
+<div class="modal fade" id="ModalSabado" style="margin-top:-2%" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="height:50px; padding:5px;">
@@ -259,96 +259,96 @@
                 <center><h4 style="font-weight: bold;">Registrar Programación Sábado</h4></center>
             </div>
             <div class="modal-body" style="height:538px;">
-                
-                    <div class="col-md-12" style="padding-bottom: 15px;">
-                        <div class="form-group">
-                            <label>Ficha</label>
-                            <select class="form-control" id="listas" ng-required="true" ng-model="Ficha.IdFicha" style="float:right;" readonly disabled="disabled">
-                                <!--<option value="" disabled selected>Seleccione el Área</option>-->
-                                <option ng-repeat="ficha in Ficha" class="{{ficha.Ficha1}}" value="{{ficha.IdFicha}}">{{ficha.Ficha1}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
 
-                        <div class="form-group">
-                            <label>Fecha Inicio</label>
-                            <label ng-model="Programacion.FechaInicio"></label>
-                            <input class="form-control" style="width:100%;" ng-model="Programacion.FechaInicio" id="FechaInicio" readonly />
-                        </div>
+                <div class="col-md-12" style="padding-bottom: 15px;">
+                    <div class="form-group">
+                        <label>Ficha</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="Ficha.IdFicha" style="float:right;" readonly disabled="disabled">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="ficha in Ficha" class="{{ficha.Ficha1}}" value="{{ficha.IdFicha}}">{{ficha.Ficha1}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
 
+                    <div class="form-group">
+                        <label>Fecha Inicio</label>
+                        <label ng-model="Programacion.FechaInicio"></label>
+                        <input class="form-control" style="width:100%;" ng-model="Programacion.FechaInicio" id="FechaInicio" readonly />
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Fecha Fin</label>
-                            <label ng-model="Programacion.FechaFin"></label>
-                            <input class="form-control" style="width:100%;" ng-model="Programacion.FechaFin" id="FechaFin" readonly />
-                        </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Fecha Fin</label>
+                        <label ng-model="Programacion.FechaFin"></label>
+                        <input class="form-control" style="width:100%;" ng-model="Programacion.FechaFin" id="FechaFin" readonly />
                     </div>
-                   
-                        <div class="col-md-6" style="float:right">
-                            <div class="form-group">
-                                <label>Instructor</label>
-                                <select class="form-control" id="listas" ng-required="true" ng-model="Instructor.IdInstructor"  readonly disabled="disabled">
-                                    <!--<option value="" disabled selected>Seleccione el Área</option>-->
-                                    <option ng-repeat="instructor in Instructor" class="{{instructor.Nombre}}" value="{{instructor.IdInstructor}}">{{instructor.Nombre}}&nbsp;{{instructor.Apellido}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style=" float:left ">
-                            <div class="form-group">
-                                <label>Competencia</label>
-                                <select class="form-control" id="listas" ng-required="true" ng-model="competencia.IdCompetencia" ng-change="ConsultarResultados(competencia.IdCompetencia)"  readonly disabled="disabled">
-                                    <!--<option value="" disabled selected>Seleccione el Área</option>-->
-                                    <option title="{{competencia.Nombre}}" ng-repeat="competencia in Competencia" class="{{competencia.Nombre}}" value="{{competencia.IdCompetencia}}">{{competencia.Codigo}}</option>
-                                </select>
-                            </div>
-                        </div>
-                  
-                   
-                    <div class="col-md-12" style="">
-                        <div class="form-group">
-                            <label>Resultado Aprendizaje</label>
-                            <!--<select class="form-control" ng-required="true" ng-model="Resultado.IdResultado" style="float:right;" readonly disabled="disabled">-->
-                                <!--<option value="" disabled selected>Seleccione el Área</option>-->
-                               <!-- <option title="{{resultado.Resultado}}" ng-repeat="resultado in Resultado" class="{{resultado.Resultado}}" value="{{resultado.IdResultado}}">{{resultado.Codigo}}</option>-->
-                            <!--  </select>-->
-                           <input class="form-control" style="width:100%;" ng-model="Resultado.IdResultado" id="FechaFin" readonly />
-                        </div>
+                </div>
+
+                <div class="col-md-6" style="float:right">
+                    <div class="form-group">
+                        <label>Instructor</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="Instructor.IdInstructor" readonly disabled="disabled">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="instructor in Instructor" class="{{instructor.Nombre}}" value="{{instructor.IdInstructor}}">{{instructor.Nombre}}&nbsp;{{instructor.Apellido}}</option>
+                        </select>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Hora Inicio</label>
-                            <input class="form-control" style="width:100%;" ng-model="Programacion1.HoraInicio" id="HoraInicio1" />
-                        </div>
+                </div>
+                <div class="col-md-6" style=" float:left ">
+                    <div class="form-group">
+                        <label>Competencia</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="competencia.IdCompetencia" ng-change="ConsultarResultados(competencia.IdCompetencia)" readonly disabled="disabled">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option title="{{competencia.Nombre}}" ng-repeat="competencia in Competencia" class="{{competencia.Nombre}}" value="{{competencia.IdCompetencia}}">{{competencia.Codigo}}</option>
+                        </select>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Hora Fin</label>
-                            <input class="form-control" style="width:100%;" ng-model="Programacion1.HoraFin" id="HoraFin1" />
-                        </div>
+                </div>
+
+
+                <div class="col-md-12" style="">
+                    <div class="form-group">
+                        <label>Resultado Aprendizaje</label>
+                        <!--<select class="form-control" ng-required="true" ng-model="Resultado.IdResultado" style="float:right;" readonly disabled="disabled">-->
+                        <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                        <!-- <option title="{{resultado.Resultado}}" ng-repeat="resultado in Resultado" class="{{resultado.Resultado}}" value="{{resultado.IdResultado}}">{{resultado.Codigo}}</option>-->
+                        <!--  </select>-->
+                        <input class="form-control" style="width:100%;" ng-model="Resultado.IdResultado" id="FechaFin" readonly />
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Día Programación</label>
-                            <select class="form-control" id="listas" ng-required="true" ng-model="FinSemana.dia" style="float:right;">
-                                <!--<option value="" disabled selected>Seleccione el Área</option>-->
-                                <option ng-repeat="finSemana in FinSemana" class="{{finSemana.Nombre}}" value="{{finSemana.dia}}">{{finSemana.Nombre}}</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Hora Inicio</label>
+                        <input class="form-control" style="width:100%;" ng-model="Programacion1.HoraInicio" id="HoraInicio1" />
                     </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Hora Fin</label>
+                        <input class="form-control" style="width:100%;" ng-model="Programacion1.HoraFin" id="HoraFin1" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Día Programación</label>
+                        <select class="form-control" id="listas" ng-required="true" ng-model="FinSemana.dia" style="float:right;">
+                            <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                            <option ng-repeat="finSemana in FinSemana" class="{{finSemana.Nombre}}" value="{{finSemana.dia}}">{{finSemana.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
                 <div id="Datos1" style="display:none;">
-                   
-                        <div class="col-md-6" style="margin-top:10px;">
-                            <div class="form-group">
-                                <label>Ambiente</label>
-                                <select class="form-control" id="listas" ng-required="true" ng-model="Ambiente1.IdAmbiente" style="float:right;">
-                                    <!--<option value="" disabled selected>Seleccione el Área</option>-->
-                                    <option ng-repeat="ambiente in Ambiente1" class="{{ambiente.Numero}}" value="{{ambiente.IdAmbiente}}">{{ambiente.Numero}}</option>
-                                </select>
-                            </div>
+
+                    <div class="col-md-6" style="margin-top:10px;">
+                        <div class="form-group">
+                            <label>Ambiente</label>
+                            <select class="form-control" id="listas" ng-required="true" ng-model="Ambiente1.IdAmbiente" style="float:right;">
+                                <!--<option value="" disabled selected>Seleccione el Área</option>-->
+                                <option ng-repeat="ambiente in Ambiente1" class="{{ambiente.Numero}}" value="{{ambiente.IdAmbiente}}">{{ambiente.Numero}}</option>
+                            </select>
                         </div>
-                    
+                    </div>
+
                 </div>
                 <div class="col-md-2" style="float:right; margin-top:2%; margin-right:4%;">
                     <div class="form-group">
@@ -356,13 +356,13 @@
                     </div>
                 </div>
             </div>
-                
-            
-           
+
+
+
             <div class="modal-footer">
                 <button class="btn btn-success" ng-click="Guardar1()">Guardar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                
+
             </div>
         </div>
     </div>
@@ -507,24 +507,38 @@
 <!--tabla donde se insertan todas las programaciones-->
 
 <div id="panel2">
+    <div style="position:absolute; display:flex; width:100%; height:100%; justify-content:center; margin-top:20%;">
+        <img src="../img/logo.png" style="position:fixed; width:20%; opacity:.2; z-index:-1" />
+    </div>
+
     <div class="Principal Transicion">
         <div class="col-md-12">
             <div class="col-md-12" style="padding: 0px !important;">
 
                 <div class="panel panel-default">
                     <div class="panel-body" id="body">
-                        <div class="col-md-3" style="float:right;">
+                        <div class="col-md-3" style="float:right;" id="Filtro">
                             <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
                             <input class="form-control" ng-keyup="Filter($event)" id="Buscar" />
                         </div>
-
-                        <button class="btn btn-default" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Eliminar Programación" style="height: 34px;">
+                        <div class="col-md-3" style="float:right; display:none;" id="BuscarCedulaInstructor">
+                            <div class="col-md-9">
+                                <input class="form-control" ng-model="cedula" />
+                            </div>
+                            <div class="col-md-3" style="padding-right:0px;" id="recibirLlave">
+                                <button class="btn btn-primary" ng-click="ConsultarPogramacionesInstructor()" style="width:100%; height:36px;">Buscar</button>
+                            </div>
+                            <div class="col-md-3" style="padding-right:0px;" id="entregaLlaves">
+                                <button class="btn btn-primary" ng-click="EntregaLlaves()" style="width:100%; height:36px; display:none;">Buscar</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-default noConsulta" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Eliminar Programación" style="height: 34px;">
                             <i class="glyphicon glyphicon-trash"></i>
                         </button>
                         <!--<button class="btn btn-default" type="button" id="Programacionessabado" ng-click="ConsultarProgramacionSabados()" title="Programaciones Técnicas Fin de Semana" style="height: 34px;">
                             <i class="material-icons">&#xE536;</i>
                         </button>-->
-                        <button class="btn btn-default" type="button" id="ProgramacionesTrasversal" ng-click="ConsultarProgramacionTransversales()" title="Programación Compentencias Transversales" style="height: 34px;">
+                        <button class="btn btn-default noConsulta" type="button" id="ProgramacionesTrasversal" ng-click="ConsultarProgramacionTransversales()" title="Programación Compentencias Transversales" style="height: 34px;">
                             <i class="material-icons">&#xE536;</i>
                         </button>
                         <!--<button class="btn btn-default" type="button" id="modificar" ng-click="Modificar()" title="Añadir Programación Compentencias Transversales" style="height: 34px;">
@@ -533,15 +547,16 @@
                         <button class="btn btn-default" type="button" ng-click="ModalContraJornada()" title="Añadir Programación Compentencias Transversales Contra Jornada" style="height: 34px;">
                             <i class="material-icons">&#xE15A;</i>
                         </button>-->
-                        <button class="btn btn-default" type="button" id="AnadirTransversales" ng-click="Modificar()" title="Añadir Progrmación Competencias Transversales" style="height:34px;">
+                        <button class="btn btn-default noConsulta" type="button" id="AnadirTransversales" ng-click="Modificar()" title="Añadir Progrmación Competencias Transversales" style="height:34px;">
                             <i class="material-icons">&#xE89C;</i>
                         </button>
-                        <button class="btn btn-default" type="button" id="reporte" ng-click="ModalReporte()" title="Reporte Programación" style="height: 34px;">
+                        <button class="btn btn-default noConsulta" type="button" id="reporte" ng-click="ModalReporte()" title="Reporte Programación" style="height: 34px;">
                             <i class="glyphicon glyphicon-registration-mark"></i>
                         </button>
-                        <button class="btn btn-default" type="button" id="habili" ng-click="EnviarCorreo()" title="Enviar Programación" style="height: 34px;">
+                        <button class="btn btn-default noConsulta" type="button" id="habili" ng-click="EnviarCorreo()" title="Enviar Programación" style="height: 34px;">
                             <i class="glyphicon glyphicon-send"></i>
                         </button>
+                       
                         <button class="btn btn-default" type="button" id="atras" ng-click="ProgramacionTecnica()" title="Atrás" style="height: 34px;">
                             <i class="glyphicon glyphicon-arrow-left" />
                         </button>
@@ -560,6 +575,7 @@
                                     <th class="paginationclass" style="font-weight:bold;">Código Competencia<!--{{Nombre}}--></th>
                                     <th class="paginationclass" style="font-weight:bold;">Instructor</th>
                                     <th class="paginationclass" style="font-weight:bold;">Día Semana</th>
+                                    <th class="paginationclass" style="font-weight:bold;">LLaves</th>
                                     <!--<th>Estado</th>-->
                                 </tr>
                             </thead>
@@ -575,6 +591,11 @@
                                     <td title="{{datalist.Competencia | uppercase}}">{{datalist.CodigoCompetencia}} </td>
                                     <td>{{datalist.NombreInstructor | uppercase}} </td>
                                     <td class="dia1">{{datalist.DiasProgramados | uppercase}}</td>
+                                    <td >
+                                       <label>R</label> <input type="checkbox" ng-click="ModalPrestamo($index)" id="recibio" name="datalist" ng-checked="{{datalist.RecibioLLaves}}" ng-model="datalist.RecibioLLaves"/>
+                                       <label style="margin-left:5px;">E</label><input style="margin-left:5px;" ng-click="ModalPrestamo1($index)" type="checkbox" ng-checked="{{datalist.EntregoLLaves}}" ng-model="datalist.EntregoLLaves"/>
+                                    </td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -1216,7 +1237,7 @@
                     <button style="margin-left:22px;" class="btn btn-primary" ng-click="AbrirModalJornada()">Programación Jornadas</button>
 
                 </div>
-                    <br />
+                <br />
                 <div class="form-group" style="margin-left:20px;">
                     <button class="btn btn-primary" ng-click="Modificar()">Transversal con Traslape</button>
                     &ensp;&ensp;
@@ -1283,7 +1304,7 @@
 
                         <!--renglon5-->
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">
-                            <input  class="OcultarPanelDatosJor" type="checkbox" ng-model="Sabado.sabado" ng-click="CerrarValidarFinSemana()" />
+                            <input class="OcultarPanelDatosJor" type="checkbox" ng-model="Sabado.sabado" ng-click="CerrarValidarFinSemana()" />
                             <label style="font-size:13px;">¿Incluye fin de semana?</label>
                         </div>
 
@@ -1295,13 +1316,13 @@
                         <!--Renglon1-->
                         <div class="row" style="margin-top:20px;">
                             <div class="form-group col-lg-5 col-md-5 col-sm-5 col-xs-5" id="form3">
-                               <!-- <input class="margenTop OcultarPanelDatosJor" type="checkbox" ng-model="ObjetoPrograma.Titulado" ng-click="ProgramasTitulados1()" />-->
-                                <input  type="checkbox" class="ocultar" ng-model="ObjetoPrograma.Titulado" ng-click="ProgramasTitulados1()" />
+                                <!-- <input class="margenTop OcultarPanelDatosJor" type="checkbox" ng-model="ObjetoPrograma.Titulado" ng-click="ProgramasTitulados1()" />-->
+                                <input type="checkbox" class="ocultar" ng-model="ObjetoPrograma.Titulado" ng-click="ProgramasTitulados1()" />
                                 <label style="font-size:13px;" class="ocultar">Titulados</label>
                             </div>
                             <div class="form-group col-lg-7 col-md-7 col-sm-7 col-xs-7" id="form4">
                                 <!--<input class="margenTop OcultarPanelDatosJor" type="checkbox" ng-model="ObjetoPrograma.Complementario" ng-click="ProgramasComplementarios()" />-->
-                                <input type="checkbox"  class="ocultar" ng-model="ObjetoPrograma.Complementario" ng-click="ProgramasComplementarios()" />
+                                <input type="checkbox" class="ocultar" ng-model="ObjetoPrograma.Complementario" ng-click="ProgramasComplementarios()" />
                                 <label style="font-size:13px;" class="ocultar">Complementarios</label>
                             </div>
                         </div>
@@ -1325,8 +1346,8 @@
                         </div>
 
                         <!--Renglon5-->
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 style="margin-top:5px;"">
-                            <input  class="OcultarPanelDatosJor" type="checkbox" ng-model="ValidarFinSemana" ng-click="SoloFinesSemana()" />
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 style=" margin-top:5px;"">
+                            <input class="OcultarPanelDatosJor" type="checkbox" ng-model="ValidarFinSemana" ng-click="SoloFinesSemana()" />
                             <label style="font-size:13px;">¿Solo fines de semana?</label>
                         </div>
 
@@ -1414,7 +1435,7 @@
                     <div>
                         <!--<div style="float:left;">
                             <div class="form-group">
-                              
+
                                 <select class="form-control" ng-required="true" ng-model="Resultado.IdResultado" style="width:250px;">
                                     <option value="" disabled selected>Seleccione Resultado</option>
                                     <option title="{{resultado.Resultado}}" ng-repeat="resultado in Resultado" class="{{resultado.Resultado}}" value="{{resultado.IdResultado}}">{{resultado.Codigo}}</option>
@@ -1432,7 +1453,7 @@
                                 </select>-->
                             </div>
                         </div>
-                     
+
 
 
 
@@ -1454,3 +1475,32 @@
         </div>
     </div>
 </div>
+
+<!--Modal confrimar prestamo llaves-->
+<div class="modal fade" id="Préstamo" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB; align-content:center;">
+                         CONFIRMAR
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Desea confirmar el registro?</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="PrestamoLlaves()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger"  ng-click="CancelarLlaves()" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal confrimar devolver llaves-->

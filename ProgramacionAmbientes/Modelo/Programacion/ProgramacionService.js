@@ -450,6 +450,32 @@
               })
         };
 
+        service.ConsultarPogramacionesInstructor = function (cedula, callback) {
+            var Item = {
+                Parametro1: cedula
+            };
+            $http.post(URLServices + "Programacion/ConsultarPogramacionesInstructor/", Item)
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
+        service.GuardarPrestamoLLaves = function (Programacion, callback) {
+            $http.post(URLServices + "Programacion/GuardarPrestamoLLaves/", Programacion)
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
+        service.EntregaLlaves = function (cedula, callback) {
+            var Item = {
+                Parametro1: cedula
+            };
+            $http.post(URLServices + "Programacion/EntregaLlaves/")
+              .success(function (response) {
+                  callback(response);
+              })
+        };
 
         return service;
 

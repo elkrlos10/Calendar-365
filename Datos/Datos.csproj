@@ -84,6 +84,7 @@
     <Compile Include="Modelo\Instructor.cs" />
     <Compile Include="Modelo\Model1.cs" />
     <Compile Include="Modelo\Municipio.cs" />
+    <Compile Include="Modelo\PrestamoLlaves.cs" />
     <Compile Include="Modelo\Programa.cs" />
     <Compile Include="Modelo\Resultado_Aprendizaje.cs" />
     <Compile Include="Modelo\Sede.cs" />

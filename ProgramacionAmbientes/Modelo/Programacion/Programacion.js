@@ -23,6 +23,7 @@
                 $(".instructor").css("display", "none");
                 $(".consulta").css("display", "none");
                 $("#ProgInstructor").css("display", "none");
+                $("#panel2").hide();
             }
             if ($rootScope.globals.currentUser.tipousuario == 2) {
                 $(".coord").css("display", "block");
@@ -31,6 +32,7 @@
                 $(".consulta").css("display", "none");
                 $("#btntransversaldia").hide();
                 $("#ProgInstructor").css("display", "none");
+                $("#panel2").hide();
             }
             if ($rootScope.globals.currentUser.tipousuario == 3) {
                 $(".instructor").css("display", "block");
@@ -39,6 +41,7 @@
                 $(".consulta").css("display", "none");
                 $(".instructor").css("margin-left", "-210%");
                 $("#ProgInstructor").css("display", "none");
+                $("#panel2").hide();
             }
             if ($rootScope.globals.currentUser.tipousuario == 4) {
                 $(".instructor").css("display", "none");
@@ -46,8 +49,12 @@
                 $(".admin").css("display", "none");
                 $(".instructor").css("display", "none");
                 $(".consulta").css("display", "none");
-                $("#transversal3").css("display", "block");
-                
+                //$("#transversal3").css("display", "block");
+                $("#panel2").show();
+                $("#panel1").hide();
+                $("#Filtro").css("display", "none");
+                $("#BuscarCedulaInstructor").css("display", "block");
+                $(".noConsulta").css("display", "none");
             }
 
             // Variables y metodos para la paginación----------------------
@@ -67,7 +74,7 @@
             $("#atras").hide();
             $("#dia").hide();
             $(".dia1").hide();
-            $("#panel2").hide();
+          
             //$("#form1").css("display", "none");
             //$("#form2").css("display", "none");
             //$("#form3").css("display", "none");
@@ -2852,6 +2859,7 @@
                     }
                 });
 
+
                 //$.each($scope.Resultado, function (index, value) {
                 //    if (value.Resultado == ProgramacionSeleccionada[0].Resultado) {
 
@@ -3209,6 +3217,7 @@
                     else if (exp.test(item.CodigoResultado)) {
                         return item;
                     }
+                 
                 });
                 $scope.datalists = Programaciones;
                 //Variable para setear la paginación 
@@ -3586,4 +3595,86 @@
             $scope.AbrirModalSabado = function () {
                 $('#ModalSabado').modal('show');
             }
+
+            //------------------------------------------- Consulta de Programacion por Instructor-----------------------------------------------
+
+            $scope.ConsultarPogramacionesInstructor = function () {
+                ProgramacionService.ConsultarPogramacionesInstructor($scope.cedula, function (response) {
+                    if (response.success) {
+                        $scope.datalists = response.datos;
+                        $.each($scope.datalists, function (index, value) {
+
+                            $scope.datalists[index].FechaInicio = value.FechaInicio.toString().substring(0, 10);
+                            $scope.datalists[index].FechaFin = value.FechaFin.toString().substring(0, 10);
+                            $scope.datalists[index].HoraInicio = value.HoraInicio.toString().substring(0, 5);
+                            $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
+                            //$scope.datalists[index].CodigoResultado = value.CodigoCompetencia;
+                            //$scope.datalists[index].Resultado = value.Competencia;
+                            //$("#dia").show();
+                            //$("#dia1").show();
+                            //$scope.Nombre = "Competencia";
+                            //Variable para setear la paginación 
+                            $scope.curPage = 0;
+                        });
+                    }
+                })
+            }
+
+            //--------------------------------------------Entrega de llaves----------------------------------------------------------------------
+
+            $scope.ModalPrestamo = function (posicion) {
+              
+                $("#Préstamo").modal("show");
+                $scope.progrmacionSelec = $scope.datalists[posicion];
+                $scope.progrmacionSelec.RecibioLLaves = true;
+            }
+
+            $scope.ModalPrestamo1 = function (posicion) {
+
+                $("#Préstamo").modal("show");
+                $scope.progrmacionSelec = $scope.datalists[posicion];
+                $scope.progrmacionSelec.EntregoLLaves = true;
+            }
+
+            $scope.PrestamoLlaves = function () {
+               
+                ProgramacionService.GuardarPrestamoLLaves($scope.progrmacionSelec, function (response) {
+                    if (response.success) {
+                        $scope.datalists = response.datos;
+                        $.each($scope.datalists, function (index, value) {
+
+                            $scope.datalists[index].FechaInicio = value.FechaInicio.toString().substring(0, 10);
+                            $scope.datalists[index].FechaFin = value.FechaFin.toString().substring(0, 10);
+                            $scope.datalists[index].HoraInicio = value.HoraInicio.toString().substring(0, 5);
+                            $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
+                         
+                            //Variable para setear la paginación 
+                            $scope.curPage = 0;
+                        });
+                        bootbox.dialog({
+                            title: "Información",
+                            message: "El prestamo de llaves se registro con éxito.",
+                            buttons: {
+                                success: {
+                                    label: "Cerrar",
+                                    className: "btn-primary",
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+
+
+
+
+
+            $scope.CancelarLlaves = function () {
+                if ($scope.progrmacionSelec.EntregoLLaves== true) {
+                    $scope.progrmacionSelec.EntregoLLaves = false;
+                } else {
+                    $scope.progrmacionSelec.RecibioLLaves = false;
+                }
+            }
+            
         }]);
