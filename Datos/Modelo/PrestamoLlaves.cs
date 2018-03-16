@@ -15,5 +15,7 @@ namespace Datos.Modelo
         public bool Entrego { get; set; }
         [Column(TypeName = "date")]
         public DateTime Fecha { get; set; }
+        public TimeSpan? HoraRecibio { get; set; }
+        public TimeSpan? HoraEntrego { get; set; }
     }
 }

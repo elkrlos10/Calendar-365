@@ -13,7 +13,8 @@
 
             //Clase para ocultar botones colegio, titulados y complementarias
             $(".ocultar").hide();
-
+            $(".ocultarLlaves").hide();
+            
             // var dato = $("#calendar .fc-celda-act").attr("data-date");
 
             if ($rootScope.globals.currentUser.tipousuario == 1) {
@@ -55,7 +56,12 @@
                 $("#Filtro").css("display", "none");
                 $("#BuscarCedulaInstructor").css("display", "block");
                 $(".noConsulta").css("display", "none");
+                $(".ocultarLlaves").show();
+                $("#cedulaBuscar").focus();
             }
+
+
+            $scope.UsuarioConsulta = $rootScope.globals.currentUser.tipousuario;
 
             // Variables y metodos para la paginación----------------------
             $scope.curPage = 0;
@@ -74,7 +80,7 @@
             $("#atras").hide();
             $("#dia").hide();
             $(".dia1").hide();
-          
+
             //$("#form1").css("display", "none");
             //$("#form2").css("display", "none");
             //$("#form3").css("display", "none");
@@ -1987,14 +1993,14 @@
 
                     //Para volver a programar todos los resultados activar de nuevo el each y cambiar el idResultado por value 
                     //$.each($scope.selectedValues, function (index, value) {
-                        $scope.ListaProgramacion.push({
-                            IdFicha: $scope.Programacion.IdFicha, IdResultado: $scope.Resultado[0].IdResultado, IdAmbiente: $scope.Programacion.IdAmbiente,
-                            IdInstructor: $scope.Programacion.IdInstructor, FechaInicio: $scope.Programacion.FechaInicio,
-                            FechaFin: $scope.Programacion.FechaFin, HoraInicio: $scope.Programacion.HoraInicio, HoraFin: $scope.Programacion.HoraFin,
-                            Jornada: $scope.Programacion.Jornada, DiaSemana: $scope.Programacion.DiaSemana, Lunes: $scope.Programacion.Lunes,
-                            Martes: $scope.Programacion.Martes, Miercoles: $scope.Programacion.Miercoles, Jueves: $scope.Programacion.Jueves,
-                            Viernes: $scope.Programacion.Viernes, Transversal: $scope.Programacion.Transversal, NombreEmpresa: $scope.Programacion.NombreEmpresa
-                        })
+                    $scope.ListaProgramacion.push({
+                        IdFicha: $scope.Programacion.IdFicha, IdResultado: $scope.Resultado[0].IdResultado, IdAmbiente: $scope.Programacion.IdAmbiente,
+                        IdInstructor: $scope.Programacion.IdInstructor, FechaInicio: $scope.Programacion.FechaInicio,
+                        FechaFin: $scope.Programacion.FechaFin, HoraInicio: $scope.Programacion.HoraInicio, HoraFin: $scope.Programacion.HoraFin,
+                        Jornada: $scope.Programacion.Jornada, DiaSemana: $scope.Programacion.DiaSemana, Lunes: $scope.Programacion.Lunes,
+                        Martes: $scope.Programacion.Martes, Miercoles: $scope.Programacion.Miercoles, Jueves: $scope.Programacion.Jueves,
+                        Viernes: $scope.Programacion.Viernes, Transversal: $scope.Programacion.Transversal, NombreEmpresa: $scope.Programacion.NombreEmpresa
+                    })
                     //})
 
 
@@ -2085,11 +2091,11 @@
 
             //Guadrar progrmación transversal contra jornada-----------------------------------------------------
             $scope.GuardarTransversalCJ = function () {
-               
+
                 $scope.Programacion.IdFicha = $scope.Ficha.IdFicha
                 $scope.Programacion.IdAmbiente = $scope.Ambiente.IdAmbiente
                 $scope.Programacion.IdInstructor = $scope.Instructor.IdInstructor
-                $scope.Programacion.IdResultado= $scope.Resultado[0].IdResultado;
+                $scope.Programacion.IdResultado = $scope.Resultado[0].IdResultado;
 
                 if ($scope.Programacion.IdFicha == "" || $scope.Programacion.IdAmbiente == "" || $scope.Programacion.IdInstructor == "" || $scope.Programacion.IdResultado == undefined) {
 
@@ -2224,13 +2230,13 @@
                 //Para volver a programar todos los resultados activar de nuevo el each y cambiar el idResultado por value 
                 //$.each($scope.selectedValues, function (index, value) {
 
-                    $scope.ListaProgramacion.push({
-                        IdFicha: $scope.Programacion.IdFicha, IdResultado: $scope.Resultado[0].IdResultado, IdAmbiente: $scope.Programacion.IdAmbiente,
-                        IdInstructor: $scope.Programacion.IdInstructor, FechaInicio: $scope.Programacion.FechaInicio,
-                        FechaFin: $scope.Programacion.FechaFin, HoraInicio: $scope.Programacion.HoraInicio, HoraFin: $scope.Programacion.HoraFin,
-                        Jornada: $scope.Programacion.Jornada, DiaSemana: $scope.Programacion.DiaSemana, Lunes: $scope.Programacion.Lunes,
-                        Martes: $scope.Programacion.Martes, Miercoles: $scope.Programacion.Miercoles, Jueves: $scope.Programacion.Jueves,
-                        Viernes: $scope.Programacion.Viernes, Transversal: $scope.Programacion.Transversal, NombreEmpresa: $scope.Programacion.NombreEmpresa
+                $scope.ListaProgramacion.push({
+                    IdFicha: $scope.Programacion.IdFicha, IdResultado: $scope.Resultado[0].IdResultado, IdAmbiente: $scope.Programacion.IdAmbiente,
+                    IdInstructor: $scope.Programacion.IdInstructor, FechaInicio: $scope.Programacion.FechaInicio,
+                    FechaFin: $scope.Programacion.FechaFin, HoraInicio: $scope.Programacion.HoraInicio, HoraFin: $scope.Programacion.HoraFin,
+                    Jornada: $scope.Programacion.Jornada, DiaSemana: $scope.Programacion.DiaSemana, Lunes: $scope.Programacion.Lunes,
+                    Martes: $scope.Programacion.Martes, Miercoles: $scope.Programacion.Miercoles, Jueves: $scope.Programacion.Jueves,
+                    Viernes: $scope.Programacion.Viernes, Transversal: $scope.Programacion.Transversal, NombreEmpresa: $scope.Programacion.NombreEmpresa
                     //})
 
                 })
@@ -2261,13 +2267,13 @@
                             //Para volver a programar todos los resultados activar de nuevo el each y cambiar el idResultado por value 
                             //$.each($scope.selectedValues, function (index, value) {
 
-                                $scope.ListaProgramacionSabado.push({
-                                    IdFicha: $scope.Programacion1.IdFicha, IdResultado: $scope.Resultado[0].IdResultado, IdAmbiente: $scope.Programacion1.IdAmbiente,
-                                    IdInstructor: $scope.Programacion1.IdInstructor, FechaInicio: $scope.Programacion1.FechaInicio,
-                                    FechaFin: $scope.Programacion1.FechaFin, HoraInicio: $scope.Programacion1.HoraInicio, HoraFin: $scope.Programacion1.HoraFin,
-                                    Jornada: $scope.Programacion1.Jornada, DiaSemana: $scope.Programacion1.DiaSemana, Lunes: null,
-                                    Martes: null, Miercoles: null, Jueves: null,
-                                    Viernes: null, Transversal: $scope.Programacion.Transversal, NombreEmpresa: $scope.Programacion.NombreEmpresa
+                            $scope.ListaProgramacionSabado.push({
+                                IdFicha: $scope.Programacion1.IdFicha, IdResultado: $scope.Resultado[0].IdResultado, IdAmbiente: $scope.Programacion1.IdAmbiente,
+                                IdInstructor: $scope.Programacion1.IdInstructor, FechaInicio: $scope.Programacion1.FechaInicio,
+                                FechaFin: $scope.Programacion1.FechaFin, HoraInicio: $scope.Programacion1.HoraInicio, HoraFin: $scope.Programacion1.HoraFin,
+                                Jornada: $scope.Programacion1.Jornada, DiaSemana: $scope.Programacion1.DiaSemana, Lunes: null,
+                                Martes: null, Miercoles: null, Jueves: null,
+                                Viernes: null, Transversal: $scope.Programacion.Transversal, NombreEmpresa: $scope.Programacion.NombreEmpresa
                                 //})
 
                             })
@@ -3009,7 +3015,7 @@
             };
             //--------------------------------------------------------------------------------------------------
 
-           
+
 
             //Función para traer los coordinadores--------------------------------------------------------------   
             $scope.ModalCoordinador = function () {
@@ -3217,7 +3223,7 @@
                     else if (exp.test(item.CodigoResultado)) {
                         return item;
                     }
-                 
+
                 });
                 $scope.datalists = Programaciones;
                 //Variable para setear la paginación 
@@ -3608,12 +3614,12 @@
                             $scope.datalists[index].FechaFin = value.FechaFin.toString().substring(0, 10);
                             $scope.datalists[index].HoraInicio = value.HoraInicio.toString().substring(0, 5);
                             $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
-                            //$scope.datalists[index].CodigoResultado = value.CodigoCompetencia;
-                            //$scope.datalists[index].Resultado = value.Competencia;
-                            //$("#dia").show();
-                            //$("#dia1").show();
-                            //$scope.Nombre = "Competencia";
-                            //Variable para setear la paginación 
+
+                            if ($scope.datalists[index].RecibioLLaves) {
+                                $("input[name='recibio" + index + "']").prop("disabled", true);
+
+                            }
+                            //Variable para setear la 
                             $scope.curPage = 0;
                         });
                     }
@@ -3622,22 +3628,18 @@
 
             //--------------------------------------------Entrega de llaves----------------------------------------------------------------------
 
-            $scope.ModalPrestamo = function (posicion) {
-              
+            $scope.ModalPrestamo = function (posicion, opc) {
                 $("#Préstamo").modal("show");
                 $scope.progrmacionSelec = $scope.datalists[posicion];
-                $scope.progrmacionSelec.RecibioLLaves = true;
-            }
-
-            $scope.ModalPrestamo1 = function (posicion) {
-
-                $("#Préstamo").modal("show");
-                $scope.progrmacionSelec = $scope.datalists[posicion];
-                $scope.progrmacionSelec.EntregoLLaves = true;
+                if (opc == 1) {
+                    $scope.progrmacionSelec.RecibioLLaves = true;
+                } else {
+                    $scope.progrmacionSelec.EntregoLLaves = true;
+                }
             }
 
             $scope.PrestamoLlaves = function () {
-               
+
                 ProgramacionService.GuardarPrestamoLLaves($scope.progrmacionSelec, function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
@@ -3647,7 +3649,10 @@
                             $scope.datalists[index].FechaFin = value.FechaFin.toString().substring(0, 10);
                             $scope.datalists[index].HoraInicio = value.HoraInicio.toString().substring(0, 5);
                             $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
-                         
+                            if ($scope.datalists[index].RecibioLLaves == false) {
+                                $("input[name='recibio" + index + "']").prop("disabled", true);
+
+                            }
                             //Variable para setear la paginación 
                             $scope.curPage = 0;
                         });
@@ -3670,11 +3675,11 @@
 
 
             $scope.CancelarLlaves = function () {
-                if ($scope.progrmacionSelec.EntregoLLaves== true) {
+                if ($scope.progrmacionSelec.EntregoLLaves == true) {
                     $scope.progrmacionSelec.EntregoLLaves = false;
                 } else {
                     $scope.progrmacionSelec.RecibioLLaves = false;
                 }
             }
-            
+
         }]);

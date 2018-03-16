@@ -447,7 +447,7 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.ConsultarPogramacionesInstructor(int.Parse(oParametrosDTO.Parametro1));
+                var datos = oProgramacionBl.ConsultarPogramacionesInstructor(oParametrosDTO.Parametro1);
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)

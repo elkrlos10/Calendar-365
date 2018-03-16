@@ -523,7 +523,7 @@
                         </div>
                         <div class="col-md-3" style="float:right; display:none;" id="BuscarCedulaInstructor">
                             <div class="col-md-9">
-                                <input class="form-control" ng-model="cedula" />
+                                <input id="cedulaBuscar" class="form-control" ng-model="cedula" />
                             </div>
                             <div class="col-md-3" style="padding-right:0px;" id="recibirLlave">
                                 <button class="btn btn-primary" ng-click="ConsultarPogramacionesInstructor()" style="width:100%; height:36px;">Buscar</button>
@@ -575,7 +575,7 @@
                                     <th class="paginationclass" style="font-weight:bold;">Código Competencia<!--{{Nombre}}--></th>
                                     <th class="paginationclass" style="font-weight:bold;">Instructor</th>
                                     <th class="paginationclass" style="font-weight:bold;">Día Semana</th>
-                                    <th class="paginationclass" style="font-weight:bold;">LLaves</th>
+                                    <th class="paginationclass ocultarLlaves" style="font-weight:bold;">LLaves</th>
                                     <!--<th>Estado</th>-->
                                 </tr>
                             </thead>
@@ -591,9 +591,9 @@
                                     <td title="{{datalist.Competencia | uppercase}}">{{datalist.CodigoCompetencia}} </td>
                                     <td>{{datalist.NombreInstructor | uppercase}} </td>
                                     <td class="dia1">{{datalist.DiasProgramados | uppercase}}</td>
-                                    <td >
-                                       <label>R</label> <input type="checkbox" ng-click="ModalPrestamo($index)" id="recibio" name="datalist" ng-checked="{{datalist.RecibioLLaves}}" ng-model="datalist.RecibioLLaves"/>
-                                       <label style="margin-left:5px;">E</label><input style="margin-left:5px;" ng-click="ModalPrestamo1($index)" type="checkbox" ng-checked="{{datalist.EntregoLLaves}}" ng-model="datalist.EntregoLLaves"/>
+                                    <td ng-if="UsuarioConsulta ==4">
+                                       <label>R</label> <input type="checkbox" ng-click="ModalPrestamo($index,1)" ng-disabled="datalist.RecibioLLaves == true" name="recibio{{$index}}"  ng-model="datalist.RecibioLLaves"/>
+                                       <label style="margin-left:5px;">E</label><input style="margin-left:5px;" ng-disabled="datalist.EntregoLLaves == true || datalist.RecibioLLaves == false" ng-click="ModalPrestamo($index,2)" type="checkbox" ng-model="datalist.EntregoLLaves"/>
                                     </td>
                                     
                                 </tr>
