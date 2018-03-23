@@ -560,6 +560,12 @@
                         <button class="btn btn-default" type="button" id="atras" ng-click="ProgramacionTecnica()" title="Atrás" style="height: 34px;">
                             <i class="glyphicon glyphicon-arrow-left" />
                         </button>
+                        <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Atrás" style="height: 34px;">
+                                <i class="material-icons">&#xE0DA;</i>
+                        </button>
+                        <button class="btn btn-default" type="button" id="llaves" ng-click="AmbientesDisponibles()" title="Atrás" style="height: 34px;">
+                            <i class="material-icons">&#xE563;</i>
+                        </button>
                         <br />
                         <br />
                         <table class="table table-bordered">
@@ -1490,9 +1496,16 @@
                 </center>
 
             </div>
-            <div class="modal-body" style="height: 100px; overflow: auto;">
+            <div class="modal-body" style="height: 100px; overflow: hidden;">
                 <div class="form-group">
-                    <label>¿Desea confirmar el registro?</label>
+                    <center>
+                        <label>{{Ob.mensaje}}</label>
+                    </center>
+                   <div>
+                       <textarea class="form-control" ng-model="Ob.Observacion" id="Observacion" maxlength="199" placeholder="Observaciones">
+
+                       </textarea>
+                   </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1503,4 +1516,43 @@
     </div>
 </div>
 
-<!--Modal confrimar devolver llaves-->
+
+<!--Modal reporte llaves-->
+<div class="modal fade" id="RepLlaves" role="dialog">
+    <div class="modal-dialog" style="height:350px; width:400px">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4>Reporte Programación</h4>
+                </center>
+            </div>
+            <div style="margin-top:2%">
+                <div>
+                    <center>
+                        <div class="form-group">
+                            <label>Fecha Inicio</label>
+                            <input class="form-control" style="width:300px;" ng-model="Fechas1.FechaInicio" id="FechaInicio4" />
+                        </div>
+                    </center>
+                </div>
+                <div>
+                    <center>
+                        <div class="form-group">
+                            <label>Fecha Fin</label>
+                            <input class="form-control" style="width:300px;" ng-model="Fechas1.FechaFin" id="FechaFin4" />
+                        </div>
+                    </center>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <center>
+                    <button class="btn btn-success" ng-click="ReporteLlaves()">Generar Reporte</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </center>
+            </div>
+
+        </div>
+    </div>
+</div>

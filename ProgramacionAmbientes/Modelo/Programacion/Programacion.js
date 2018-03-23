@@ -34,6 +34,7 @@
                 $("#btntransversaldia").hide();
                 $("#ProgInstructor").css("display", "none");
                 $("#panel2").hide();
+                $("#llaves").hide();
             }
             if ($rootScope.globals.currentUser.tipousuario == 3) {
                 $(".instructor").css("display", "block");
@@ -1747,7 +1748,7 @@
                     });
                     return;
                 }
-
+                //NO BORRAR ---- NO BORRAR----------
                 //if ($scope.Resultado.IdResultado == undefined) {
                 //    bootbox.dialog({
                 //        title: "Información",
@@ -1832,26 +1833,7 @@
             //Guardar programación transversal-------------------------------------------------------------------
             $scope.GuardarTransversal = function () {
 
-                //$.each($scope.Ficha, function (index, value) {
-                //    if (value.IdFicha == $scope.Ficha.IdFicha) {
-                //        $scope.Programacion.IdFicha = value.IdFicha
-                //    }
-                //});
-                //$.each($scope.Ambiente, function (index, value) {
-                //    if (value.IdAmbiente == $scope.Ambiente.IdAmbiente) {
-                //        $scope.Programacion.IdAmbiente = value.IdAmbiente
-                //    }
-                //});
-                //$.each($scope.Instructor, function (index, value) {
-                //    if (value.IdInstructor == $scope.Instructor.IdInstructor) {
-                //        $scope.Programacion.IdInstructor = value.IdInstructor
-                //    }
-                //});
-                //$.each($scope.Resultado, function (index, value) {
-                //    if (value.IdResultado == $scope.Resultado.IdResultado) {
-                //        $scope.Programacion.IdResultado = value.IdResultado
-                //    }
-                //});
+                
                 $scope.Programacion.IdFicha = $scope.Ficha.IdFicha;
                 $scope.Programacion.IdAmbiente = $scope.Ambiente.IdAmbiente;
                 $scope.Programacion.IdInstructor = $scope.Instructor.IdInstructor;
@@ -2641,8 +2623,8 @@
                 $("#panel2").show();
                 $("#panel1").hide()
                 $("#ModalTipoProgramaciones").modal("hide");
-                $("#HoraInicio2").prop("disabled", true);
-                $("#HoraFin2").prop("disabled", true);
+                //$("#HoraInicio2").prop("disabled", true);
+                //$("#HoraFin2").prop("disabled", true);
 
                 ProgramacionService.ConsultarCompetenciasxPrograma($rootScope.ProgramaTransversal, function (response) {
                     if (response.success == true) {
@@ -3627,19 +3609,25 @@
             }
 
             //--------------------------------------------Entrega de llaves----------------------------------------------------------------------
+            $scope.Ob = { Observacion: ""}
 
             $scope.ModalPrestamo = function (posicion, opc) {
                 $("#Préstamo").modal("show");
                 $scope.progrmacionSelec = $scope.datalists[posicion];
                 if (opc == 1) {
+                    $scope.Ob.mensaje = "¿Desea confirmar el prestamo de las llaves?";
                     $scope.progrmacionSelec.RecibioLLaves = true;
+                    $("#Observacion").show();
                 } else {
+                    $scope.Ob.mensaje = "¿Desea confirmar la recepción de las llaves?";
                     $scope.progrmacionSelec.EntregoLLaves = true;
+                    $("#Observacion").hide();
                 }
             }
 
             $scope.PrestamoLlaves = function () {
-
+                $scope.progrmacionSelec.Observacion = $scope.Ob.Observacion;
+         
                 ProgramacionService.GuardarPrestamoLLaves($scope.progrmacionSelec, function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
@@ -3670,16 +3658,99 @@
                 })
             }
 
-
-
-
-
             $scope.CancelarLlaves = function () {
                 if ($scope.progrmacionSelec.EntregoLLaves == true) {
                     $scope.progrmacionSelec.EntregoLLaves = false;
                 } else {
                     $scope.progrmacionSelec.RecibioLLaves = false;
                 }
+            }
+
+
+            $scope.AbrirReporteLlaves = function () {
+                $("#RepLlaves").modal("show");
+            }
+
+            
+            $('#FechaInicio4').datepicker({
+                language: 'es',
+                autoclose: true,
+                //daysOfWeekDisabled: [0]
+            });
+
+            $('#FechaFin4').datepicker({
+                language: 'es',
+                autoclose: true,
+                //daysOfWeekDisabled: [0]
+            });
+
+
+            $scope.Fechas1 = {
+                FechaInicio: "",
+                FechaFin: ""
+            }
+ 
+            $scope.ReporteLlaves = function () {
+
+                var x = $("#FechaInicio4").val().split('/');
+                var y = $("#FechaFin4").val().split('/');
+
+                var StartDate = x[1] + "-" + x[2] + "-" + x[0];
+                var EndDate = y[1] + "-" + y[2] + "-" + y[0];
+                if (Date.parse(StartDate) > Date.parse(EndDate)) {
+                    bootbox.dialog({
+                        title: "Información",
+                        message: "La fecha final debe ser mayor a la fecha inicial",
+                        buttons: {
+                            success: {
+                                label: "Cerrar",
+                                className: "btn-primary",
+                            }
+                        }
+                    });
+                    return;
+                }
+                ProgramacionService.ReporteLlaves($scope.Fechas1, function (response) {
+
+                    if (response.success == true) {
+                        $scope.Llaves = response.datos;
+                        $scope.ProgramacionFichaExport = [];
+
+                        $.each($scope.Llaves, function (index, value) {
+                            var fechaIini = value.FechaInicio.split('T');
+                            var x = fechaIini[0].split('-');
+
+                            $scope.ProgramacionFichaExport.push({
+                                Nombre_Instructor: value.NombreInstructor, Cedula: value.CedulaIns,
+                                Ficha: parseInt(value.Ficha), 
+                                Ambiente: value.Ambiente, Fecha: fechaIini[0],
+                                Hora_Reciibio: value.HoraInicio, Hora_Entrego: value.HoraFin,
+                                Competencia: value.Competencia                            });
+                        });
+                        alasql('SELECT * INTO XLSX("Reporte Entrega llaves.xlsx",{headers:true}) FROM ?', [$scope.ProgramacionFichaExport]);
+                    }
+                });
+            }
+
+            $scope.AmbientesDisponibles = function () {
+                ProgramacionService.AmbientesDisponibles(function (response) {
+                    if (response.success) {
+                        $scope.datalists = response.datos;
+                        $.each($scope.datalists, function (index, value) {
+
+                            $scope.datalists[index].FechaInicio = value.FechaInicio.toString().substring(0, 10);
+                            $scope.datalists[index].FechaFin = value.FechaFin.toString().substring(0, 10);
+                            $scope.datalists[index].HoraInicio = value.HoraInicio.toString().substring(0, 5);
+                            $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
+                            if ($scope.datalists[index].RecibioLLaves == false) {
+                                $("input[name='recibio" + index + "']").prop("disabled", true);
+
+                            }
+                            //Variable para setear la paginación 
+                            $scope.curPage = 0;
+                        });
+                    }
+                })
             }
 
         }]);

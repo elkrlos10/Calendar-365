@@ -19,9 +19,10 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 bool respuesta = false;
+
                 FichaBl oFichaBl = new FichaBl();
                 respuesta = oFichaBl.GuardarFicha(oFicha);
-                return Ok(new { respuesta = respuesta, success = true });
+                return Ok(new { respuesta, success = true });
             }
             catch (Exception exc)
             {

@@ -467,11 +467,20 @@
               })
         };
 
-        service.EntregaLlaves = function (cedula, callback) {
+
+        service.ReporteLlaves = function (fecha, callback) {
             var Item = {
-                Parametro1: cedula
+                Parametro1: fecha.FechaInicio,
+                Parametro2: fecha.FechaFin,
             };
-            $http.post(URLServices + "Programacion/EntregaLlaves/")
+            $http.post(URLServices + "Programacion/ReporteLlaves/", Item)
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
+        service.AmbientesDisponibles = function (callback) {
+            $http.post(URLServices + "Programacion/AmbientesDisponibles/")
               .success(function (response) {
                   callback(response);
               })

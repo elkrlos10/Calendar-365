@@ -43,5 +43,6 @@ namespace Datos.DTO
         public string NombreArea { get; set; }
 
         public int IdArea { get; set; }
+       
     }
 }

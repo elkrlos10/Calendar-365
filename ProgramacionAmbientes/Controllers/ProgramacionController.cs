@@ -464,7 +464,7 @@ namespace ProgramacionAmbientes.Controllers
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
                 var datos = oProgramacionBl.GuardarPrestamoLLaves(oProgramacion);
-                return Ok(new { success = true, datos});
+                return Ok(new { success = true, datos });
             }
             catch (Exception exc)
             {
@@ -474,17 +474,31 @@ namespace ProgramacionAmbientes.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult EntregaLlaves(ParametrosDTO oParametroDTO)
+        public IHttpActionResult ReporteLlaves(ParametrosDTO oParametrosDTO)
         {
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.EntregaLlaves(oParametroDTO.Parametro1);
+                var datos = oProgramacionBl.ReporteLlaves(DateTime.Parse(oParametrosDTO.Parametro1), DateTime.Parse(oParametrosDTO.Parametro2));
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)
             {
+                return Ok(new { success = false, exc.Message });
+            }
+        }
 
+        [HttpPost]
+        public IHttpActionResult AmbientesDisponibles()
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.AmbientesDisponibles();
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
                 return Ok(new { success = false, exc.Message });
             }
         }

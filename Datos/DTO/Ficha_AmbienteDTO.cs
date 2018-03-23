@@ -26,9 +26,9 @@ namespace Datos.DTO
 
         public DateTime FechaFin { get; set; }
 
-        public TimeSpan HoraInicio { get; set; }
+        public TimeSpan? HoraInicio { get; set; }
 
-        public TimeSpan HoraFin { get; set; }
+        public TimeSpan? HoraFin { get; set; }
 
         public string Color { get; set; }
 
@@ -80,6 +80,8 @@ namespace Datos.DTO
 
         public bool RecibioLLaves { get; set; }
         public bool EntregoLLaves { get; set; }
+
+        public string Observacion { get; set; }
 
     }
 }

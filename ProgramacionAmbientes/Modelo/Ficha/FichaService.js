@@ -19,6 +19,7 @@
             });
         };
 
+
         service.GuardarFicha = function (Ficha, callback) {
             $http.post(URLServices + "Ficha/GuardarFicha", Ficha)
                 .success(function (response) {
