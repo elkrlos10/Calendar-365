@@ -1232,10 +1232,26 @@ namespace LogicaNegocio.LogicaNegocio
                                          where i.Id == IdProgramacionPrincipal
                                          select i).FirstOrDefault();
 
-            var ProgramacionTransversal = (from p in entity.Ficha_Ambiente
-                                           where p.ProgramacionPrincipal == IdProgramacionPrincipal
-                                           orderby p.HoraInicio
-                                           select p).ToList();
+          
+            var hora = TimeSpan.Parse("01:00");
+            var minutos = TimeSpan.Parse("00:59");
+            var min = TimeSpan.Parse("00:01");
+            List<TimeSpan> lista = new List<TimeSpan>();
+            for (TimeSpan i = ProgramacionPrincipal.HoraInicio; i < ProgramacionPrincipal.HoraFin; i= i + (hora))
+            {
+                var horaFin = i.Add(minutos);
+                i= i + (min);
+                var ProgramacionTransversal1 = (from p in entity.Ficha_Ambiente
+                                                where p.ProgramacionPrincipal == IdProgramacionPrincipal &&
+                                               (p.HoraInicio >= i && p.HoraFin <= horaFin || p.HoraFin >= i && p.HoraFin <= horaFin
+                                                || p.HoraInicio <= i && p.HoraFin >= horaFin)
+                                                select p).FirstOrDefault();
+                if (ProgramacionTransversal1 == null)
+                {
+                    lista.Add(i);
+                }
+                i = i - (min);
+            }
 
 
             List<Instructor> oListaInstructor = new List<Instructor>();
@@ -3027,7 +3043,8 @@ namespace LogicaNegocio.LogicaNegocio
                                           Martes = i.Martes,
                                           Miercoles = i.Miercoles,
                                           Jueves = i.Jueves,
-                                          Viernes = i.Viernes
+                                          Viernes = i.Viernes,
+                                          Observacion = p.Observacion
                                       }).FirstOrDefault();
 
                 programacion.Add(Programaciones);

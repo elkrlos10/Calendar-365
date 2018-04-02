@@ -523,10 +523,10 @@
                         </div>
                         <div class="col-md-3" style="float:right; display:none;" id="BuscarCedulaInstructor">
                             <div class="col-md-9">
-                                <input id="cedulaBuscar" class="form-control" ng-model="cedula" />
+                                <input id="cedulaBuscar" class="form-control noMostrar" ng-model="cedula" />
                             </div>
                             <div class="col-md-3" style="padding-right:0px;" id="recibirLlave">
-                                <button class="btn btn-primary" ng-click="ConsultarPogramacionesInstructor()" style="width:100%; height:36px;">Buscar</button>
+                                <button class="btn btn-primary noMostrar" ng-click="ConsultarPogramacionesInstructor()" style="width:100%; height:36px;">Buscar</button>
                             </div>
                             <div class="col-md-3" style="padding-right:0px;" id="entregaLlaves">
                                 <button class="btn btn-primary" ng-click="EntregaLlaves()" style="width:100%; height:36px; display:none;">Buscar</button>
@@ -560,10 +560,10 @@
                         <button class="btn btn-default" type="button" id="atras" ng-click="ProgramacionTecnica()" title="Atrás" style="height: 34px;">
                             <i class="glyphicon glyphicon-arrow-left" />
                         </button>
-                        <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Atrás" style="height: 34px;">
+                        <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Reporte entrega de llaves" style="height: 34px;">
                                 <i class="material-icons">&#xE0DA;</i>
                         </button>
-                        <button class="btn btn-default" type="button" id="llaves" ng-click="AmbientesDisponibles()" title="Atrás" style="height: 34px;">
+                        <button class="btn btn-default" type="button" id="llaves" ng-click="AmbientesDisponibles()" title="Ambientes disponibles" style="height: 34px;">
                             <i class="material-icons">&#xE563;</i>
                         </button>
                         <br />

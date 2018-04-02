@@ -3612,6 +3612,7 @@
             $scope.Ob = { Observacion: ""}
 
             $scope.ModalPrestamo = function (posicion, opc) {
+                $scope.Ob.Observacion = null;
                 $("#Préstamo").modal("show");
                 $scope.progrmacionSelec = $scope.datalists[posicion];
                 if (opc == 1) {
@@ -3725,7 +3726,7 @@
                                 Ficha: parseInt(value.Ficha), 
                                 Ambiente: value.Ambiente, Fecha: fechaIini[0],
                                 Hora_Reciibio: value.HoraInicio, Hora_Entrego: value.HoraFin,
-                                Competencia: value.Competencia                            });
+                                Competencia: value.Competencia, Observacion:value.Observacion});
                         });
                         alasql('SELECT * INTO XLSX("Reporte Entrega llaves.xlsx",{headers:true}) FROM ?', [$scope.ProgramacionFichaExport]);
                     }
@@ -3733,6 +3734,8 @@
             }
 
             $scope.AmbientesDisponibles = function () {
+                //$("#Filtro").show();
+                //$(".noMostrar").hide();
                 ProgramacionService.AmbientesDisponibles(function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
