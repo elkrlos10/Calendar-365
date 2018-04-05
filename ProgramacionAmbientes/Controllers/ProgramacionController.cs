@@ -502,5 +502,20 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc.Message });
             }
         }
+
+        [HttpPost]
+        public IHttpActionResult RegresarLlavesAmbientesDisponibles()
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.RegresarLlavesAmbientesDisponibles();
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
+                return Ok(new { success = false, exc.Message });
+            }
+        }
     }
 }

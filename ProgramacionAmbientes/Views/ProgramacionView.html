@@ -521,6 +521,10 @@
                             <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
                             <input class="form-control" ng-keyup="Filter($event)" id="Buscar" />
                         </div>
+                        <div class="col-md-3 filtroCedula" style="float:right; display:none;" id="FiltroAmbiente">
+                            <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
+                            <input class="form-control" ng-keyup="FilterAmbiente($event)" id="Buscar1" />
+                        </div>
                         <div class="col-md-3" style="float:right; display:none;" id="BuscarCedulaInstructor">
                             <div class="col-md-9">
                                 <input id="cedulaBuscar" class="form-control noMostrar" ng-model="cedula" />
@@ -528,9 +532,9 @@
                             <div class="col-md-3" style="padding-right:0px;" id="recibirLlave">
                                 <button class="btn btn-primary noMostrar" ng-click="ConsultarPogramacionesInstructor()" style="width:100%; height:36px;">Buscar</button>
                             </div>
-                            <div class="col-md-3" style="padding-right:0px;" id="entregaLlaves">
+                            <!--<div class="col-md-3" style="padding-right:0px;" id="entregaLlaves">
                                 <button class="btn btn-primary" ng-click="EntregaLlaves()" style="width:100%; height:36px; display:none;">Buscar</button>
-                            </div>
+                            </div>-->
                         </div>
                         <button class="btn btn-default noConsulta" type="button" id="eliminar" ng-click="CambiarEstadoSeleccionados()" title="Eliminar Programación" style="height: 34px;">
                             <i class="glyphicon glyphicon-trash"></i>
@@ -563,8 +567,14 @@
                         <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Reporte entrega de llaves" style="height: 34px;">
                                 <i class="material-icons">&#xE0DA;</i>
                         </button>
-                        <button class="btn btn-default" type="button" id="llaves" ng-click="AmbientesDisponibles()" title="Ambientes disponibles" style="height: 34px;">
-                            <i class="material-icons">&#xE563;</i>
+                        <button class="btn btn-default noCor" type="button" id="llaves" ng-click="AmbientesDisponibles()" title="Ambientes disponibles" style="height: 34px;">
+                            <i class="material-icons">&#xE876;</i>
+                        </button>
+                        <button class="btn btn-default noCor" type="button" id="llaves" ng-click="RegresarLlavesAmbientes()" title="Ambientes disponibles" style="height: 34px;">
+                            <i class="material-icons">&#xE877;</i>
+                        </button>
+                        <button class="btn btn-default filtroCedula" type="button" id="llaves" ng-click="MostrarFiltroCedula()" title="Ambientes disponibles" style="height: 34px; display:none">
+                            <i class="material-icons">&#xE8FA;</i>
                         </button>
                         <br />
                         <br />
@@ -592,7 +602,8 @@
                                     <td>{{datalist.FechaFin}}</td>
                                     <td>{{datalist.HoraInicio}}</td>
                                     <td>{{datalist.HoraFin}}</td>
-                                    <td>{{datalist.Ambiente}}&ensp;-&ensp;{{datalist.Sede}}</td>
+                                   <!-- <td>{{datalist.Ambiente}}&ensp;-&ensp;{{datalist.Sede}}</td>-->
+                                    <td title="{{datalist.Sede}}">{{datalist.Ambiente}}</td>
                                     <td>{{datalist.Ficha}}</td>
                                     <td title="{{datalist.Competencia | uppercase}}">{{datalist.CodigoCompetencia}} </td>
                                     <td>{{datalist.NombreInstructor | uppercase}} </td>
@@ -662,7 +673,7 @@
                         <div style="float:left;">
                             <div class="form-group">
                                 <label>Competencia</label>
-                                <select class="form-control" id="listas" ng-required="true" ng-model="competencia.IdCompetencia" ng-change="ConsultarResultados(competencia.IdCompetencia)" style="width:570px;">
+                                <select class="form-control" id="listas" ng-required="true" ng-model="Competencia.IdCompetencia" ng-change="ConsultarResultados(Competencia.IdCompetencia)" style="width:570px;">
                                     <option title="{{competencia.Nombre}}" ng-repeat="competencia in Competencia" class="{{competencia.Nombre}}" value="{{competencia.IdCompetencia}}">{{competencia.Codigo}}</option>
                                 </select>
                             </div>

@@ -486,6 +486,13 @@
               })
         };
 
+        service.RegresarLlavesAmbientesDisponibles = function (callback) {
+            $http.post(URLServices + "Programacion/RegresarLlavesAmbientesDisponibles/")
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
         return service;
 
     }]);
