@@ -8,11 +8,14 @@
 }
 
 .Principal {
-    padding: 0px !important;
     float: right;
-    width: 1300px;
+    width: 93% !important;
 }
 
+.alinearTexto{
+    text-align:center;
+    padding:10px 1px !important;
+}
 
 .Transicion {
     transition: 0.3s all ease-in;
