@@ -1,4 +1,9 @@
-﻿.select2-selection__rendered{
+﻿*{
+    margin:0;
+    padding:0;
+}
+
+.select2-selection__rendered{
     max-height: 28px;
     overflow: auto !important;
 }
