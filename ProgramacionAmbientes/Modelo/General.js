@@ -2,6 +2,7 @@
 //var URLServices = "http://calendar365.azurewebsites.net//api/";
 //var URLServices = "http://10.3.240.88:8083//api/";
 
+
 var Admin = "admin";
 var Password = "admin";
 

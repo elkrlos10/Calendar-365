@@ -171,6 +171,8 @@
     <Content Include="css\ng-table.min.css" />
     <Content Include="css\normalize.css" />
     <Content Include="Global.asax" />
+    <Content Include="img\icono.svg" />
+    <Content Include="img\icono1.svg" />
     <Content Include="img\logo.png" />
     <Content Include="img\LogoHorizontal.png" />
     <Content Include="img\logo_sena.jpg" />
@@ -236,6 +238,7 @@
     <Content Include="fonts\ecoicons\ecoicons.ttf" />
     <Content Include="fonts\ecoicons\ecoicons.woff" />
     <Content Include="Plantillas\plantilla Competencia.xlsx" />
+    <None Include="Properties\PublishProfiles\365.pubxml" />
     <None Include="Properties\PublishProfiles\calendar.pubxml" />
     <None Include="Properties\PublishProfiles\Calendar365 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\Calendar365 - Web Deploy.pubxml" />
@@ -246,6 +249,7 @@
     <None Include="Properties\PublishProfiles\gestionambientes - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\gestionambientes - Web Deploy %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\gestionambientes - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\prueba.pubxml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\daypilot-all.min.js" />
     <Content Include="scripts\dirPagination.js" />

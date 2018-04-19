@@ -176,7 +176,7 @@
                 });
         };
 
-        service.Disponibilidad1 = function (Transversal, IdCoordinacion, Programacion, callback) {
+        service.Disponibilidad1 = function (Transversal, IdCoordinacion, Programacion,IdAmbiente, callback) {
             var Item = {
                 Parametro1: IdCoordinacion,
                 Parametro2: Programacion.FechaInicio,
@@ -186,7 +186,8 @@
                 Parametro6: Transversal,
                 Parametro7: Programacion.Jornada,
                 Parametro8: Programacion.IdInstructor,
-                Parametro9: Programacion.IdFicha
+                Parametro9: Programacion.IdFicha,
+                Parametro10:IdAmbiente
             }
             $http.post(URLServices + "Programacion/Disponibilidad1/", Item)
                 .success(function (response) {
@@ -468,10 +469,11 @@
         };
 
 
-        service.ReporteLlaves = function (fecha, callback) {
+        service.ReporteLlaves = function (fecha, IdCoordinador, callback) {
             var Item = {
                 Parametro1: fecha.FechaInicio,
                 Parametro2: fecha.FechaFin,
+                Parametro3:IdCoordinador
             };
             $http.post(URLServices + "Programacion/ReporteLlaves/", Item)
               .success(function (response) {
@@ -488,6 +490,38 @@
 
         service.RegresarLlavesAmbientesDisponibles = function (callback) {
             $http.post(URLServices + "Programacion/RegresarLlavesAmbientesDisponibles/")
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+        
+        service.EliminarReciboLlaves = function (programacion, callback) {
+            $http.post(URLServices + "Programacion/EliminarReciboLlaves/", programacion)
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
+        service.AmbientesSinProgramacion = function (horas, callback) {
+            var item = {
+                Parametro1: horas.Inicio,
+                Parametro2:horas.Fin
+            }
+            $http.post(URLServices + "Programacion/AmbientesSinProgramacion/", item)
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
+        service.GuardarPrestamoLLavesAmbientes = function (Ambiente, callback) {
+            $http.post(URLServices + "Programacion/GuardarPrestamoLLavesAmbientes/", Ambiente)
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
+        service.AmbientesEntregarLlaves = function (callback) {
+            $http.post(URLServices + "Programacion/AmbientesEntregarLlaves/")
               .success(function (response) {
                   callback(response);
               })

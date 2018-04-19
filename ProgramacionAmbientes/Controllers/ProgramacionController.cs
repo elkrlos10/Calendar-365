@@ -239,7 +239,7 @@ namespace ProgramacionAmbientes.Controllers
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
                 var Datos = oProgramacionBl.Disponibilidad(bool.Parse(oParametrosDTO.Parametro6.ToLower()), int.Parse(oParametrosDTO.Parametro1), DateTime.Parse(oParametrosDTO.Parametro2), DateTime.Parse(oParametrosDTO.Parametro3), oParametrosDTO.Parametro4, oParametrosDTO.Parametro5, int.Parse(oParametrosDTO.Parametro7), int.Parse(oParametrosDTO.Parametro8), bool.Parse(oParametrosDTO.Parametro9), bool.Parse(oParametrosDTO.Parametro10), bool.Parse(oParametrosDTO.Parametro11), bool.Parse(oParametrosDTO.Parametro12), bool.Parse(oParametrosDTO.Parametro13), bool.Parse(oParametrosDTO.Parametro14), bool.Parse(oParametrosDTO.Parametro15), bool.Parse(oParametrosDTO.Parametro16), bool.Parse(oParametrosDTO.Parametro17), bool.Parse(oParametrosDTO.Parametro18), bool.Parse(oParametrosDTO.Parametro19));
-                return Ok(new { ambiente = Datos.Item1, instructor = Datos.Item2, ficha = Datos.Item3, AmbientesOtraArea = Datos.Item4, success = true });
+                return Ok(new { ambiente = Datos.Item1, instructor = Datos.Item2, ficha = Datos.Item3, AmbientesOtraArea = Datos.Item4,NoValidarFicha= Datos.Item5, success = true });
             }
             catch (Exception exc)
             {
@@ -268,7 +268,7 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var Datos = oProgramacionBl.Disponibilidad1(bool.Parse(oParametrosDTO.Parametro6.ToLower()), int.Parse(oParametrosDTO.Parametro1), DateTime.Parse(oParametrosDTO.Parametro2), DateTime.Parse(oParametrosDTO.Parametro3), oParametrosDTO.Parametro4, oParametrosDTO.Parametro5, int.Parse(oParametrosDTO.Parametro7), int.Parse(oParametrosDTO.Parametro8), int.Parse(oParametrosDTO.Parametro9));
+                var Datos = oProgramacionBl.Disponibilidad1(bool.Parse(oParametrosDTO.Parametro6.ToLower()), int.Parse(oParametrosDTO.Parametro1), DateTime.Parse(oParametrosDTO.Parametro2), DateTime.Parse(oParametrosDTO.Parametro3), oParametrosDTO.Parametro4, oParametrosDTO.Parametro5, int.Parse(oParametrosDTO.Parametro7), int.Parse(oParametrosDTO.Parametro8), int.Parse(oParametrosDTO.Parametro9), int.Parse(oParametrosDTO.Parametro10));
                 return Ok(new { ambiente = Datos.Item1, instructor = Datos.Item2, ficha = Datos.Item3, MensajeInstructor = Datos.Item4, MensajeFicha = Datos.Item5, success = true });
             }
             catch (Exception exc)
@@ -479,7 +479,7 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.ReporteLlaves(DateTime.Parse(oParametrosDTO.Parametro1), DateTime.Parse(oParametrosDTO.Parametro2));
+                var datos = oProgramacionBl.ReporteLlaves(DateTime.Parse(oParametrosDTO.Parametro1), DateTime.Parse(oParametrosDTO.Parametro2), int.Parse(oParametrosDTO.Parametro3));
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)
@@ -514,6 +514,68 @@ namespace ProgramacionAmbientes.Controllers
             }
             catch (Exception exc)
             {
+                return Ok(new { success = false, exc.Message });
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult EliminarReciboLlaves(Ficha_AmbienteDTO oProgramacion)
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.EliminarReciboLlaves(oProgramacion);
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
+                return Ok(new { success = false, exc.Message });
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult AmbientesSinProgramacion(ParametrosDTO oParametrosDTO)
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.AmbientesSinProgramacion(oParametrosDTO.Parametro1, oParametrosDTO.Parametro2);
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
+                return Ok(new { success = false, exc.Message });
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult GuardarPrestamoLLavesAmbientes(AmbienteDTO oAmbiente)
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.GuardarPrestamoLLavesAmbientes(oAmbiente);
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
+
+                return Ok(new { success = false, exc.Message });
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult AmbientesEntregarLlaves()
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+                var datos = oProgramacionBl.AmbientesEntregarLlaves();
+                return Ok(new { success = true, datos });
+            }
+            catch (Exception exc)
+            {
+
                 return Ok(new { success = false, exc.Message });
             }
         }

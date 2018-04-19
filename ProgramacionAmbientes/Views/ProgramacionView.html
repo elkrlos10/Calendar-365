@@ -25,10 +25,10 @@
                 <button class="btn btn-primary admin" id="transversal" style="width:100%; height:42px;" ng-click="ModalCoordinador()">Filtrar coordinador</button>
             </div>
             <div class="col-md-3" style="padding-right:0px;">
-                <!--<button class="btn btn-default admin" type="button" id="reporte1" ng-click="ModalReporte()" title="Reporte Programación" style="height: 34px; float:right;">
-                    <i class="glyphicon glyphicon-registration-mark"></i>
-                </button>-->
                 <button class="btn btn-primary admin reporte" id="reporte1" style="width:100%; height:42px;" ng-click="ModalReporte()">Reporte Programación</button>
+            </div>
+            <div class="col-md-3" style="padding-right:0px;">
+                <button class="btn btn-primary admin reporte"  style="width:100%; height:42px;" ng-click="AbrirReporteLlaves()">Reporte Llaves</button>
             </div>
             <div class="col-md-3" style="padding-right:0px;">
                 <button class="btn btn-primary instructor" style="width:100%; height:42px;" ng-click="filtrarProgramacionInstructor()">Filtrar Programación</button>
@@ -233,7 +233,7 @@
                         <div style="float:right; display:none" id="Empresa">
                             <div class="form-group">
                                 <!--<label>Fecha Fin</label>-->
-                                <input class="form-control" style="width:250px;" ng-model="Programacion.NombreEmpresa" id="FechaFin" placeholder="Nombre Empresa" />
+                                <input class="form-control" style="width:250px;" ng-model="Programacion.NombreEmpresa" id="FechaFin" placeholder="{{NombreCampo}}" />
                             </div>
                         </div>
                     </div>
@@ -526,11 +526,11 @@
                         </div>
                         <div class="col-md-3 filtroCedula" style="float:right; display:none;" id="FiltroAmbiente">
                             <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
-                            <input class="form-control" ng-keyup="FilterAmbiente($event)" id="Buscar1" />
+                            <input class="form-control Buscar1" ng-keyup="FilterAmbiente($event)" id="Buscar1" />
                         </div>
                         <div class="col-md-4" style="float:right; display:none;" id="BuscarCedulaInstructor">
                             <div class="col-md-9">
-                                <input id="cedulaBuscar" class="form-control noMostrar" ng-model="cedula" />
+                                <input id="cedulaBuscar" type="number" class="form-control noMostrar" ng-model="cedula" />
                             </div>
                             <div class="col-md-3" style="padding-right:0px !important; padding-left:0px !important" id="recibirLlave">
                                 <button class="btn btn-primary noMostrar col-lg-3" ng-click="ConsultarPogramacionesInstructor()" style="width:100%; height:35px;"><p style="padding:0 !important;">Buscar</p></button>
@@ -557,7 +557,7 @@
                         <button class="btn btn-default noConsulta" type="button" id="AnadirTransversales" ng-click="Modificar()" title="Añadir Progrmación Competencias Transversales" style="height:34px;">
                             <i class="material-icons">&#xE89C;</i>
                         </button>
-                        <button class="btn btn-default noConsulta" type="button" id="reporte" ng-click="ModalReporte()" title="Reporte Programación" style="height: 34px;">
+                        <button class="btn btn-default" type="button" id="reporte" ng-click="ModalReporte()" title="Reporte Programación" style="height: 34px;">
                             <i class="glyphicon glyphicon-registration-mark"></i>
                         </button>
                         <button class="btn btn-default noConsulta" type="button" id="habili" ng-click="EnviarCorreo()" title="Enviar Programación" style="height: 34px;">
@@ -570,11 +570,20 @@
                         <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Reporte entrega de llaves" style="height: 34px;">
                                 <i class="material-icons">&#xE0DA;</i>
                         </button>
-                        <button class="btn btn-default noCor" type="button" id="llaves" ng-click="AmbientesDisponibles()" title="Ambientes disponibles" style="height: 34px;">
+                        <button class="btn btn-default noCor" type="button"  ng-click="AbrirModalHoras()" title="Ambientes disponibles" style="height: 34px;">
+                            <img src="../img/icono1.svg" width="25" height="18" />
+                        </button>
+                        <button class="btn btn-default noCor" type="button" ng-click="AmbientesEntregarLlaves()" title="Ambientes disponibles" style="height: 34px;">
+                            <img src="../img/icono.svg" width="25" height="18" />
+                        </button>
+                        <button class="btn btn-default noCor" type="button"  ng-click="AmbientesDisponibles()" title="Entregar llaves" style="height: 34px;">
                             <i class="material-icons">&#xE876;</i>
                         </button>
-                        <button class="btn btn-default noCor" type="button" id="llaves" ng-click="RegresarLlavesAmbientes()" title="Ambientes disponibles" style="height: 34px;">
+                        <button class="btn btn-default noCor" type="button"  ng-click="RegresarLlavesAmbientes()" title="Recibir llaves" style="height: 34px;">
                             <i class="material-icons">&#xE877;</i>
+                        </button>
+                        <button class="btn btn-default noCor" type="button" id="eliminarPrestamo" ng-click="AbrirModalEliminarPrestamo()" title="Recibir llaves" style="height: 34px; display:none">
+                            <i class="material-icons">&#xE872;</i>
                         </button>
                         <button class="btn btn-default filtroCedula" type="button" id="llaves" ng-click="MostrarFiltroCedula()" title="Ambientes disponibles" style="height: 34px; display:none">
                             <i class="material-icons">&#xE8FA;</i>
@@ -640,6 +649,7 @@
                                 </li>
                             </ul>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -647,6 +657,106 @@
     </div>
 </div>
 
+<!--tabla donde se insertan para los ambientes disponibles en el rol consulta-->
+<div id="panel3" >
+    <div style="position:fixed; display:flex; width:100%; height:100%; justify-content:center; margin-top:20%; ">
+        <img src="../img/logo.png" style="position:fixed; width:20%; opacity:.2; z-index:-1" />
+    </div>
+
+    <!--style="padding-top: 75px !important;"-->
+    <div id="Prueba" class="Principal Transicion" style="margin-top: -55px !important;">
+        <div class="col-md-12">
+            <br />
+            <br />
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-3" style="float:right;">
+                        
+                        <input class="form-control Buscar1" ng-keyup="FilterAmbiente1($event)" id="Buscar2" />
+                    </div>
+                    <button class="btn btn-default noCor" type="button" ng-click="OcultarTablaAmbientes()" title="Recibir llaves" style="height: 34px;">
+                        <i class="material-icons">&#xE15E;</i>
+                    </button>
+                    <button class="btn btn-default noCor" type="button" ng-click="AmbientesEntregarLlaves()" title="Ambientes disponibles" style="height: 34px;">
+                        <img src="../img/icono.svg" width="25" height="18" />
+                    </button>
+                    <br />
+                    <br />
+                    <br />
+                   
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold; width:17%">Sede</th>
+                                <th class="paginationclass" style="font-weight:bold; width:30%">Area</th>
+                                <th class="paginationclass" style="font-weight:bold; width:7%">
+                                    Piso
+                                    <i ng-click="OrganizarPisoAsc()" class="glyphicon glyphicon-menu-up" style="float:right; margin-top:0px; margin-left:-15px;"></i>
+                                    <i ng-click="OrganizarPisoDesc()" class="glyphicon glyphicon-menu-down" style="float:right;margin-top:10px;"></i>
+                                </th>
+                                <th class="paginationclass" style="font-weight:bold; width:12%">
+                                    N°Ambiente
+                                    <i ng-click="OrganizarNumeroAsc()" class="glyphicon glyphicon-menu-up" style="float:right; margin-top:0px; margin-left:-15px;"></i>
+                                    <i ng-click="OrganizarNumeroDesc()" class="glyphicon glyphicon-menu-down" style="float:right;margin-top:10px;"></i>
+                                </th>
+                                <th class="paginationclass" style="font-weight:bold; width:8%">N°Equipos</th>
+                                <th class="paginationclass" style="font-weight:bold; width:9%">N°Mesas</th>
+                                <th class="paginationclass" style="font-weight:bold; width:8%">N°Sillas</th>
+                                <th class="paginationclass" style="font-weight:bold; width:9%">Pantalla</th>
+                                <th class="paginationclass ocultarLlaves alinearTexto" style="font-weight:bold;">Llaves</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize | uppercase">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.IdAmbiente}}" /></td>
+                                <td>{{datalist.NombreSede | uppercase}}</td>
+                                <td>{{datalist.Area | uppercase}}</td>
+                                <td>{{datalist.Piso | uppercase}}</td>
+                                <td>{{datalist.Ambiente | uppercase}}</td>
+                                <td>{{datalist.NumeroEquipos | uppercase}}</td>
+                                <td>{{datalist.NumeroMesas | uppercase}}</td>
+                                <td>{{datalist.NumeroSillas | uppercase}}</td>
+                                <td>
+                                    <div>
+                                        <label ng-show="datalist.Pantalla == true">Sí</label>
+                                        <label ng-show="datalist.Pantalla == false">No</label>
+                                    </div>
+                                </td>
+                                <td ng-if="UsuarioConsulta ==4" style="display:flex; justify-content:center; border-top:1px solid silver !important; border:transparent; padding-top:15% !important;">
+                                    <label>R</label> <input style="margin-left:5px;" type="checkbox" ng-click="ModalPrestamoAmbiente($index,1)" ng-disabled="datalist.Recibio == true" name="recibio{{$index}}" ng-model="datalist.Recibio" />
+                                    <label style="margin-left:5px;">E</label><input style="margin-left:5px;" ng-disabled="datalist.Entrego == true || datalist.Recibio == false" ng-click="ModalPrestamoAmbiente($index,2)" type="checkbox" ng-model="datalist.Entrego" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination pagination-centered" ng-show="datalists.length" style="float:right">
+                        <ul class="pagination-controle pagination">
+                            <li>
+                                <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                        ng-click="curPage=curPage-1">
+                                    Anterior
+                                </button>
+                            </li>
+                            <li>
+                                <span>Pág {{curPage + 1}} de {{ numberOfPages() }}</span>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-primary"
+                                        ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                        ng-click="curPage = curPage+1">
+                                    Siguiente
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--modal para registrar el tranversal-->
 
 <div class="modal fade" id="ModalRegistroTransversal" role="dialog" style="margin-top:-2%;">
@@ -1497,12 +1607,12 @@
 </div>
 
 <!--Modal confrimar prestamo llaves-->
-<div class="modal fade" id="Préstamo" role="dialog">
+<div class="modal fade" id="Préstamo" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="width: 400px;">
         <!--Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" ng-click="CancelarLlaves()">&times;</button>
                 <center>
                     <h4 style="color:#1C75BB; align-content:center;">
                          CONFIRMAR
@@ -1530,9 +1640,40 @@
     </div>
 </div>
 
+<div class="modal fade" id="PréstamoAmbiente" role="dialog" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog" style="width: 400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" ng-click="CancelarLlavesAmbiente()">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB; align-content:center;">
+                        CONFIRMAR
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: hidden;">
+                <div class="form-group">
+                    <center>
+                        <label>{{Ob.mensaje}}</label>
+                    </center>
+                    <div>
+                        <textarea class="form-control" ng-model="Ob.Observacion" id="Observacion1" maxlength="199" placeholder="Observaciones"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="PrestamoLlavesAmbientes()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" ng-click="CancelarLlavesAmbiente()" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--Modal reporte llaves-->
-<div class="modal fade" id="RepLlaves" role="dialog">
+<div class="modal fade" id="RepLlaves" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" style="height:350px; width:400px">
         <!--Modal content-->
         <div class="modal-content">
@@ -1567,6 +1708,72 @@
                 </center>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="HorasDisponible" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" style="height:350px; width:400px">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4>Ambientes Disponibles</h4>
+                </center>
+            </div>
+            <div style="margin-top:2%">
+                <div>
+                    <center>
+                        <div class="form-group">
+                            <label>Hora Inicio</label>
+                            <input class="form-control" style="width:300px;" ng-model="AHora.Inicio" id="HoraInicioA" />
+                        </div>
+                    </center>
+                </div>
+                <div>
+                    <center>
+                        <div class="form-group">
+                            <label>Hora Fin</label>
+                            <input class="form-control" style="width:300px;" ng-model="AHora.Fin" id="HoraFinA"/>
+                        </div>
+                    </center>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <center>
+                    <button class="btn btn-success" ng-click="ConsultarAmbientesSinProgramacion()">Consultar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </center>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Modal Eliminar Registro-->
+<div class="modal fade" id="modalEliminarPrestamo" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+        <!--Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center>
+                    <h4 style="color:#1C75BB;">
+                        CONFIRMAR ELIMINACIÓN
+                    </h4>
+                </center>
+
+            </div>
+            <div class="modal-body" style="height: 100px; overflow: auto;">
+                <div class="form-group">
+                    <label>¿Está seguro que desea eliminar el registro? </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success  btn-default" data-dismiss="modal" ng-click="EliminarPrestamol()">Aceptar</button>
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>

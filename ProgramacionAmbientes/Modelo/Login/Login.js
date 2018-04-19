@@ -34,7 +34,7 @@
                             apellido: " ",
                             cedula: " ",
                             tipousuario: 1,
-                            idpersona: ""
+                            idpersona: 0
                         }
                     };
                     $cookies.putObject("username", $rootScope.globals);

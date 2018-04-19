@@ -189,8 +189,8 @@ namespace LogicaNegocio.LogicaNegocio
 
                 if (sede.TipoSede == 1)
                 {
-                    if (ambiente.IdArea == Programa.IdArea)
-                    {
+                    //if (ambiente.IdArea == Programa.IdArea)
+                    //{
                         oFicha_Ambiente.Estado = true;
                         oFicha_Ambiente.Color = "#" + r.Next(100000, 999999).ToString();
                         entity.Ficha_Ambiente.Add(oFicha_Ambiente);
@@ -201,39 +201,39 @@ namespace LogicaNegocio.LogicaNegocio
                         //              "<br>Resultado de aprendizaje: " + resultado.Codigo + " - " + resultado.Resultado;
                         //SendMail.SendMailMessage(Asunto, Cuerpo, instructor.Email);
 
-                    }
-                    else
-                    {
-                        oFicha_Ambiente.Estado = false;
-                        var coordinadorSolicitado = (from i in entity.Coordinacion
-                                                     where i.IdArea == ambiente.IdArea
-                                                     select i).FirstOrDefault();
+                    //}
+                    //else
+                    //{
+                    //    oFicha_Ambiente.Estado = false;
+                    //    var coordinadorSolicitado = (from i in entity.Coordinacion
+                    //                                 where i.IdArea == ambiente.IdArea
+                    //                                 select i).FirstOrDefault();
 
-                        oFicha_Ambiente.Color = "#" + r.Next(100000, 999999).ToString();
-                        entity.Ficha_Ambiente.Add(oFicha_Ambiente);
-                        entity.SaveChanges();
+                    //    oFicha_Ambiente.Color = "#" + r.Next(100000, 999999).ToString();
+                    //    entity.Ficha_Ambiente.Add(oFicha_Ambiente);
+                    //    entity.SaveChanges();
 
-                        var coordinador = (from i in entity.Coordinacion
-                                           where i.IdArea == Programa.IdArea
-                                           select i).FirstOrDefault();
-
-
-                        var Asunto = "Solicitud de ambiente";
-                        var Cuerpo = "La coordinacion de " + coordinador.Nombre_Coordinacion + " agotó los ambientes asignados a su área y requiere un préstamo de uno de sus ambientes. Por favor abra el link a continuación y apruebe o rechace la solicitud";
-                        var Link = "<br/><a href = 'http://10.3.240.88:8083/Principal.html#/Solicitud?GUID=" + oFicha_Ambiente.Id + "'>Ver </a>";
-                        SendMail.SendMailMessage(Asunto, Cuerpo + Link, coordinadorSolicitado.Correo);
+                    //    var coordinador = (from i in entity.Coordinacion
+                    //                       where i.IdArea == Programa.IdArea
+                    //                       select i).FirstOrDefault();
 
 
-
-                        Solicitud oSolicitud = new Solicitud();
-                        oSolicitud.IdFicha_Ambiente = oFicha_Ambiente.Id;
-                        oSolicitud.IdCoordinacion = coordinador.IdCoordinacion;
-
-                        entity.Solicitud.Add(oSolicitud);
-                        entity.SaveChanges();
+                    //    var Asunto = "Solicitud de ambiente";
+                    //    var Cuerpo = "La coordinacion de " + coordinador.Nombre_Coordinacion + " agotó los ambientes asignados a su área y requiere un préstamo de uno de sus ambientes. Por favor abra el link a continuación y apruebe o rechace la solicitud";
+                    //    var Link = "<br/><a href = 'http://10.3.240.88:8083/Principal.html#/Solicitud?GUID=" + oFicha_Ambiente.Id + "'>Ver </a>";
+                    //    SendMail.SendMailMessage(Asunto, Cuerpo + Link, coordinadorSolicitado.Correo);
 
 
-                    }
+
+                    //    Solicitud oSolicitud = new Solicitud();
+                    //    oSolicitud.IdFicha_Ambiente = oFicha_Ambiente.Id;
+                    //    oSolicitud.IdCoordinacion = coordinador.IdCoordinacion;
+
+                    //    entity.Solicitud.Add(oSolicitud);
+                    //    entity.SaveChanges();
+
+
+                    //}
 
                 }
                 else
@@ -462,7 +462,7 @@ namespace LogicaNegocio.LogicaNegocio
 
         }
 
-        public Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, bool> Disponibilidad(bool Transversal, int IdCoordinacion, DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int IdSede, int IdPrograma, bool Lunes, bool Martes, bool Miercoles, bool Jueves, bool Viernes, bool Sabado, bool Domingo, bool colegio, bool Manana, bool Tarde, bool Noche)
+        public Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, bool, bool> Disponibilidad(bool Transversal, int IdCoordinacion, DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int IdSede, int IdPrograma, bool Lunes, bool Martes, bool Miercoles, bool Jueves, bool Viernes, bool Sabado, bool Domingo, bool colegio, bool Manana, bool Tarde, bool Noche)
         {
             Model1 entity = new Model1();
             InstructorBl oInstructorBl = new InstructorBl();
@@ -473,11 +473,15 @@ namespace LogicaNegocio.LogicaNegocio
             var DisponibilidadAmbiente = new List<Ambiente>();
             var DisponibilidadFicha = new List<Ficha>();
             bool AmbientesOtraArea = false;
+            bool NoValidarFicha = false;
 
 
             var Coordinacion = (from i in entity.Coordinacion
                                 where i.IdCoordinacion == IdCoordinacion
                                 select i).FirstOrDefault();
+            var IdArea = (from i in entity.Programa
+                          where i.IdPrograma == i.IdPrograma
+                          select i.IdArea).FirstOrDefault();
 
 
             var TipoSede = (from s in entity.Sede
@@ -503,12 +507,11 @@ namespace LogicaNegocio.LogicaNegocio
                 {
                     jornada = 3;
                 }
-                DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea,@jornada",
+                DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin,@jornada",
                                                                                                  new SqlParameter("fecha_ini", FechaInicio),
                                                                                                  new SqlParameter("fecha_Fin", FechaFin),
                                                                                                  new SqlParameter("HoraInicio", HoraInicio),
                                                                                                  new SqlParameter("HoraFin", HoraFin),
-                                                                                                 new SqlParameter("idarea", Coordinacion.IdArea),
                                                                                                  new SqlParameter("jornada", jornada)).ToList();
 
 
@@ -540,13 +543,18 @@ namespace LogicaNegocio.LogicaNegocio
                                   select i).ToList();
                 }
 
-                DisponibilidadFicha = entity.Database.SqlQuery<Ficha>("sp_disponibilidadFichaSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea, @jornada",
-                                                                                      new SqlParameter("fecha_ini", FechaInicio),
-                                                                                      new SqlParameter("fecha_Fin", FechaFin),
-                                                                                      new SqlParameter("HoraInicio", HoraInicio),
-                                                                                      new SqlParameter("HoraFin", HoraFin),
-                                                                                      new SqlParameter("idarea", Coordinacion.IdArea),
-                                                                                      new SqlParameter("jornada", jornada)).ToList();
+                if (Coordinacion.Nombre != "PROGRAMACIÓN EVENTOS")
+                {
+                    DisponibilidadFicha = entity.Database.SqlQuery<Ficha>("sp_disponibilidadFichaSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea, @jornada",
+                                                                                     new SqlParameter("fecha_ini", FechaInicio),
+                                                                                     new SqlParameter("fecha_Fin", FechaFin),
+                                                                                     new SqlParameter("HoraInicio", HoraInicio),
+                                                                                     new SqlParameter("HoraFin", HoraFin),
+                                                                                     new SqlParameter("idarea", Coordinacion.IdArea),
+                                                                                     new SqlParameter("jornada", jornada)).ToList();
+                    NoValidarFicha = true;
+                }
+               
             }
             else
             {
@@ -605,7 +613,9 @@ namespace LogicaNegocio.LogicaNegocio
                                   select i).ToList();
                 }
 
-                DisponibilidadFicha = entity.Database.SqlQuery<Ficha>("sp_disponibilidadFicha @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea,  @idprograma, @lunes, @martes, @miercoles, @jueves, @viernes",
+                if (Coordinacion.Nombre_Coordinacion != "PROGRAMACIÓN EVENTOS")
+                {
+                    DisponibilidadFicha = entity.Database.SqlQuery<Ficha>("sp_disponibilidadFicha @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea,  @idprograma, @lunes, @martes, @miercoles, @jueves, @viernes",
                                                                                       new SqlParameter("fecha_ini", FechaInicio),
                                                                                       new SqlParameter("fecha_Fin", FechaFin),
                                                                                       new SqlParameter("HoraInicio", HoraInicio),
@@ -618,6 +628,8 @@ namespace LogicaNegocio.LogicaNegocio
                                                                                       new SqlParameter("jueves", Jueves),
                                                                                       new SqlParameter("viernes", Viernes)).ToList();
 
+                    NoValidarFicha = true;
+                }
             }
 
 
@@ -639,7 +651,11 @@ namespace LogicaNegocio.LogicaNegocio
             }
             else
             {
-                Ambiente = oAmbienteBl.ConsultarAmbientesxArea(Coordinacion.IdArea, IdSede);
+                //Ambiente = oAmbienteBl.ConsultarAmbientesxArea(Coordinacion.IdArea, IdSede);
+                Ambiente = oAmbienteBl.ConsultarAmbientes();
+                Ambiente = (from i in Ambiente
+                            where i.IdSede == IdSede
+                            select i).ToList();
             }
 
 
@@ -700,7 +716,7 @@ namespace LogicaNegocio.LogicaNegocio
 
             if (DisponibilidadFicha.Count == 0)
             {
-                oListaFicha.AddRange(Ficha);
+                oListaFicha.AddRange(Ficha.Where(i=>i.FechaInicio <= FechaInicio && i.FechaFin >= FechaFin));
             }
             else
             {
@@ -730,33 +746,39 @@ namespace LogicaNegocio.LogicaNegocio
                 oListaInstructor = Ins;
             }
 
-            if (oListaAmbiente.Count == 0)
+            //DESCOMENTAR SI SE VA A REGRESAR A LOS AMBIENTES ASIGNADOS A CADA COORDINACION Y CAMBIAR LA VARIABLE "AmbientesOtraArea" A TRUE
+            //if (oListaAmbiente.Count == 0)
+            //{
+            if (Sabado == false && Domingo == false)
             {
                 var ambientes = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteAreasAlternas @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @lunes, @martes, @miercoles, @jueves, @viernes,@IdSede",
-                                                                       new SqlParameter("fecha_ini", FechaInicio),
-                                                                       new SqlParameter("fecha_Fin", FechaFin),
-                                                                       new SqlParameter("HoraInicio", HoraInicio),
-                                                                       new SqlParameter("HoraFin", HoraFin),
-                                                                       new SqlParameter("lunes", Lunes),
-                                                                       new SqlParameter("martes", Martes),
-                                                                       new SqlParameter("miercoles", Miercoles),
-                                                                       new SqlParameter("jueves", Jueves),
-                                                                       new SqlParameter("viernes", Viernes),
-                                                                       new SqlParameter("IdSede", IdSede)).ToList();
-
-
-                foreach (var item in ambientes)
-                {
-                    oListaAmbiente.Add(item);
-                }
-
-                AmbientesOtraArea = true;
+                                                                    new SqlParameter("fecha_ini", FechaInicio),
+                                                                    new SqlParameter("fecha_Fin", FechaFin),
+                                                                    new SqlParameter("HoraInicio", HoraInicio),
+                                                                    new SqlParameter("HoraFin", HoraFin),
+                                                                    new SqlParameter("lunes", Lunes),
+                                                                    new SqlParameter("martes", Martes),
+                                                                    new SqlParameter("miercoles", Miercoles),
+                                                                    new SqlParameter("jueves", Jueves),
+                                                                    new SqlParameter("viernes", Viernes),
+                                                                    new SqlParameter("IdSede", IdSede)).ToList();
+                oListaAmbiente = ambientes.OrderBy(x => int.Parse(x.Numero)).ToList();
 
             }
 
+            //foreach (var item in ambientes)
+            //{
+            //    oListaAmbiente.Add(item);
+            //}
 
 
-            return new Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, bool>(oListaAmbiente, oListaInstructor.OrderBy(x => x.Nombre).ToList(), oListaFicha.OrderBy(x => x.Ficha1).ToList(), AmbientesOtraArea);
+            AmbientesOtraArea = false;
+
+            //}
+
+
+
+            return new Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, bool, bool>(oListaAmbiente, oListaInstructor.OrderBy(x => x.Nombre).ToList(), oListaFicha.OrderBy(x => x.Ficha1).ToList(), AmbientesOtraArea, NoValidarFicha);
         }
 
         public Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, bool> DisponibilidadTransversalCJ(bool Transversal, int IdCoordinacion, DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int IdSede, int IdPrograma, bool Lunes, bool Martes, bool Miercoles, bool Jueves, bool Viernes, bool Sabado, bool Domingo)
@@ -790,12 +812,11 @@ namespace LogicaNegocio.LogicaNegocio
                 {
                     jornada = 3;
                 }
-                DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea,@jornada",
+                DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin,@jornada",
                                                                                                  new SqlParameter("fecha_ini", FechaInicio),
                                                                                                  new SqlParameter("fecha_Fin", FechaFin),
                                                                                                  new SqlParameter("HoraInicio", HoraInicio),
                                                                                                  new SqlParameter("HoraFin", HoraFin),
-                                                                                                 new SqlParameter("idarea", Coordinacion.IdArea),
                                                                                                  new SqlParameter("jornada", jornada)).ToList();
 
 
@@ -934,7 +955,12 @@ namespace LogicaNegocio.LogicaNegocio
                                                                                       new SqlParameter("viernes", Viernes)).ToList();
 
             }
-            var Ambiente = oAmbienteBl.ConsultarAmbientesxArea(Coordinacion.IdArea, IdSede);
+            //var Ambiente = oAmbienteBl.ConsultarAmbientesxArea(Coordinacion.IdArea, IdSede);
+         
+            var  Ambiente = oAmbienteBl.ConsultarAmbientes();
+            Ambiente = (from i in Ambiente
+                        where i.IdSede == IdSede
+                        select i).ToList();
 
             var Ficha = new List<Ficha>();
             //if (Transversal == true)
@@ -997,7 +1023,9 @@ namespace LogicaNegocio.LogicaNegocio
                 oListaInstructor = Ins;
             }
 
-            if (oListaAmbiente.Count == 0)
+            //if (oListaAmbiente.Count == 0)
+            //{
+            if (Sabado == false && Domingo == false)
             {
                 var ambientes = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteAreasAlternas @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @lunes, @martes, @miercoles, @jueves, @viernes, @IdSede",
                                                                        new SqlParameter("fecha_ini", FechaInicio),
@@ -1010,23 +1038,25 @@ namespace LogicaNegocio.LogicaNegocio
                                                                        new SqlParameter("jueves", Jueves),
                                                                        new SqlParameter("viernes", Viernes),
                                                                        new SqlParameter("IdSede", IdSede)).ToList();
-
-
-                foreach (var item in ambientes)
-                {
-                    oListaAmbiente.Add(item);
-                }
-
-                AmbientesOtraArea = true;
-
             }
+                
+
+
+                //foreach (var item in ambientes)
+                //{
+                //    oListaAmbiente.Add(item);
+                //}
+
+                AmbientesOtraArea = false;
+
+            //}
 
 
 
             return new Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, bool>(oListaAmbiente, oListaInstructor.OrderBy(x => x.Nombre).ToList(), oListaFicha.OrderBy(x => x.Ficha1).ToList(), AmbientesOtraArea);
         }
 
-        public Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, string, string> Disponibilidad1(bool Transversal, int IdCoordinacion, DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int jornada, int IdInstructor, int IdFicha)
+        public Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, string, string> Disponibilidad1(bool Transversal, int IdCoordinacion, DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int jornada, int IdInstructor, int IdFicha,int IdAmbiente)
         {
             Model1 entity = new Model1();
             InstructorBl oInstructorBl = new InstructorBl();
@@ -1042,12 +1072,11 @@ namespace LogicaNegocio.LogicaNegocio
                                 where i.IdCoordinacion == IdCoordinacion
                                 select i).FirstOrDefault();
 
-            var DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @idarea,@jornada",
+            var DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("sp_disponibilidadAmbienteSabado @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin,@jornada",
                                                                                   new SqlParameter("fecha_ini", FechaInicio),
                                                                                   new SqlParameter("fecha_Fin", FechaFin),
                                                                                   new SqlParameter("HoraInicio", HoraInicio),
                                                                                   new SqlParameter("HoraFin", HoraFin),
-                                                                                  new SqlParameter("idarea", Coordinacion.IdArea),
                                                                                   new SqlParameter("jornada", jornada)).ToList();
 
 
@@ -1114,7 +1143,8 @@ namespace LogicaNegocio.LogicaNegocio
                 MensajeFicha = "La ficha " + ValidarFicha.Ficha1 + " no se encuentra disponible en ese horario el día " + Dia;
             }
             //Consulta de ambientes Translape
-            var Ambiente = oAmbienteBl.ConsultarAmbientesxArea(Coordinacion.IdArea, 1);
+            var sede = oAmbienteBl.ConsultarAmbienteId(IdAmbiente);
+            var Ambiente = oAmbienteBl.ConsultarAmbientes().Where(x=> x.IdSede == sede.IdSede);
             var Ficha = oFichaBl.ConsultarFichasxArea(Coordinacion.IdCoordinacion);
 
 
@@ -1167,7 +1197,7 @@ namespace LogicaNegocio.LogicaNegocio
                            select i).ToList();
                 oListaInstructor = Ins;
             }
-            return new Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, string, string>(oListaAmbiente, oListaInstructor.OrderBy(x => x.Nombre).ToList(), oListaFicha.OrderBy(x => x.Ficha1).ToList(), MensajeInstructor, MensajeFicha);
+            return new Tuple<List<Ambiente>, List<Instructor>, List<Ficha>, string, string>(oListaAmbiente.OrderBy(x=>int.Parse(x.Numero)).ToList(), oListaInstructor.OrderBy(x => x.Nombre).ToList(), oListaFicha.OrderBy(x => x.Ficha1).ToList(), MensajeInstructor, MensajeFicha);
         }
 
         public Tuple<List<Instructor>, Ficha_Ambiente> DisponibilidadTrasversal(int IdCoordinacion, DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int IdProgramacionPrincipal, int DiaSemana, bool Lunes, bool Martes, bool Miercoles, bool Jueves, bool Viernes, bool Sabado, bool Domingo)
@@ -2643,13 +2673,18 @@ namespace LogicaNegocio.LogicaNegocio
 
             List<Ficha_Ambiente> Datos = new List<Ficha_Ambiente>();
 
+            var coordinador = (from i in entity.Coordinacion
+                               where i.IdCoordinacion == IdCoordinador
+                               select i).FirstOrDefault();
+
             if (IdCoordinador != 0)
             {
                 Datos = (from i in entity.Ficha_Ambiente
                          join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
-                         join ar in entity.Area on a.IdArea equals ar.IdArea
-                         join c in entity.Coordinacion on ar.IdArea equals c.IdArea
-                         where c.IdCoordinacion == IdCoordinador && i.IdAmbiente != 192 &&
+                         join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
+                         join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+                         join p in entity.Programa on c.IdPrograma equals p.IdPrograma
+                         where p.IdArea == coordinador.IdArea && i.IdAmbiente != 192 &&
                          ((i.FechaInicio >= fechaInicio && i.FechaInicio <= fechaFin) ||
                          (i.FechaFin <= fechaFin && i.FechaFin >= fechaInicio)
                          || (i.FechaInicio <= fechaInicio && i.FechaFin >= fechaFin))
@@ -2735,13 +2770,20 @@ namespace LogicaNegocio.LogicaNegocio
                 Ficha.Competencia = Competencia.Nombre;
                 Ficha.TotalHoras = item.HoraFin - item.HoraInicio;
                 Ficha.Area = area.Nombre;
-
-
                 Ficha.Sede = DatosSede.Nombre_Sede;
-                if (DatosSede.IdSede == SedeEmpresa.IdSede)
+                Ficha.NombreEvento = "";
+                if (item.NombreEmpresa!="")
                 {
-                    Ficha.Sede = DatosSede.Nombre_Sede + " " + item.NombreEmpresa.ToUpper();
+                    if (DatosSede.IdSede == SedeEmpresa.IdSede)
+                    {
+                        Ficha.Sede = DatosSede.Nombre_Sede + " " + item.NombreEmpresa.ToUpper();
+                    }
+                    else
+                    {
+                        Ficha.NombreEvento = item.NombreEmpresa;
+                    }
                 }
+                
 
 
                 if (item.Lunes != null)
@@ -2861,13 +2903,21 @@ namespace LogicaNegocio.LogicaNegocio
                               where i.Cedula == CedulaInstructor
                               select i).FirstOrDefault();
 
+
+
+            //var Programciones1 = (from i in entity.Ficha_Ambiente
+            //                      join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
+            //                      where p.Fecha != fecha && i.IdInstructor == instructor.IdInstructor
+            //                      select i).ToList();
+
             var Programaciones = (from i in entity.Ficha_Ambiente
+                                  //join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
                                   join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
                                   join f in entity.Ficha on i.IdFicha equals f.IdFicha
                                   join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
                                   join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
                                   join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
-                                  where i.IdInstructor == instructor.IdInstructor
+                                  where i.IdInstructor == instructor.IdInstructor 
                                   && (i.FechaInicio.Year == FechaActual.Year && i.FechaFin.Year <= FechaActual.Year)
                                   && (i.Lunes == Lunes || i.Martes == Martes || i.Miercoles == Miercoles || i.Jueves == Jueves || i.Viernes == Viernes || i.Jornada == Sabado || i.Jornada == Domingo)
                                   select new Ficha_AmbienteDTO
@@ -2894,6 +2944,7 @@ namespace LogicaNegocio.LogicaNegocio
                                       Miercoles = i.Miercoles,
                                       Jueves = i.Jueves,
                                       Viernes = i.Viernes
+                                
                                   }).ToList();
 
             //Clonar lista
@@ -2902,15 +2953,26 @@ namespace LogicaNegocio.LogicaNegocio
             TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
             string fromTimeString = Hora.ToString("hh':'mm");
 
-            foreach (var item in newList)
-            {
+            //foreach (var item in newList)
+            //{
+            //     //|| !(Hora >= item.HoraInicio && Hora <= item.HoraFin)
+            //    if (!(FechaActual >= item.FechaInicio && FechaActual <= item.FechaFin))
+            //    {
+            //        Programaciones.Remove(item);
+            //    }
+           
+            //    //var ambiente = (from i in entity.PrestamoLlaves
+            //    //                join f in entity.Ficha_Ambiente on i.IdFicha_Ambiente equals f.Id
+            //    //                where f.Id== item.Id && f.IdAmbiente == item.IdAmbiente && i.Fecha == fecha
+            //    //                && (Hora >= f.HoraInicio && Hora <= f.HoraFin)
+            //    //                select f.IdAmbiente).FirstOrDefault();
 
-                if (!(FechaActual >= item.FechaInicio && FechaActual <= item.FechaFin) || !(Hora >= item.HoraInicio && Hora <= item.HoraFin))
-                {
-                    Programaciones.Remove(item);
-                }
+            //    //if (ambiente > 0)
+            //    //{
+            //    //    Programaciones.Remove(item);
+            //    //}
 
-            }
+            //}
             foreach (var item in Programaciones.Select((value, i) => new { i, value }))
             {
                 var FechaPrestamo = (from i in entity.PrestamoLlaves
@@ -2982,12 +3044,13 @@ namespace LogicaNegocio.LogicaNegocio
                     oPrestamo.HoraRecibio = Hora;
                     oPrestamo.HoraEntrego = TimeSpan.Parse("00:00");
                     oPrestamo.Observacion = oProgramacion.Observacion;
-                }
-                oPrestamo.IdFicha_Ambiente = oProgramacion.Id;
-                oPrestamo.Fecha = DateTime.Now;
+                    oPrestamo.IdFicha_Ambiente = oProgramacion.Id;
+                    oPrestamo.Fecha = DateTime.Now;
 
-                entity.PrestamoLlaves.Add(oPrestamo);
-                entity.SaveChanges();
+                    entity.PrestamoLlaves.Add(oPrestamo);
+                    entity.SaveChanges();
+                }
+               
             }
             else
             {
@@ -2996,70 +3059,38 @@ namespace LogicaNegocio.LogicaNegocio
                 entity.SaveChanges();
             }
 
-            var inst = (from i in entity.Instructor
-                        where i.IdInstructor == oProgramacion.IdInstructor
-                        select i).FirstOrDefault();
-            var Programaciones = ConsultarPogramacionesInstructor(inst.Cedula);
 
+            var Programaciones = RegresarLlavesAmbientesDisponibles();
+
+            if (oProgramacion.CedulaIns!= "")
+            {
+                var inst = (from i in entity.Instructor
+                            where i.IdInstructor == oProgramacion.IdInstructor
+                            select i).FirstOrDefault();
+              
+                 Programaciones = ConsultarPogramacionesInstructor(inst.Cedula);
+            }
+
+           
             return Programaciones;
 
         }
 
 
-        public List<Ficha_AmbienteDTO> ReporteLlaves(DateTime fechaInicio, DateTime fechaFin)
+        public List<Ficha_AmbienteDTO> EliminarReciboLlaves(Ficha_AmbienteDTO oProgramcion)
         {
             Model1 entity = new Model1();
-
-            var Reporte = (from i in entity.PrestamoLlaves
-                           where i.Fecha >= fechaInicio && i.Fecha <= fechaFin
-                           select i).ToList();
-
             var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var programacion = (from i in entity.PrestamoLlaves
+                                where i.IdFicha_Ambiente == oProgramcion.Id && i.Fecha== fecha
+                                select i).FirstOrDefault();
 
-            var programacion = new List<Ficha_AmbienteDTO>();
-
-            foreach (var item1 in Reporte)
+            if (programacion!= null)
             {
-                var Programaciones = (from i in entity.Ficha_Ambiente
-                                      join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
-                                      join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
-                                      join f in entity.Ficha on i.IdFicha equals f.IdFicha
-                                      join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
-                                      join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
-                                      join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
-                                      where i.Id == item1.IdFicha_Ambiente
-                                      select new Ficha_AmbienteDTO
-                                      {
-                                          Id = i.Id,
-                                          IdFicha = i.IdFicha,
-                                          Ficha = f.Ficha1,
-                                          IdAmbiente = i.IdAmbiente,
-                                          Ambiente = a.Numero,
-                                          IdInstructor = i.IdInstructor,
-                                          CedulaIns = t.Cedula,
-                                          NombreInstructor = t.Nombre + " " + t.Apellido,
-                                          Resultado = r.Resultado,
-                                          CodigoResultado = r.Codigo,
-                                          Competencia = c.Nombre,
-                                          CodigoCompetencia = c.Codigo.ToString(),
-                                          FechaInicio = p.Fecha,
-                                          FechaFin = i.FechaFin,
-                                          HoraInicio = p.HoraRecibio,
-                                          HoraFin = p.HoraEntrego,
-                                          Color = i.Color,
-                                          Lunes = i.Lunes,
-                                          Martes = i.Martes,
-                                          Miercoles = i.Miercoles,
-                                          Jueves = i.Jueves,
-                                          Viernes = i.Viernes,
-                                          Observacion = p.Observacion
-                                      }).FirstOrDefault();
-
-                programacion.Add(Programaciones);
+                entity.PrestamoLlaves.Remove(programacion);
+                entity.SaveChanges();
             }
-
-
-            return programacion;
+            return RegresarLlavesAmbientesDisponibles();
         }
 
         public List<Ficha_AmbienteDTO> AmbientesDisponibles()
@@ -3106,6 +3137,11 @@ namespace LogicaNegocio.LogicaNegocio
             var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
             var hora = (TimeSpan.Parse("00:00"));
 
+            //var programa = (from i in entity.Ficha_Ambiente
+            //                where i.Martes == true && !(from o in entity.PrestamoLlaves
+            //                                            where o.Fecha== fecha
+            //                                            select o.IdFicha_Ambiente).Contains(i.Id) select i).ToList();
+
             var Programaciones = (from i in entity.Ficha_Ambiente
                                       //join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
                                   join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
@@ -3115,7 +3151,9 @@ namespace LogicaNegocio.LogicaNegocio
                                   join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
                                   where (i.FechaInicio.Year == FechaActual.Year && i.FechaFin.Year <= FechaActual.Year)
                                   && (i.Lunes == Lunes || i.Martes == Martes || i.Miercoles == Miercoles || i.Jueves == Jueves || i.Viernes == Viernes || i.Jornada == Sabado || i.Jornada == Domingo)
-                                  && !(from p in entity.PrestamoLlaves where p.Recibio == true select p.IdFicha_Ambiente).Contains(i.Id)
+                                  && !(from o in entity.PrestamoLlaves
+                                                        where o.Fecha == fecha
+                                                        select o.IdFicha_Ambiente).Contains(i.Id) 
                                   select new Ficha_AmbienteDTO
                                   {
                                       Id = i.Id,
@@ -3149,16 +3187,6 @@ namespace LogicaNegocio.LogicaNegocio
             TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
             string fromTimeString = Hora.ToString("hh':'mm");
 
-            //Programaciones.Distinct(prestamos.id) 
-            foreach (var item in newList)
-            {
-
-                if (!(FechaActual >= item.FechaInicio && FechaActual <= item.FechaFin) || !(Hora >= item.HoraInicio && Hora <= item.HoraFin))
-                {
-                    Programaciones.Remove(item);
-                }
-
-            }
 
             foreach (var item in Programaciones.Select((value, i) => new { i, value }))
             {
@@ -3205,7 +3233,7 @@ namespace LogicaNegocio.LogicaNegocio
                     Programaciones[item.i].DiasProgramados += "Domingo -";
                 }
             }
-            return Programaciones;
+            return Programaciones.OrderBy(x => int.Parse(x.Ambiente)).ToList().OrderBy((x => x.HoraInicio)).ToList();
         }
 
         public List<Ficha_AmbienteDTO> RegresarLlavesAmbientesDisponibles()
@@ -3252,8 +3280,11 @@ namespace LogicaNegocio.LogicaNegocio
             var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
             var hora = (TimeSpan.Parse("00:00"));
 
+
+
+
             var Programaciones = (from i in entity.Ficha_Ambiente
-                                      //join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
+                                  join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
                                   join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
                                   join f in entity.Ficha on i.IdFicha equals f.IdFicha
                                   join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
@@ -3261,7 +3292,8 @@ namespace LogicaNegocio.LogicaNegocio
                                   join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
                                   where (i.FechaInicio.Year == FechaActual.Year && i.FechaFin.Year <= FechaActual.Year)
                                   && (i.Lunes == Lunes || i.Martes == Martes || i.Miercoles == Miercoles || i.Jueves == Jueves || i.Viernes == Viernes || i.Jornada == Sabado || i.Jornada == Domingo)
-                                  && (from p in entity.PrestamoLlaves where p.Recibio == true && p.Entrego== false select p.IdFicha_Ambiente).Contains(i.Id)
+                                  && p.Recibio == true && p.Entrego== false && p.Fecha== fecha
+
                                   select new Ficha_AmbienteDTO
                                   {
                                       Id = i.Id,
@@ -3285,7 +3317,9 @@ namespace LogicaNegocio.LogicaNegocio
                                       Martes = i.Martes,
                                       Miercoles = i.Miercoles,
                                       Jueves = i.Jueves,
-                                      Viernes = i.Viernes
+                                      Viernes = i.Viernes,
+                                      EntregoLLaves = p.Entrego,
+                                      RecibioLLaves = p.Recibio
                                   }).ToList();
 
             //Clonar lista
@@ -3296,31 +3330,35 @@ namespace LogicaNegocio.LogicaNegocio
             string fromTimeString = Hora.ToString("hh':'mm");
 
             //Programaciones.Distinct(prestamos.id) 
-            foreach (var item in newList)
-            {
+            //foreach (var item in newList)
+            //{
 
-                if (!(FechaActual >= item.FechaInicio && FechaActual <= item.FechaFin))
-                {
-                    Programaciones.Remove(item);
-                }
+            //    if (!(FechaActual >= item.FechaInicio && FechaActual <= item.FechaFin))
+            //    {
+            //        Programaciones.Remove(item);
+            //    }
+            //    //if ((item.RecibioLLaves== true && item.EntregoLLaves== true) || (item.RecibioLLaves == true && item.EntregoLLaves == false))
+            //    //{
+            //    //    Programaciones.Remove(item);
+            //    //}
 
-            }
+            //}
 
             foreach (var item in Programaciones.Select((value, i) => new { i, value }))
             {
-                var FechaPrestamo = (from i in entity.PrestamoLlaves
-                                     where i.IdFicha_Ambiente == item.value.Id && i.Fecha == fecha
-                                     select i).FirstOrDefault();
-                if (FechaPrestamo != null)
-                {
-                    Programaciones[item.i].EntregoLLaves = FechaPrestamo.Entrego;
-                    Programaciones[item.i].RecibioLLaves = FechaPrestamo.Recibio;
-                }
-                else
-                {
-                    Programaciones[item.i].EntregoLLaves = false;
-                    Programaciones[item.i].RecibioLLaves = false;
-                }
+                //var FechaPrestamo = (from i in entity.PrestamoLlaves
+                //                     where i.IdFicha_Ambiente == item.value.Id && i.Fecha == fecha
+                //                     select i).FirstOrDefault();
+                //if (FechaPrestamo != null)
+                //{
+                //    Programaciones[item.i].EntregoLLaves = FechaPrestamo.Entrego;
+                //    Programaciones[item.i].RecibioLLaves = FechaPrestamo.Recibio;
+                //}
+                //else
+                //{
+                //    Programaciones[item.i].EntregoLLaves = false;
+                //    Programaciones[item.i].RecibioLLaves = false;
+                //}
 
                 if (item.value.Lunes == true)
                 {
@@ -3352,6 +3390,229 @@ namespace LogicaNegocio.LogicaNegocio
                 }
             }
             return Programaciones;
+        }
+
+        public List<AmbienteDTO> AmbientesSinProgramacion(string horaInicio, string horafin)
+        {
+            Model1 entity = new Model1();
+
+          
+            var FechaActual = DateTime.Now;
+            var Lunes = false;
+            var Martes = false;
+            var Miercoles = false;
+            var Jueves = false;
+            var Viernes = false;
+            var jornada = 0;
+
+            var DiaSemana = FechaActual.DayOfWeek;
+
+            switch (DiaSemana.ToString())
+            {
+                case "Monday":
+                    Lunes = true;
+                    break;
+
+                case "Tuesday":
+                    Martes = true;
+                    break;
+
+                case "Wednesday":
+                    Miercoles = true;
+                    break;
+                case "Thursday":
+                    Jueves = true;
+                    break;
+                case "Friday":
+                    Viernes = true;
+                    break;
+                case "Saturday":
+                    jornada = 2;
+                    break;
+                case "Sunday":
+                    jornada = 3;
+                    break;
+            }
+
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+         
+            var ambientes = entity.Database.SqlQuery<AmbienteDTO>("AmbientesLibres @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @lunes, @martes, @miercoles, @jueves, @viernes, @jornada",
+                                                                                    new SqlParameter("fecha_ini", fecha),
+                                                                                    new SqlParameter("fecha_Fin", fecha),
+                                                                                    new SqlParameter("HoraInicio", TimeSpan.Parse(horaInicio)),
+                                                                                    new SqlParameter("HoraFin", TimeSpan.Parse(horafin)),
+                                                                                    new SqlParameter("lunes", Lunes),
+                                                                                    new SqlParameter("martes", Martes),
+                                                                                    new SqlParameter("miercoles", Miercoles),
+                                                                                    new SqlParameter("jueves", Jueves),
+                                                                                    new SqlParameter("viernes", Viernes),
+                                                                                    new SqlParameter("jornada", jornada)).ToList();
+
+            var AmbientesDisponibles = (from i in ambientes
+                                        where !(from P in entity.PrestamoAmbiente
+                                                select P.IdAmbiente).Contains(i.IdAmbiente)
+                                        select i).ToList();
+
+
+            return AmbientesDisponibles.OrderBy(x=>x.Piso).ToList().OrderBy(x=>int.Parse(x.Numero)).ToList();
+        }
+
+        public List<AmbienteDTO> GuardarPrestamoLLavesAmbientes(AmbienteDTO oAmbiente)
+        {
+            Model1 entity = new Model1();
+            var oPrestamo = new PrestamoAmbiente();
+
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var prestamo = (from i in entity.PrestamoAmbiente
+                            where i.IdAmbiente == oAmbiente.IdAmbiente && i.Fecha == fecha 
+                            select i).FirstOrDefault();
+
+            var FechaActual = DateTime.Now;
+            TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
+            string fromTimeString = Hora.ToString("hh':'mm");
+            if (prestamo == null)
+            {
+                if (oAmbiente.Recibio)
+                {
+                    oPrestamo.Recibio = true;
+                    oPrestamo.Entrego = false;
+                    oPrestamo.HoraRecibio = Hora;
+                    oPrestamo.HoraEntrego = TimeSpan.Parse("00:00");
+                    oPrestamo.Observacion = oAmbiente.Observacion;
+                    oPrestamo.IdAmbiente = oAmbiente.IdAmbiente;
+                    oPrestamo.Fecha = DateTime.Now;
+                }
+               
+
+                entity.PrestamoAmbiente.Add(oPrestamo);
+                entity.SaveChanges();
+            }
+            else
+            {
+                prestamo.Entrego = true;
+                prestamo.HoraEntrego = Hora;
+                entity.SaveChanges();
+            }
+
+            //var Ambientes = AmbientesSinProgramacion();
+            return AmbientesEntregarLlaves();
+
+        }
+
+        public List<AmbienteDTO> AmbientesEntregarLlaves()
+        {
+            Model1 entity = new Model1();
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var ambientes = (from i in entity.Ambiente
+                             join p in entity.PrestamoAmbiente on i.IdAmbiente equals p.IdAmbiente
+                             join s in entity.Sede on i.IdSede equals s.IdSede
+                             join a in entity.Area on i.IdArea equals a.IdArea
+                             where p.Recibio==true && p.Entrego == false && p.Fecha== fecha
+                             select new AmbienteDTO
+                             {
+                               IdAmbiente= i.IdAmbiente,
+                               IdSede= i.IdSede,
+                               Piso= i.Piso,
+                               Numero= i.Numero,
+                               IdArea=i.IdArea,
+                               Pantalla= i.Pantalla,
+                               NumeroEquipos= i.NumeroEquipos,
+                               NumeroSillas= i.NumeroSillas,
+                               NumeroMesas=i.NumeroMesas,
+                               Ambiente=i.Numero,
+                               NombreSede= s.Nombre_Sede,
+                               Area=a.Nombre,
+                               Recibio= p.Recibio,
+                               Entrego= p.Entrego,
+                               Observacion= p.Observacion
+                             }).ToList();
+
+            return ambientes;
+        }
+
+        public List<Ficha_AmbienteDTO> ReporteLlaves(DateTime fechaInicio, DateTime fechaFin, int idCoordinacion)
+        {
+            Model1 entity = new Model1();
+
+            var Reporte = (from i in entity.PrestamoLlaves
+                           where i.Fecha >= fechaInicio && i.Fecha <= fechaFin
+                           select i).ToList();
+
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+
+            var programacion = new List<Ficha_AmbienteDTO>();
+
+            Coordinacion coordinacion = null;
+            if (idCoordinacion > 0)
+            {
+                coordinacion = (from i in entity.Coordinacion
+                                where i.IdCoordinacion == idCoordinacion
+                                select i).FirstOrDefault();
+            }
+
+            foreach (var item1 in Reporte)
+            {
+                var Programaciones = (from i in entity.Ficha_Ambiente
+                                      join p in entity.PrestamoLlaves on i.Id equals p.IdFicha_Ambiente
+                                      join t in entity.Instructor on i.IdInstructor equals t.IdInstructor
+                                      join f in entity.Ficha on i.IdFicha equals f.IdFicha
+                                      join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
+                                      join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
+                                      join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+                                      where i.Id == item1.IdFicha_Ambiente
+                                      select new Ficha_AmbienteDTO
+                                      {
+                                          Id = i.Id,
+                                          IdFicha = i.IdFicha,
+                                          Ficha = f.Ficha1,
+                                          IdAmbiente = i.IdAmbiente,
+                                          Ambiente = a.Numero,
+                                          IdInstructor = i.IdInstructor,
+                                          CedulaIns = t.Cedula,
+                                          NombreInstructor = t.Nombre + " " + t.Apellido,
+                                          Resultado = r.Resultado,
+                                          CodigoResultado = r.Codigo,
+                                          Competencia = c.Nombre,
+                                          CodigoCompetencia = c.Codigo.ToString(),
+                                          FechaInicio = p.Fecha,
+                                          FechaFin = i.FechaFin,
+                                          HoraInicio = p.HoraRecibio,
+                                          HoraFin = p.HoraEntrego,
+                                          Color = i.Color,
+                                          Lunes = i.Lunes,
+                                          Martes = i.Martes,
+                                          Miercoles = i.Miercoles,
+                                          Jueves = i.Jueves,
+                                          Viernes = i.Viernes,
+                                          Observacion = p.Observacion
+                                      }).FirstOrDefault();
+
+                if (coordinacion != null && Programaciones != null)
+                {
+
+                    var area = (from i in entity.Area
+                                where i.IdArea == coordinacion.IdArea
+                                select i).FirstOrDefault();
+
+                    var areaIns = (from i in entity.Instructor
+                                   where i.IdInstructor == Programaciones.IdInstructor
+                                   select i).FirstOrDefault();
+
+                    if (area.IdArea == areaIns.IdArea)
+                    {
+                        programacion.Add(Programaciones);
+                    }
+
+                }
+                else
+                {
+                    programacion.Add(Programaciones);
+                }
+
+            }
+
+
+            return programacion;
         }
     }
 }

@@ -28,5 +28,16 @@ namespace Datos.DTO
         public int? NumeroMesas { get; set; }
 
         public string NombreSede { get; set; }
+
+        public string Area { get; set; }
+
+        public bool Recibio { get; set; }
+
+        public bool Entrego { get; set; }
+
+        public string Observacion { get; set; }
+
+        public string Ambiente { get; set; }
+
     }
 }

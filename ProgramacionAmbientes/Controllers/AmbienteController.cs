@@ -492,6 +492,10 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 AmbienteBl oAmbienteBl = new AmbienteBl();
+                if (oParamaetrosDTO.Parametro6 == "")
+                {
+                    oParamaetrosDTO.Parametro6 = "0";
+                }
                 var Datos = oAmbienteBl.ambientesDisponibles(DateTime.Parse(oParamaetrosDTO.Parametro1), DateTime.Parse(oParamaetrosDTO.Parametro2), oParamaetrosDTO.Parametro3, oParamaetrosDTO.Parametro4, int.Parse(oParamaetrosDTO.Parametro5), int.Parse(oParamaetrosDTO.Parametro6),bool.Parse(oParamaetrosDTO.Parametro7), bool.Parse(oParamaetrosDTO.Parametro8), bool.Parse(oParamaetrosDTO.Parametro9), bool.Parse(oParamaetrosDTO.Parametro10), bool.Parse(oParamaetrosDTO.Parametro11));
                 return Ok(new { success = true, datos = Datos });
             }

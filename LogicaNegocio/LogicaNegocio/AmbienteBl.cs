@@ -214,17 +214,25 @@ namespace LogicaNegocio.LogicaNegocio
 
         public List<Ambiente> ambientesDisponibles(DateTime FechaInicio, DateTime FechaFin, string HoraInicio, string HoraFin, int opc, int IdCoordinacion, bool Lunes, bool Martes, bool Miercoles, bool Jueves, bool Viernes)
         {
-
+            int area = 0;
             var coordinador = (from i in entity.Coordinacion
                                where i.IdCoordinacion == IdCoordinacion
                                select i).FirstOrDefault();
 
+            if (coordinador== null)
+            {
+                area = 0;
+            }
+            else
+            {
+                area = coordinador.IdArea;
+            }
             var DisponibilidadAmbiente = entity.Database.SqlQuery<Ambiente>("AmbientesDisponibles @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin,@IdArea, @opc, @lunes,@martes,@miercoles,@jueves,@viernes",
                                                                                  new SqlParameter("fecha_ini", FechaInicio),
                                                                                  new SqlParameter("fecha_Fin", FechaFin),
                                                                                  new SqlParameter("HoraInicio", TimeSpan.Parse(HoraInicio)),
                                                                                  new SqlParameter("HoraFin", TimeSpan.Parse(HoraFin)),
-                                                                                 new SqlParameter("IdArea", coordinador.IdArea),
+                                                                                 new SqlParameter("IdArea", area),
                                                                                  new SqlParameter("lunes", Lunes),
                                                                                  new SqlParameter("martes", Martes),
                                                                                  new SqlParameter("miercoles", Miercoles),
@@ -235,7 +243,7 @@ namespace LogicaNegocio.LogicaNegocio
 
 
 
-            return DisponibilidadAmbiente;
+            return DisponibilidadAmbiente.OrderBy(x=>int.Parse(x.Numero)).ToList();
 
 
         }

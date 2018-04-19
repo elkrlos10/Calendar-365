@@ -82,6 +82,7 @@ namespace Datos.DTO
         public bool EntregoLLaves { get; set; }
 
         public string Observacion { get; set; }
+        public string NombreEvento { get; set; }
 
     }
 }
