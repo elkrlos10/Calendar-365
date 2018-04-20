@@ -527,6 +527,13 @@
               })
         };
 
+        service.RegistrarProgramacionesPrestamoLLaves = function (callback) {
+            $http.post(URLServices + "Programacion/RegistrarProgramacionesPrestamoLLaves/")
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
         return service;
 
     }]);

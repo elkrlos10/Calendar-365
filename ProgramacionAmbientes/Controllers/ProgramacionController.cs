@@ -579,5 +579,21 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc.Message });
             }
         }
+
+        [HttpPost]
+        public IHttpActionResult RegistrarProgramacionesPrestamoLLaves()
+        {
+            try
+            {
+                ProgramacionBl oProgramacionBl = new ProgramacionBl();
+              oProgramacionBl.RegistrarProgramacionesPrestamoLLaves();
+                return Ok(new { success = true });
+            }
+            catch (Exception exc)
+            {
+
+                return Ok(new { success = false, exc.Message });
+            }
+        }
     }
 }

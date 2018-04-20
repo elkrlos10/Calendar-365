@@ -138,8 +138,8 @@ ProgramacionApp.config(function ($routeProvider) {
 
 // create the controller and inject Angular's $scope
 ProgramacionApp.controller('PrincipalController',
-    ['$scope', '$rootScope', '$cookies', '$cookieStore', 'InstructorService', 'LoginService', '$http', '$location',
-    function ($scope, $rootScope, $cookies, $cookieStore, InstructorService, LoginService, $http, $location) {
+    ['$scope', '$rootScope', '$cookies', '$cookieStore', 'InstructorService', 'ProgramacionService', 'LoginService', '$http', '$location',
+    function ($scope, $rootScope, $cookies, $cookieStore, InstructorService, ProgramacionService, LoginService, $http, $location) {
         $scope.CerrarSesion = function () {
             $cookies.remove("username");
             $location.url('/Login');
@@ -185,6 +185,16 @@ ProgramacionApp.controller('PrincipalController',
         //        //}
         //    });
         //}, 120000);
+
+        setInterval(function () {
+            ProgramacionService.RegistrarProgramacionesPrestamoLLaves(function (response) {
+                if (response.success == true) {
+              
+               }
+            });
+        }, 2400000);
+
+        //2400000 milisegundos
 
         $scope.UsuarioCambiarPass = {
             Password: "",

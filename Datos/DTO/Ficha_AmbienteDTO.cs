@@ -76,6 +76,10 @@ namespace Datos.DTO
 
         public bool? Viernes { get; set; }
 
+        public bool? Sabado { get; set; }
+
+        public bool? Domingo { get; set; }
+
         public string Area { get; set; }
 
         public bool RecibioLLaves { get; set; }

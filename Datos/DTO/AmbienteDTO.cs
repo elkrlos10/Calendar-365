@@ -39,5 +39,10 @@ namespace Datos.DTO
 
         public string Ambiente { get; set; }
 
+        public DateTime Fecha { get; set; }
+
+        public TimeSpan? HoraInicio { get; set; }
+
+        public TimeSpan? HoraFin { get; set; }
     }
 }
