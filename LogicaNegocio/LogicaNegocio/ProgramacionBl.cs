@@ -3196,7 +3196,8 @@ namespace LogicaNegocio.LogicaNegocio
                                       Martes = i.Martes,
                                       Miercoles = i.Miercoles,
                                       Jueves = i.Jueves,
-                                      Viernes = i.Viernes
+                                      Viernes = i.Viernes,
+                                      Jornada = i.Jornada.ToString()
                                   }).ToList();
 
             //Clonar lista
@@ -3338,7 +3339,8 @@ namespace LogicaNegocio.LogicaNegocio
                                       Jueves = i.Jueves,
                                       Viernes = i.Viernes,
                                       EntregoLLaves = p.Entrego,
-                                      RecibioLLaves = p.Recibio
+                                      RecibioLLaves = p.Recibio,
+                                      Jornada= i.Jornada.ToString()
                                   }).ToList();
 
             //Clonar lista
@@ -3597,78 +3599,7 @@ namespace LogicaNegocio.LogicaNegocio
                                   }).ToList();
 
 
-            //List<Ficha_AmbienteDTO> newList = Programaciones.GetRange(0, Programaciones.Count);
-            //var ReporteLLavesReclamar = (from i in Programaciones
-            //                             join pr in entity.PrestamoLlaves on i.Id equals pr.IdFicha_Ambiente
-            //                             where (from p in entity.PrestamoLlaves
-            //                                    where p.Fecha >= fechaInicio && p.Fecha <= fechaFin
-            //                                    select p.IdFicha_Ambiente).Contains(i.Id)
-            //                             select new Ficha_AmbienteDTO
-            //                             {
-            //                                 Id = i.Id,
-            //                                 IdFicha = i.IdFicha,
-            //                                 Ficha = i.Ficha,
-            //                                 IdAmbiente = i.IdAmbiente,
-            //                                 Ambiente = i.Ambiente,
-            //                                 IdInstructor = i.IdInstructor,
-            //                                 CedulaIns = i.CedulaIns,
-            //                                 NombreInstructor = i.NombreInstructor,
-            //                                 Resultado = i.Resultado,
-            //                                 CodigoResultado = i.CodigoResultado,
-            //                                 Competencia = i.Competencia,
-            //                                 CodigoCompetencia = i.CodigoCompetencia,
-            //                                 FechaInicio = pr.Fecha,
-            //                                 FechaFin = i.FechaFin,
-            //                                 HoraInicio = pr.HoraRecibio,
-            //                                 HoraFin = pr.HoraEntrego,
-            //                                 Color = i.Color,
-            //                                 Lunes = i.Lunes,
-            //                                 Martes = i.Martes,
-            //                                 Miercoles = i.Miercoles,
-            //                                 Jueves = i.Jueves,
-            //                                 Viernes = i.Viernes,
-            //                                 Jornada = i.Jornada,
-            //                                 Observacion = pr.Observacion
-
-            //                             }).ToList();
-
-            //var ReporteLLavesSinReclamar = (from i in newList
-            //                                where !(from p in entity.PrestamoLlaves
-            //                                        where p.Fecha >= fechaInicio && p.Fecha <= fechaFin
-            //                                        select p.IdFicha_Ambiente).Contains(i.Id)
-            //                                select new Ficha_AmbienteDTO
-            //                                {
-            //                                    Id = i.Id,
-            //                                    IdFicha = i.IdFicha,
-            //                                    Ficha = i.Ficha,
-            //                                    IdAmbiente = i.IdAmbiente,
-            //                                    Ambiente = i.Ambiente,
-            //                                    IdInstructor = i.IdInstructor,
-            //                                    CedulaIns = i.CedulaIns,
-            //                                    NombreInstructor = i.NombreInstructor,
-            //                                    Resultado = i.Resultado,
-            //                                    CodigoResultado = i.CodigoResultado,
-            //                                    Competencia = i.Competencia,
-            //                                    CodigoCompetencia = i.CodigoCompetencia,
-            //                                    FechaInicio = DateTime.Parse(DateTime.Now.Year.ToString() + "-01" + "-01"),
-            //                                    FechaFin = i.FechaFin,
-            //                                    HoraInicio = TimeSpan.Parse("00:00"),
-            //                                    HoraFin = TimeSpan.Parse("00:00"),
-            //                                    Color = i.Color,
-            //                                    Lunes = i.Lunes,
-            //                                    Martes = i.Martes,
-            //                                    Miercoles = i.Miercoles,
-            //                                    Jueves = i.Jueves,
-            //                                    Viernes = i.Viernes,
-            //                                    Jornada = i.Jornada,
-            //                                    Observacion = "Las llaves del ambiente no has sido reclamdadas"
-
-            //                                }).ToList();
-
-            //var ProgramacionLista = new List<Ficha_AmbienteDTO>();
-
-            //ProgramacionLista.AddRange(ReporteLLavesReclamar);
-            //ProgramacionLista.AddRange(ReporteLLavesSinReclamar);
+           
 
             var reporteAmbientes = (from i in entity.PrestamoAmbiente
                                     join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
@@ -3724,6 +3655,26 @@ namespace LogicaNegocio.LogicaNegocio
             {
                 GuardarPrestamoLLaves(item);
             }
+        }
+
+        public List<Ficha_AmbienteDTO> PrestamosLLavesCerrados()
+        {
+            Model1 entity = new Model1();
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            var prestamos = (from i in entity.PrestamoLlaves
+                             where i.Recibio == true && i.Entrego == true && i.Fecha== fecha
+                             select i).ToList();
+
+            foreach (var item in prestamos)
+            {
+                var programaciones = (from i in entity.Ficha_Ambiente
+                                      where i.Id == item.IdFicha_Ambiente && i.HoraFin<item.HoraEntrego
+                                      select i).FirstOrDefault();
+                                 
+            }
+           
+
+            return null;
         }
     }
 }
