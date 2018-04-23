@@ -570,7 +570,14 @@
                         <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Reporte entrega de llaves" style="height: 34px;">
                                 <i class="material-icons">&#xE0DA;</i>
                         </button>
-                        <button class="btn btn-default noCor" type="button"  ng-click="AbrirModalHoras()" title="Ambientes disponibles" style="height: 34px;">
+
+                        <button class="btn btn-default noCor" type="button"  ng-click="ConsultarLLavesEditar()" title="Ambientes disponibles" style="height: 34px;">
+                            <i class="material-icons">&#xE8E8;</i>
+                        </button>
+
+
+
+                        <button class="btn btn-default noCor" type="button" ng-click="AbrirModalHoras()" title="Ambientes disponibles" style="height: 34px;">
                             <img src="../img/icono1.svg" width="25" height="18" />
                         </button>
                         <button class="btn btn-default noCor" type="button" ng-click="AmbientesEntregarLlaves()" title="Ambientes disponibles" style="height: 34px;">
@@ -621,7 +628,7 @@
                                     <td>{{datalist.NombreInstructor | uppercase}} </td>
                                     <td class="dia1">{{datalist.DiasProgramados | uppercase}}</td>
                                     <td ng-if="UsuarioConsulta ==4" style="display:flex; justify-content:center; border-top:1px solid silver !important; border:transparent; padding-top:15% !important;">
-                                       <label>R</label> <input style="margin-left:5px;" type="checkbox" ng-click="ModalPrestamo($index,1)" ng-disabled="datalist.RecibioLLaves == true" name="recibio{{$index}}"  ng-model="datalist.RecibioLLaves"/>
+                                       <label>R</label> <input style="margin-left:5px;" type="checkbox"  ng-click="ModalPrestamo($index,1)" ng-disabled="datalist.RecibioLLaves == true" name="recibio{{$index}}" ng-model="datalist.RecibioLLaves"/>
                                        <label style="margin-left:5px;">E</label><input style="margin-left:5px;" ng-disabled="datalist.EntregoLLaves == true || datalist.RecibioLLaves == false" ng-click="ModalPrestamo($index,2)" type="checkbox" ng-model="datalist.EntregoLLaves"/>
                                     </td>
                                     

@@ -3657,7 +3657,13 @@
             $scope.ModalPrestamo = function (posicion, opc) {
                 $scope.Ob.Observacion = null;
                 $("#Préstamo").modal("show");
-                $scope.progrmacionSelec = $scope.datalists[posicion];
+                //$scope.progrmacionSelec = $scope.datalists[posicion];
+                var programacion = $scope.datalists.filter(function (item) {
+                   
+                    return item.RecibioLLaves === true;
+                });
+                 $scope.progrmacionSelec = programacion[0];
+
                 if (opc == 1) {
                     $scope.Ob.mensaje = "¿Desea confirmar el prestamo de las llaves?";
                     $scope.progrmacionSelec.RecibioLLaves = true;
@@ -3666,6 +3672,14 @@
                     $scope.Ob.mensaje = "¿Desea confirmar la recepción de las llaves?";
                     $scope.progrmacionSelec.EntregoLLaves = true;
                     $("#Observacion").hide();
+                }
+            }
+
+            $scope.CancelarLlaves = function () {
+                if ($scope.progrmacionSelec.EntregoLLaves == true) {
+                    $scope.progrmacionSelec.EntregoLLaves = false;
+                } else {
+                    $scope.progrmacionSelec.RecibioLLaves = false;
                 }
             }
 
@@ -3702,13 +3716,7 @@
                 })
             }
 
-            $scope.CancelarLlaves = function () {
-                if ($scope.progrmacionSelec.EntregoLLaves == true) {
-                    $scope.progrmacionSelec.EntregoLLaves = false;
-                } else {
-                    $scope.progrmacionSelec.RecibioLLaves = false;
-                }
-            }
+           
 
             $scope.AmbientesDisponibles = function () {
                 //$("#Filtro").show();
@@ -3739,7 +3747,6 @@
             $scope.AbrirReporteLlaves = function () {
                 $("#RepLlaves").modal("show");
             }
-
 
             $('#FechaInicio4').datepicker({
                 language: 'es',
@@ -3902,6 +3909,29 @@
                 })
             }
 
+
+            $scope.ConsultarLLavesEditar = function () {
+                ProgramacionService.ConsultarLLavesEditar(function (response) {
+                    if (response.success) {
+                        $scope.datalists = response.datos;
+                        $scope.ListaCompleta = response.datos;
+                        $.each($scope.datalists, function (index, value) {
+
+                            $scope.datalists[index].FechaInicio = value.FechaInicio.toString().substring(0, 10);
+                            $scope.datalists[index].FechaFin = value.FechaFin.toString().substring(0, 10);
+                            $scope.datalists[index].HoraInicio = value.HoraInicio.toString().substring(0, 5);
+                            $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
+                            //if ($scope.datalists[index].RecibioLLaves == false) {
+                            //    $("input[name='recibio" + index + "']").prop("disabled", true);
+                            //}
+                            //Variable para setear la paginación 
+                            //$scope.curPage = 0;
+                        });
+                    }
+                })
+
+            }
+
             //#endregion 
 
             //#region entrega de llaves ambientes sin progragramcaión
@@ -3913,8 +3943,15 @@
 
             $scope.ModalPrestamoAmbiente = function (posicion, opc) {
                 $scope.Ob.Observacion = null;
+
                 $("#PréstamoAmbiente").modal("show");
-                $scope.AmbienteSelec = $scope.datalists[posicion];
+                //$scope.AmbienteSelec = $scope.datalists[posicion];
+                var Ambiente = $scope.datalists.filter(function (item) {
+
+                    return item.Recibio === true;
+                });
+                $scope.AmbienteSelec = Ambiente[0];
+
                 if (opc == 1) {
                     $scope.Ob.mensaje = "¿Desea confirmar el prestamo de las llaves?";
                     $scope.AmbienteSelec.Recibio = true;

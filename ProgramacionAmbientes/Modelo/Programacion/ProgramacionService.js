@@ -534,6 +534,13 @@
               })
         };
 
+        service.ConsultarLLavesEditar = function (callback) {
+            $http.post(URLServices + "Programacion/ConsultarLLavesEditar/")
+              .success(function (response) {
+                  callback(response);
+              })
+        };
+
         return service;
 
     }]);
