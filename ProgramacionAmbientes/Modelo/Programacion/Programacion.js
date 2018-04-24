@@ -14,6 +14,7 @@
             //Clase para ocultar botones colegio, titulados y complementarias
             $(".ocultar").hide();
             $(".ocultarLlaves").hide();
+            //$("#panel3").hide();
 
             // var dato = $("#calendar .fc-celda-act").attr("data-date");
 
@@ -25,6 +26,7 @@
                 $(".consulta").css("display", "none");
                 $("#ProgInstructor").css("display", "none");
                 $("#panel2").hide();
+                $("#panel3").hide();
             }
             if ($rootScope.globals.currentUser.tipousuario == 2) {
                 $(".coord").css("display", "block");
@@ -36,6 +38,8 @@
                 $("#panel2").hide();
                 //$("#llaves").hide();
                 $(".noCor").hide();
+                $("#panel3").hide();
+
             }
             if ($rootScope.globals.currentUser.tipousuario == 3) {
                 $(".instructor").css("display", "block");
@@ -45,6 +49,8 @@
                 $(".instructor").css("margin-left", "-210%");
                 $("#ProgInstructor").css("display", "none");
                 $("#panel2").hide();
+                $("#panel3").hide();
+
             }
             if ($rootScope.globals.currentUser.tipousuario == 4) {
                 $(".instructor").css("display", "none");
@@ -1404,7 +1410,7 @@
                         $scope.Ficha = response.ficha;
                         $scope.Ambiente = response.ambiente;
                         $scope.Instructor = response.instructor;
-                       
+
                         $("#guardarTecnica").css("display", "inline-block");
                         var ingreso = 0;
                         $.each($scope.Ambiente, function (index, value) {
@@ -1424,7 +1430,7 @@
                             });
                             if (response.NoValidarFicha == false) {
                                 $("#Empresa").css("display", "block");
-                                if (ingreso==0) {
+                                if (ingreso == 0) {
                                     $scope.NombreCampo = "Nombre Evento"
                                 }
                             }
@@ -2838,7 +2844,7 @@
                     }
 
                     Cortada = DIAS.split(",");
-                   
+
                     $.each(Cortada, function (index, value) {
                         if (value == "Lunes") {
                             $("#Lunes").hide();
@@ -3589,7 +3595,7 @@
                                 Version_Programa: value.VersionPrograma, Programa: value.Programa, Nivel_Programa: value.NivelPrograma, Ficha: parseInt(value.Ficha), Nombre_Sede: value.Sede,
                                 Ambiente: value.IdAmbiente, Fecha_Inicio: fechaIini[0], Fecha_Fin: fechafin[0],
                                 Hora_Inicio: value.HoraInicio, Hora_Fin: value.HoraFin, Total_Horas: value.TotalHoras,
-                                Competencia: value.Competencia, Resultado: value.Resultado, Dias_Semana: value.Jornada, NombreEvento:value.NombreEvento
+                                Competencia: value.Competencia, Resultado: value.Resultado, Dias_Semana: value.Jornada, NombreEvento: value.NombreEvento
                             });
                         });
                         alasql('SELECT * INTO XLSX("Reporte Programación.xlsx",{headers:true}) FROM ?', [$scope.ProgramacionFichaExport]);
@@ -3626,7 +3632,7 @@
                 $('#ModalSabado').modal('show');
             }
             //#endregion
-            
+
             //--------------------------------------------Entrega de llaves----------------------------------------------------------------------
 
             //#region Entrega de llaves para ambientes con programación
@@ -3659,11 +3665,13 @@
                 $("#Préstamo").modal("show");
                 //$scope.progrmacionSelec = $scope.datalists[posicion];
                 var programacion = $scope.datalists.filter(function (item) {
-                   
+
                     return item.RecibioLLaves === true;
                 });
-                 $scope.progrmacionSelec = programacion[0];
 
+                var number = ((posicion + 1) + ($scope.curPage) * $scope.pageSize) - 1;
+                $scope.progrmacionSelec = $scope.datalists[number];
+                console.log($scope.number);
                 if (opc == 1) {
                     $scope.Ob.mensaje = "¿Desea confirmar el prestamo de las llaves?";
                     $scope.progrmacionSelec.RecibioLLaves = true;
@@ -3716,7 +3724,7 @@
                 })
             }
 
-           
+
 
             $scope.AmbientesDisponibles = function () {
                 //$("#Filtro").show();
@@ -3799,13 +3807,18 @@
                                 if (value.Observacion == null) {
                                     value.Observacion = "";
                                 }
-
+                                if (value.HoraRecibio2 == null) {
+                                    value.HoraRecibio2 = ""
+                                }
+                                if (value.HoraEntrego2 == null) {
+                                    value.HoraEntrego2 = ""
+                                }
                                 $scope.ProgramacionFichaExport.push({
                                     Nombre_Instructor: value.NombreInstructor, Cedula: value.CedulaIns,
                                     Ficha: parseInt(value.Ficha),
                                     Ambiente: value.Ambiente, Fecha: fechaIini[0],
-                                    Hora_Reciibio: value.HoraInicio, Hora_Entrego: value.HoraFin,
-                                    Competencia: value.Competencia, Observacion: value.Observacion
+                                    Hora_Recibio: value.HoraInicio, Hora_Entrego: value.HoraEntrego, HoraFin_Formación: value.HoraFin, Diferencia: value.DiferenciaHoras,
+                                    Competencia: value.Competencia, Observacion: value.Observacion, Hora_Recibio2: value.HoraRecibio2, Hora_Entrego2: value.HoraEntrego2,
                                 });
                             });
                         }
@@ -3864,7 +3877,7 @@
             };
 
             $scope.AbrirModalEliminarPrestamo = function () {
-               
+
                 var ProgramacionBorrar = $scope.datalists.filter(function (item) {
                     return item.Seleccionado === true;
                 });
@@ -3911,6 +3924,9 @@
 
 
             $scope.ConsultarLLavesEditar = function () {
+                $("#BuscarCedulaInstructor").hide();
+                $(".filtroCedula").show();
+                $("#eliminarPrestamo").hide();
                 ProgramacionService.ConsultarLLavesEditar(function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
@@ -3925,13 +3941,38 @@
                             //    $("input[name='recibio" + index + "']").prop("disabled", true);
                             //}
                             //Variable para setear la paginación 
-                            //$scope.curPage = 0;
+                            $scope.curPage = 0;
+
                         });
                     }
                 })
 
             }
 
+            $scope.ReporteAmbientesAdmin = function () {
+                ProgramacionService.ConsultarLLavesEditar(function (response) {
+
+                    if (response.success == true) {
+
+                        $scope.ProgramacionFichaExport = [];
+
+                        $.each(response.datos, function (index, value) {
+                            var fechaI = value.FechaInicio.toString().substring(0, 10);
+                           var fechaF = value.FechaFin.toString().substring(0, 10);
+                          
+                            $scope.ProgramacionFichaExport.push({
+                                Nombre_Instructor: value.NombreInstructor, Cedula: value.CedulaIns,
+                                Ficha: parseInt(value.Ficha),
+                                Ambiente: value.Ambiente, Fecha_Inicio: fechaI,
+                                Fecha_Fin: fechaF, Hora_Inicio: value.HoraInicio, Hora_Fin: value.HoraFin,
+                                Competencia: value.Competencia, Dias: value.DiasProgramados
+                            });
+                        });
+
+                        alasql('SELECT * INTO XLSX("Reporte Entrega llaves.xlsx",{headers:true}) FROM ?', [$scope.ProgramacionFichaExport]);
+                    }
+                });
+            }
             //#endregion 
 
             //#region entrega de llaves ambientes sin progragramcaión
@@ -4019,10 +4060,10 @@
                 })
 
             }
-       
+
             $scope.Hora = {
                 Inicio: "",
-                Fin:""
+                Fin: ""
             }
 
             $scope.ConsultarAmbientesSinProgramacion = function () {
@@ -4053,7 +4094,7 @@
                 var Programaciones = [];
                 $scope.datalists = $scope.ListaCompleta;
                 Programaciones = $scope.datalists.filter(function (item) {
-              
+
                     if (exp.test(item.Ambiente)) {
                         return item;
                     }

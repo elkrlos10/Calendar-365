@@ -31,6 +31,9 @@
                 <button class="btn btn-primary admin reporte"  style="width:100%; height:42px;" ng-click="AbrirReporteLlaves()">Reporte Llaves</button>
             </div>
             <div class="col-md-3" style="padding-right:0px;">
+                <button class="btn btn-primary admin reporte" style="width:100%; height:42px;" ng-click="ReporteAmbientesAdmin()">Ambientes Disponibles</button>
+            </div>
+            <div class="col-md-3" style="padding-right:0px;">
                 <button class="btn btn-primary instructor" style="width:100%; height:42px;" ng-click="filtrarProgramacionInstructor()">Filtrar Programación</button>
             </div>
             <div class="col-md-3" style="padding-right:0px;" ng-click="filtrarProgramacion()">
@@ -570,13 +573,6 @@
                         <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Reporte entrega de llaves" style="height: 34px;">
                                 <i class="material-icons">&#xE0DA;</i>
                         </button>
-
-                        <button class="btn btn-default noCor" type="button"  ng-click="ConsultarLLavesEditar()" title="Ambientes disponibles" style="height: 34px;">
-                            <i class="material-icons">&#xE8E8;</i>
-                        </button>
-
-
-
                         <button class="btn btn-default noCor" type="button" ng-click="AbrirModalHoras()" title="Ambientes disponibles" style="height: 34px;">
                             <img src="../img/icono1.svg" width="25" height="18" />
                         </button>
@@ -591,6 +587,9 @@
                         </button>
                         <button class="btn btn-default noCor" type="button" id="eliminarPrestamo" ng-click="AbrirModalEliminarPrestamo()" title="Recibir llaves" style="height: 34px; display:none">
                             <i class="material-icons">&#xE872;</i>
+                        </button>
+                        <button class="btn btn-default noCor" type="button" ng-click="ConsultarLLavesEditar()" title="Ambientes disponibles" style="height: 34px;">
+                            <i class="material-icons">&#xE8E8;</i>
                         </button>
                         <button class="btn btn-default filtroCedula" type="button" id="llaves" ng-click="MostrarFiltroCedula()" title="Ambientes disponibles" style="height: 34px; display:none">
                             <i class="material-icons">&#xE8FA;</i>

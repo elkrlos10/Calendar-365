@@ -18,5 +18,8 @@ namespace Datos.Modelo
         public TimeSpan? HoraRecibio { get; set; }
         public TimeSpan? HoraEntrego { get; set; }
         public string Observacion { get; set; }
+        public TimeSpan? HoraRecibio2 { get; set; }
+        public TimeSpan? HoraEntrego2 { get; set; }
+
     }
 }

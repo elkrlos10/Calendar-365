@@ -3056,10 +3056,32 @@ namespace LogicaNegocio.LogicaNegocio
                 }
                 else
                 {
+                    if (prestamo.Recibio== true && prestamo.Entrego==true)
+                    {
+                        if (prestamo.HoraRecibio2== null)
+                        {
+                            prestamo.HoraRecibio2 = Hora;
+                            prestamo.HoraEntrego2 = TimeSpan.Parse("00:00");
+                            prestamo.Observacion = oProgramacion.Observacion;
+                            entity.SaveChanges();
+                            return ConsultarLLavesEditar();
+                        }
+                        else
+                        {
+                            prestamo.HoraEntrego2 = Hora;
+                            entity.SaveChanges();
 
-                    prestamo.Entrego = true;
-                    prestamo.HoraEntrego = Hora;
-                    entity.SaveChanges();
+                            return ConsultarLLavesEditar();
+                        }
+                       
+                    }
+                    else
+                    {
+                        prestamo.Entrego = true;
+                        prestamo.HoraEntrego = Hora;
+                        entity.SaveChanges();
+                    }
+                  
 
                 }
             }
@@ -3081,7 +3103,7 @@ namespace LogicaNegocio.LogicaNegocio
 
             var Programaciones = RegresarLlavesAmbientesDisponibles();
 
-            if (oProgramacion.CedulaIns != "")
+            if (oProgramacion.CedulaIns != "" && oProgramacion.CedulaIns != null)
             {
                 var inst = (from i in entity.Instructor
                             where i.IdInstructor == oProgramacion.IdInstructor
@@ -3565,14 +3587,21 @@ namespace LogicaNegocio.LogicaNegocio
                                       Jueves = i.Jueves,
                                       Jornada = i.Jornada.ToString(),
                                       HoraInicio = pr.HoraRecibio,
-                                      HoraFin = pr.HoraEntrego,
+                                      HoraFin = i.HoraFin,
+                                      HoraEntrego = pr.HoraEntrego,
                                       Observacion = pr.Observacion,
-                                      FechaInicio= pr.Fecha
+                                      FechaInicio= pr.Fecha,
+                                      HoraRecibio2= pr.HoraRecibio2,
+                                      HoraEntrego2=pr.HoraEntrego2
                                       
                                   }).ToList();
 
+            foreach (var item in ProgramacionLista.Select((value, i) => new { i, value }))
+            {
+                ProgramacionLista[item.i].DiferenciaHoras = TimeSpan.Parse(item.value.HoraFin.ToString()).Subtract(TimeSpan.Parse(item.value.HoraEntrego.ToString()));
+               
+            }
 
-           
 
             var reporteAmbientes = (from i in entity.PrestamoAmbiente
                                     join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
@@ -3635,7 +3664,7 @@ namespace LogicaNegocio.LogicaNegocio
             Model1 entity = new Model1();
             var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
             var prestamos = (from i in entity.PrestamoLlaves
-                             where i.Recibio == true && i.Entrego == true && i.Fecha== fecha
+                             where i.Recibio == true && i.Entrego == true && i.Fecha== fecha 
                              select i).ToList();
             var listaProgramacion = new List<Ficha_AmbienteDTO>();
             foreach (var item in prestamos)
@@ -3670,14 +3699,54 @@ namespace LogicaNegocio.LogicaNegocio
                                           HoraInicio = i.HoraInicio,
                                           HoraFin = i.HoraFin,
                                           Observacion = item.Observacion,
-                                          FechaInicio = item.Fecha,
+                                          FechaInicio = i.FechaInicio,
+                                          FechaFin= i.FechaFin,
                                           RecibioLLaves= item.Recibio,
                                           EntregoLLaves=item.Entrego
                                       }).FirstOrDefault();
 
+
+                if (programacion.Lunes == true)
+                {
+                    programacion.DiasProgramados += "Lunes -";
+                }
+                if (programacion.Martes == true)
+                {
+                    programacion.DiasProgramados += "Martes -";
+                }
+                if (programacion.Miercoles == true)
+                {
+                    programacion.DiasProgramados += "Miercoles -";
+                }
+                if (programacion.Jueves == true)
+                {
+                    programacion.DiasProgramados += "Jueves -";
+                }
+                if (programacion.Viernes == true)
+                {
+                    programacion.DiasProgramados += "Viernes -";
+                }
+                if (programacion.Jornada == "2")
+                {
+                    programacion.DiasProgramados += "Sábado -";
+                }
+                if (programacion.Jornada == "3")
+                {
+                    programacion.DiasProgramados += "Domingo -";
+                }
+
                 if (programacion.HoraFin> item.HoraEntrego)
                 {
-                    listaProgramacion.Add(programacion);
+                    if (item.HoraRecibio2 == null)
+                    {
+                        programacion.RecibioLLaves = false;
+                    }
+                    if (item.HoraEntrego2== TimeSpan.Parse("00:00") || item.HoraEntrego2== null)
+                    {
+                        programacion.EntregoLLaves = false;
+                        listaProgramacion.Add(programacion);
+                    }
+                  
                 }
                
 

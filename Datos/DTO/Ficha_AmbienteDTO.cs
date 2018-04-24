@@ -88,5 +88,11 @@ namespace Datos.DTO
         public string Observacion { get; set; }
         public string NombreEvento { get; set; }
 
+        public TimeSpan? HoraRecibio2 { get; set; }
+        public TimeSpan? HoraEntrego2 { get; set; }
+        public TimeSpan? HoraRecibio { get; set; }
+        public TimeSpan? HoraEntrego { get; set; }
+        public TimeSpan? DiferenciaHoras { get; set; }
+
     }
 }
