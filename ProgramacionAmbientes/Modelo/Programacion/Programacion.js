@@ -46,11 +46,11 @@
                 $(".coord").css("display", "none");
                 $(".admin").css("display", "none");
                 $(".consulta").css("display", "none");
-                $(".instructor").css("margin-left", "-210%");
+                //$(".instructor").css("margin-left", "-210%");
                 $("#ProgInstructor").css("display", "none");
                 $("#panel2").hide();
                 $("#panel3").hide();
-
+           
             }
             if ($rootScope.globals.currentUser.tipousuario == 4) {
                 $(".instructor").css("display", "none");
@@ -3707,6 +3707,7 @@
                                 $("input[name='recibio" + index + "']").prop("disabled", true);
 
                             }
+
                             //Variable para setear la paginación 
                             $scope.curPage = 0;
                         });
@@ -3744,6 +3745,9 @@
                             $scope.datalists[index].HoraFin = value.HoraFin.toString().substring(0, 5);
                             if ($scope.datalists[index].RecibioLLaves == false) {
                                 $("input[name='recibio" + index + "']").prop("disabled", true);
+                            }
+                            if ($scope.datalists[index].RecibioLLaves == true) {
+
                             }
                             //Variable para setear la paginación 
                             $scope.curPage = 0;

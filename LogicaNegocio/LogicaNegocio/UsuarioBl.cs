@@ -22,17 +22,42 @@ namespace LogicaNegocio.LogicaNegocio
                          && i.Password == Encriptar
                          select i).FirstOrDefault();
 
-            if (Datos ==  null)
+            if (Datos == null)
             {
                 return null;
             }
-            var Instructor = (from i in entity.Instructor
-                              where i.IdUsuario == Datos.IdUsuario
-                              select i).FirstOrDefault();
 
             var Coordinador = (from i in entity.Coordinacion
                                where i.IdUsuario == Datos.IdUsuario
                                select i).FirstOrDefault();
+
+            var Instructor = new Instructor();
+
+            if (Coordinador == null)
+            {
+               var inst = (from i in entity.Usuario
+                         join p in entity.Instructor on i.IdUsuario equals p.IdUsuario
+                         where i.NombreUsuario == Usuario && p.Cedula == Usuario
+                         && i.Password == Encriptar
+                         select i).FirstOrDefault();
+
+                if (inst!= null)
+                {
+                    Instructor = (from i in entity.Instructor
+                                  where i.IdUsuario == inst.IdUsuario
+                                  select i).FirstOrDefault();
+                }
+                else
+                {
+                    Instructor = null;
+                }
+
+            }
+            else
+            {
+                Instructor = null;
+            }
+
 
             if (Instructor != null)
             {
@@ -116,12 +141,12 @@ namespace LogicaNegocio.LogicaNegocio
 
         }
 
-        public void CambiarContrasena(string Password, string newPassword,int usuario)
+        public void CambiarContrasena(string Password, string newPassword, int usuario)
         {
             var Encriptar = SecurityEncode.SecurityEncode.Encriptar(Password);
             PersonaDTO oPersonaDTO = new PersonaDTO();
             var Datos = (from i in entity.Usuario
-                         where  i.Password == Encriptar && i.IdUsuario == usuario
+                         where i.Password == Encriptar && i.IdUsuario == usuario
                          select i).FirstOrDefault();
 
             if (Datos != null)
