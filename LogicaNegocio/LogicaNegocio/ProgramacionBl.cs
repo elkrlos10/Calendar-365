@@ -3041,18 +3041,17 @@ namespace LogicaNegocio.LogicaNegocio
             TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
             string fromTimeString = Hora.ToString("hh':'mm");
 
-            //var ambiente = (from p in entity.PrestamoLlaves
-            //                join f in entity.Ficha_Ambiente on p.IdFicha_Ambiente equals f.Id
-            //                join a in entity.Ambiente on f.IdAmbiente equals a.IdAmbiente
-            //                where a.IdAmbiente == oProgramacion.IdAmbiente && p.Fecha == fecha && p.Entrego == false
-            //                select p).ToList();
+            var ambiente = (from p in entity.PrestamoLlaves
+                            join f in entity.Ficha_Ambiente on p.IdFicha_Ambiente equals f.Id
+                            where f.IdAmbiente == oProgramacion.IdAmbiente && p.IdFicha_Ambiente != oProgramacion.Id && p.Fecha == fecha && p.Entrego == false
+                            select p).ToList();
 
-            //foreach (var item in ambiente.Select((value, i) => new { i, value }))
-            //{
-            //    ambiente[item.i].Entrego = true;
-            //    ambiente[item.i].HoraEntrego = Hora;
-            //    entity.SaveChanges();
-            //}
+            foreach (var item in ambiente.Select((value, i) => new { i, value }))
+            {
+                ambiente[item.i].Entrego = true;
+                ambiente[item.i].HoraEntrego = Hora;
+                entity.SaveChanges();
+            }
 
 
             var prestamo = (from i in entity.PrestamoLlaves
@@ -3627,6 +3626,20 @@ namespace LogicaNegocio.LogicaNegocio
                                          HoraEntrego2 = pr.HoraEntrego2
 
                                      }).ToList();
+
+            if (idCoordinacion!=0)
+            {
+                var coordinador = (from i in entity.Coordinacion
+                                   where i.IdCoordinacion == idCoordinacion
+                                   select i).FirstOrDefault();
+
+                ProgramacionLista = (from p in ProgramacionLista
+                                     join i in entity.Instructor on p.IdInstructor equals i.IdInstructor
+                                     join a in entity.Area on i.IdArea equals a.IdArea
+                                     where a.IdArea == coordinador.IdArea
+                                     select p).ToList();
+            }
+            
 
             foreach (var item in ProgramacionLista.Select((value, i) => new { i, value }))
             {
