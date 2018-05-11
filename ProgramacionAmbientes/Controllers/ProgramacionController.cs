@@ -329,7 +329,7 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var programacion = oProgramacionBl.FiltroProgramacionxCoordinador(int.Parse(oParametrosDTO.Parametro1), int.Parse(oParametrosDTO.Parametro2), int.Parse(oParametrosDTO.Parametro3));
+                var programacion = oProgramacionBl.FiltroProgramacionxCoordinador(int.Parse(oParametrosDTO.Parametro2), int.Parse(oParametrosDTO.Parametro3));
                 return Ok(new { success = true, programacion });
             }
             catch (Exception exc)
@@ -396,7 +396,8 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var sedes = oProgramacionBl.ConsultarAmbientesxSede(int.Parse(oParametrosDTO.Parametro1));
+                var sedes = oProgramacionBl.ConsultarAmbientesxSede(int.Parse(oParametrosDTO.Parametro1)).OrderBy(x => int.Parse(x.Numero)).ToList();
+               
                 return Ok(new { success = true, sedes });
             }
             catch (Exception exc)

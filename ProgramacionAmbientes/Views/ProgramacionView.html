@@ -4,42 +4,105 @@
 </div>
 <div>
     <div class="Principal Transicion" style="padding-top:84px !important">
-        <div class="col-md-12">
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary coord" id="boton" style="width:100%; height:42px;" ng-click="AbrirModalesProgramaciones()">Registrar Programación</button>
-            </div>
+        <!--<div class="col-md-12">-->
+                <!--<div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary coord" id="boton" style="width:80%; height:42px;" ng-click="AbrirModalesProgramaciones()">Registrar Programación</button>
+                </div>-->
             <!--<div class="col-md-2" style="padding-right:0px;">
                 <button class="btn btn-primary coord" id="boton" style="width:100%; height:42px;" ng-click="AbrirModalDias()">Registrar Programación Días</button>
             </div>-->
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary coord" id="transversal" style="width:100%; height:42px;" ng-click="filtrarProgramacion()">Filtrar Programación</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary coord" id="transversal3" style="width:100%; height:42px;" ng-click="VerProgramaciones()">Ver Programaciones</button>
-            </div>
+                <!--<div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary coord" id="transversal" style="width:80%; height:42px;" ng-click="filtrarProgramacion()">Filtrar Programación</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary coord" id="transversal3" style="width:80%; height:42px;" ng-click="VerProgramaciones()">Ver Programaciones</button>
+                </div>-->
             <!-- BOTÓN PARA REGISTRO DE LAS PROGRAMACIONES TRANSVERSALES DE UN SOLO DÍA, ESTE BOTÓN ESTÁ OCULTO-->
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary coord" id="btntransversaldia" style="width:100%; height:42px;" ng-click="ProgramaTranversalxDia()">Programar Transversal</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary admin" id="transversal" style="width:100%; height:42px;" ng-click="ModalCoordinador()">Filtrar coordinador</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary admin reporte" id="reporte1" style="width:100%; height:42px;" ng-click="ModalReporte()">Reporte Programación</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary admin reporte"  style="width:100%; height:42px;" ng-click="AbrirReporteLlaves()">Reporte Llaves</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary admin reporte" style="width:100%; height:42px;" ng-click="ReporteAmbientesAdmin()">Ambientes Disponibles</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;">
-                <button class="btn btn-primary instructor" style="width:100%; height:42px;" ng-click="filtrarProgramacionInstructor()">Filtrar Programación</button>
-            </div>
-            <div class="col-md-3" style="padding-right:0px;" ng-click="filtrarProgramacion()">
-                <button class="btn btn-primary consulta" style="width:100%; height:42px;">Filtrar Programación</button>
+                <!--<div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary coord" id="btntransversaldia" style="width:80%; height:42px;" ng-click="ProgramaTranversalxDia()">Programar Transversal</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary admin" id="transversal" style="width:80%; height:42px;" ng-click="ModalCoordinador()">Filtrar coordinador</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary admin reporte" id="reporte1" style="width:80%; height:42px;" ng-click="ModalReporte()">Reporte Programación</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary admin reporte"  style="width:80%; height:42px;" ng-click="AbrirReporteLlaves()">Reporte Llaves</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary admin reporte" style="width:80%; height:42px;" ng-click="ReporteAmbientesAdmin()">Ambientes Disponibles</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;">
+                    <button class="btn btn-primary instructor" style="width:80%; height:42px;" ng-click="filtrarProgramacionInstructor()">Filtrar Programación</button>
+                </div>
+                <div class="col-md-2" style="padding-right:0px;" ng-click="filtrarProgramacion()">
+                    <button class="btn btn-primary consulta" style="width:80%; height:42px;">Filtrar Programación</button>
+                </div>
+
+                <button class="btn btn-default admin reporte" style="padding-right:0px;height: 34px;" type="button" ng-click="AbrirModalHoras()" title="Ambientes disponibles sin programación">
+                    <img src="../img/icono1.svg" width="25" height="18" />
+                </button>-->
+
+
+        <div class="Transicion administrador" style="display:grid; grid-template-columns:repeat(5,1fr); margin-left:1em">
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary " style="width:90%; height:42px;" ng-click="ModalCoordinador()">Filtrar Ambientes</button>
             </div>
 
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary  reporte" id="reporte1" style="width:90%; height:42px;" ng-click="ModalReporte()">Reporte Programación</button>
+            </div>
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary  reporte" style="width:90%; height:42px;" ng-click="AbrirReporteLlaves()">Reporte Llaves</button>
+            </div>
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary  reporte" style="width:90%; height:42px;" ng-click="ReporteAmbientesAdmin()">Ambientes Disponibles</button>
+            </div>
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary  reporte" style="width:90%; height:42px;" ng-click="AbrirModalHoras()" title="Ambientes disponibles sin programacion">Ambientes sin programación</button>
+            </div>
+
+            <div style="padding-right:0px;" ng-click="filtrarProgramacion()">
+                <button class="btn btn-primary consulta" style="width:80%; height:42px;">Filtrar Programación</button>
+            </div>
+
+            <!--<button class="btn btn-default admin reporte" style="padding-right:0px;height: 34px;" type="button" ng-click="AbrirModalHoras()" title="Ambientes disponibles sin programación">
+                <img src="../img/icono1.svg" width="25" height="18" />
+            </button>-->
+
+        </div>
+
+        <div class="Transicion coordinador" style="display:grid; grid-template-columns:repeat(3,1fr); margin-left:1em;">
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary coord" id="boton" style="width:90%; height:42px;" ng-click="AbrirModalesProgramaciones()">Registrar Programación</button>
+            </div>
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary coord" id="transversal" style="width:90%; height:42px;" ng-click="filtrarProgramacion()">Filtrar Programación</button>
+            </div>
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary coord" id="transversal3" style="width:90%; height:42px;" ng-click="VerProgramaciones()">Ver Programaciones</button>
+            </div>
+
+        </div>
+
+        <div class="Transicion instructor" style="margin-left:1em; width:30%;">
+
+            <div style="padding-right:0px;">
+                <button class="btn btn-primary instructor" style="width:80%; height:42px;" ng-click="filtrarProgramacionInstructor()">Filtrar Programación</button>
+            </div>
+
+        </div>
+           
+            
+            
             <!--<div class="col-md-3" style="float:right; padding-right:0px;">
                 <div>
                     <select class="form-control" ng-required="true" ng-model="AmbienteFiltro.IdAmbiente" ng-change="FiltroAmbiente(AmbienteFiltro)" style="float:right;">
@@ -48,7 +111,7 @@
                     </select>
                 </div>
             </div>-->
-        </div>
+        <!--</div>-->
 
         <div class="col-md-12" style="padding: 0px !important;">
             <br />
@@ -573,10 +636,10 @@
                         <button class="btn btn-default" type="button" id="llaves" ng-click="AbrirReporteLlaves()" title="Reporte entrega de llaves" style="height: 34px;">
                                 <i class="material-icons">&#xE0DA;</i>
                         </button>
-                        <button class="btn btn-default noCor" type="button" ng-click="AbrirModalHoras()" title="Ambientes disponibles" style="height: 34px;">
+                        <button class="btn btn-default noCor" type="button" ng-click="AbrirModalHoras()" title="Ambientes disponibles sin programación" style="height: 34px;">
                             <img src="../img/icono1.svg" width="25" height="18" />
                         </button>
-                        <button class="btn btn-default noCor" type="button" ng-click="AmbientesEntregarLlaves()" title="Ambientes disponibles" style="height: 34px;">
+                        <button class="btn btn-default noCor" type="button" ng-click="AmbientesEntregarLlaves()" title="Regresar llaves ambientes sin programación" style="height: 34px;">
                             <img src="../img/icono.svg" width="25" height="18" />
                         </button>
                         <button class="btn btn-default noCor" type="button"  ng-click="AmbientesDisponibles()" title="Entregar llaves" style="height: 34px;">
@@ -591,7 +654,7 @@
                         <button class="btn btn-default noCor" type="button" ng-click="ConsultarLLavesEditar()" title="Ambientes disponibles" style="height: 34px;">
                             <i class="material-icons">&#xE8E8;</i>
                         </button>
-                        <button class="btn btn-default filtroCedula" type="button" id="llaves" ng-click="MostrarFiltroCedula()" title="Ambientes disponibles" style="height: 34px; display:none">
+                        <button class="btn btn-default filtroCedula" type="button" id="llaves" ng-click="MostrarFiltroCedula()" title="Regresar filtro cédula" style="height: 34px; display:none">
                             <i class="material-icons">&#xE8FA;</i>
                         </button>
                         <br />
@@ -988,19 +1051,19 @@
                 <div>
                     <div class="form-group">
                         <div>
-                            <label>Seleccione un coordinador</label>
-                            <select class="form-control" ng-required="true" ng-model="Coordinador.IdCoordinacion" ng-change="ConsultarAmbientesCoordinador(Coordinador.IdCoordinacion)" style="float:right;">
-                                <option value="" disabled selected>Seleccione un coordinador</option>
-                                <option ng-repeat="coordinador in Coordinador" class="{{coordinador.Nombre}}" value="{{coordinador.IdCoordinacion}}">{{coordinador.Nombre}}&ensp;{{coordinador.Apellido}}</option>
+                            <label>Seleccione una sede</label>
+                            <select class="form-control" ng-required="true" ng-model="Sede1.IdSede" ng-change="ConsultarAmbientesxSede(Sede1.IdSede)" style="float:right;">
+                                <option value="" disabled selected>Seleccione una sede</option>
+                                <option ng-repeat="sede in Sede1" class="{{sede.Nombre_Sede}}" value="{{sede.IdSede}}">{{sede.Nombre_Sede}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <div id="coor" style="display:none;">
                             <label style="margin-top:20px;">Seleccione un ambiente</label>
-                            <select class="form-control" ng-required="true" ng-model="Ambiente.IdAmbiente" style="float:right;">
+                            <select class="form-control" ng-required="true" ng-model="AmbientexSede.IdAmbiente" style="float:right;">
                                 <option value="" disabled selected>Seleccione un ambiente</option>
-                                <option ng-repeat="ambiente in Ambiente" class="{{ambiente.Numero}}" value="{{ambiente.IdAmbiente}}">{{ambiente.Numero +" "+ ambiente.NombreSede}}</option>
+                                <option ng-repeat="ambiente in AmbientexSede" class="{{ambiente.Numero}}" value="{{ambiente.IdAmbiente}}">{{ambiente.Numero +" "+ ambiente.NombreSede}}</option>
                             </select>
                         </div>
                     </div>
@@ -1014,7 +1077,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" ng-click="FiltroCoordinador(Coordinador, Ambiente)">Consultar</button>
+                <button class="btn btn-success" ng-click="FiltroCoordinador(Sede1, AmbientexSede)">Consultar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>

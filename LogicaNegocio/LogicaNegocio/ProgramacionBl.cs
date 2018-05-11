@@ -1314,13 +1314,28 @@ namespace LogicaNegocio.LogicaNegocio
         public List<Ficha_AmbienteDTO> ConsultarProgramacion(int IdCoordinador)
         {
             Model1 entity = new Model1();
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
             var Datos = (from i in entity.Ficha_Ambiente
                          join a in entity.Instructor on i.IdInstructor equals a.IdInstructor
                          join p in entity.Area on a.IdArea equals p.IdArea
                          join c in entity.Coordinacion on a.IdArea equals c.IdArea
-                         where c.IdCoordinacion == IdCoordinador && i.Estado == true && i.Transversal != true
+                         where c.IdCoordinacion == IdCoordinador && i.Transversal != true
                          orderby i.Id descending
                          select i).ToList();
+
+            var fechaMayor = (from i in Datos
+                     where i.FechaInicio >= fecha 
+                     orderby i.FechaInicio
+                     select i).ToList();
+
+            Datos = (from i in Datos
+                     where  (i.FechaInicio >= fecha && i.FechaInicio <= fecha)
+                             || (i.FechaFin <= fecha && i.FechaFin >= fecha)
+                             || (i.FechaInicio <= fecha && i.FechaFin >= fecha)
+                     orderby i.FechaInicio
+                     select i).ToList();
+
+            Datos.AddRange(fechaMayor);
 
             List<Ficha_AmbienteDTO> Programacion = new List<Ficha_AmbienteDTO>();
 
@@ -2162,7 +2177,7 @@ namespace LogicaNegocio.LogicaNegocio
             //return Datos;
         }
 
-        public List<Ficha_AmbienteDTO> FiltroProgramacionxCoordinador(int IdCoordinador, int jornada, int Ambiente)
+        public List<Ficha_AmbienteDTO> FiltroProgramacionxCoordinador(int jornada, int Ambiente)
         {
             TimeSpan horaInicio = TimeSpan.Parse("00:00");
             TimeSpan horaFin = TimeSpan.Parse("00:00");
@@ -2175,24 +2190,29 @@ namespace LogicaNegocio.LogicaNegocio
             }
             if (jornada == 2)
             {
-                horaInicio = TimeSpan.Parse("12:00");
+                horaInicio = TimeSpan.Parse("12:01");
                 horaFin = TimeSpan.Parse("18:00");
             }
 
             if (jornada == 3)
             {
-                horaInicio = TimeSpan.Parse("18:00");
+                horaInicio = TimeSpan.Parse("18:01");
                 horaFin = TimeSpan.Parse("22:00");
             }
             Model1 entity = new Model1();
             var Datos = (from f in entity.Ficha_Ambiente
-                         join r in entity.Resultado_Aprendizaje on f.IdResultado equals r.IdResultado
-                         join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
-                         join p in entity.Programa on c.IdPrograma equals p.IdPrograma
-                         join a in entity.Area on p.IdArea equals a.IdArea
-                         join i in entity.Coordinacion on a.IdArea equals i.IdArea
-                         where i.IdCoordinacion == IdCoordinador && f.HoraInicio >= horaInicio && f.HoraFin <= horaFin && f.Estado == true && f.IdAmbiente == Ambiente
+                             //join r in entity.Resultado_Aprendizaje on f.IdResultado equals r.IdResultado
+                             //join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+                             //join p in entity.Programa on c.IdPrograma equals p.IdPrograma
+                             //join a in entity.Area on p.IdArea equals a.IdArea
+                             //join i in entity.Coordinacion on a.IdArea equals i.IdArea
+
+                         where f.IdAmbiente == Ambiente
+                          && (f.HoraInicio >= horaInicio && f.HoraInicio <= horaFin
+                         || f.HoraFin >= horaInicio && f.HoraFin <= horaFin
+                         || f.HoraInicio <= horaInicio && f.HoraFin >= horaFin)
                          select f).ToList();
+
 
             List<Ficha_AmbienteDTO> Programacion = new List<Ficha_AmbienteDTO>();
 
@@ -2687,28 +2707,27 @@ namespace LogicaNegocio.LogicaNegocio
                                where i.IdCoordinacion == IdCoordinador
                                select i).FirstOrDefault();
 
-            if (IdCoordinador != 0)
-            {
-                Datos = (from i in entity.Ficha_Ambiente
-                         join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
-                         join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
-                         join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
-                         join p in entity.Programa on c.IdPrograma equals p.IdPrograma
-                         where p.IdArea == coordinador.IdArea && i.IdAmbiente != 192 &&
-                         ((i.FechaInicio >= fechaInicio && i.FechaInicio <= fechaFin) ||
-                         (i.FechaFin <= fechaFin && i.FechaFin >= fechaInicio)
-                         || (i.FechaInicio <= fechaInicio && i.FechaFin >= fechaFin))
-
-                         select i).ToList();
-            }
-            else
-            {
-                Datos = (from i in entity.Ficha_Ambiente
-                         where (i.FechaInicio >= fechaInicio && i.FechaInicio <= fechaFin) ||
-                         (i.FechaFin <= fechaFin && i.FechaFin >= fechaInicio) ||
-                         (i.FechaInicio <= fechaInicio && i.FechaFin >= fechaFin)
-                         select i).ToList();
-            }
+            //if (IdCoordinador != 0) Esta consulta es para filtrar el reporte para los coordinadores
+            //{
+            //Datos = (from i in entity.Ficha_Ambiente
+            //         join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
+            //         join r in entity.Resultado_Aprendizaje on i.IdResultado equals r.IdResultado
+            //         join c in entity.Competencia on r.IdCompetencia equals c.IdCompetencia
+            //         join p in entity.Programa on c.IdPrograma equals p.IdPrograma
+            //         where p.IdArea == coordinador.IdArea && i.IdAmbiente != 192 &&
+            //         ((i.FechaInicio >= fechaInicio && i.FechaInicio <= fechaFin) ||
+            //         (i.FechaFin <= fechaFin && i.FechaFin >= fechaInicio)
+            //         || (i.FechaInicio <= fechaInicio && i.FechaFin >= fechaFin))
+            //         select i).ToList();
+            //}
+            //else
+            //{
+            Datos = (from i in entity.Ficha_Ambiente
+                     where (i.FechaInicio >= fechaInicio && i.FechaInicio <= fechaFin) ||
+                     (i.FechaFin <= fechaFin && i.FechaFin >= fechaInicio) ||
+                     (i.FechaInicio <= fechaInicio && i.FechaFin >= fechaFin)
+                     select i).ToList();
+            //}
 
 
             List<Ficha_AmbienteDTO> Programacion = new List<Ficha_AmbienteDTO>();
@@ -3041,27 +3060,30 @@ namespace LogicaNegocio.LogicaNegocio
             TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
             string fromTimeString = Hora.ToString("hh':'mm");
 
-            var ambiente = (from p in entity.PrestamoLlaves
-                            join f in entity.Ficha_Ambiente on p.IdFicha_Ambiente equals f.Id
-                            where f.IdAmbiente == oProgramacion.IdAmbiente && p.IdFicha_Ambiente != oProgramacion.Id && p.Fecha == fecha && p.Entrego == false
-                            select p).ToList();
-
-            foreach (var item in ambiente.Select((value, i) => new { i, value }))
-            {
-                ambiente[item.i].Entrego = true;
-                ambiente[item.i].HoraEntrego = Hora;
-                entity.SaveChanges();
-            }
 
 
             var prestamo = (from i in entity.PrestamoLlaves
                             where i.IdFicha_Ambiente == oProgramacion.Id && i.Fecha == fecha
                             select i).FirstOrDefault();
 
-
-
             if (Hora < TimeSpan.Parse("22:59"))
             {
+                if (oProgramacion.opc == 1)
+                {
+                    var ambiente = (from p in entity.PrestamoLlaves
+                                    join f in entity.Ficha_Ambiente on p.IdFicha_Ambiente equals f.Id
+                                    where f.IdAmbiente == oProgramacion.IdAmbiente && p.Fecha == fecha && p.Entrego == false
+                                    select p).ToList();
+                    if (ambiente.Count > 0)
+                    {
+                        var IdMayor = ambiente.Max(x => x.Id);
+                        var ambienteactualizar = entity.PrestamoLlaves.Where(x => x.Id == IdMayor).FirstOrDefault();
+                        ambienteactualizar.Entrego = true;
+                        ambienteactualizar.HoraEntrego = Hora;
+                        entity.SaveChanges();
+                    }
+                }
+
                 if (prestamo == null)
                 {
                     if (oProgramacion.RecibioLLaves)
@@ -3112,16 +3134,18 @@ namespace LogicaNegocio.LogicaNegocio
             }
             else
             {
-                oPrestamo.Recibio = false;
-                oPrestamo.Entrego = false;
-                oPrestamo.HoraRecibio = TimeSpan.Parse("00:00");
-                oPrestamo.HoraEntrego = TimeSpan.Parse("00:00");
-                oPrestamo.Observacion = oProgramacion.Observacion;
-                oPrestamo.IdFicha_Ambiente = oProgramacion.Id;
-                oPrestamo.Fecha = DateTime.Now;
+                //var prestamos = AmbientesDisponibles();
+                //    oPrestamo.Recibio = false;
+                //    oPrestamo.Entrego = false;
+                //    oPrestamo.HoraRecibio = TimeSpan.Parse("00:00");
+                //    oPrestamo.HoraEntrego = TimeSpan.Parse("00:00");
+                //    oPrestamo.Observacion = oProgramacion.Observacion;
+                //    oPrestamo.IdFicha_Ambiente = item.Id;
+                //    oPrestamo.Fecha = DateTime.Now;
 
-                entity.PrestamoLlaves.Add(oPrestamo);
-                entity.SaveChanges();
+                //    entity.PrestamoLlaves.Add(oPrestamo);
+                //    entity.SaveChanges();
+
             }
 
 
@@ -3250,10 +3274,21 @@ namespace LogicaNegocio.LogicaNegocio
             //Clonar lista
             List<Ficha_AmbienteDTO> newList = Programaciones.GetRange(0, Programaciones.Count);
 
+            Programaciones = (from i in Programaciones
+                              where
+                               (i.FechaInicio >= fecha && i.FechaInicio <= fecha)
+                              || (i.FechaFin <= fecha && i.FechaFin >= fecha)
+                              || (i.FechaInicio <= fecha && i.FechaFin >= fecha)
+                              select i).ToList();
+
+            //(f.FechaInicio between @vardate and @vardate ) or
+            //(f.FechaFin between @vardate and @vardate) or
+            //(f.FechaInicio <= @vardate and f.FechaFin >= @vardate))
+
             //Programaciones = (from i in Programaciones
-            //                  where (i.FechaInicio >= fecha && i.FechaInicio <= fecha) ||
-            //                        (i.FechaFin <= fecha && i.FechaFin >= fecha) ||
-            //                        (i.FechaInicio <= fecha && i.FechaFin >= fecha)
+            //                  where !(from o in Programaciones1
+
+            //                          select o.Id).Contains(i.Id)
             //                  select i).ToList();
 
             TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
@@ -3305,6 +3340,7 @@ namespace LogicaNegocio.LogicaNegocio
                     Programaciones[item.i].DiasProgramados += "Domingo -";
                 }
             }
+            //return Programaciones.OrderBy(x => x.FechaFin).ToList();
             return Programaciones.OrderBy(x => int.Parse(x.Ambiente)).ToList().OrderBy((x => x.HoraInicio)).ToList();
         }
 
@@ -3481,7 +3517,7 @@ namespace LogicaNegocio.LogicaNegocio
             }
 
             var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
-
+            var horaI = TimeSpan.Parse(horafin);
             var ambientes = entity.Database.SqlQuery<AmbienteDTO>("AmbientesLibres @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @lunes, @martes, @miercoles, @jueves, @viernes, @jornada",
                                                                                     new SqlParameter("fecha_ini", fecha),
                                                                                     new SqlParameter("fecha_Fin", fecha),
@@ -3494,14 +3530,15 @@ namespace LogicaNegocio.LogicaNegocio
                                                                                     new SqlParameter("viernes", Viernes),
                                                                                     new SqlParameter("jornada", jornada)).ToList();
 
-            //var AmbientesDisponibles = (from i in ambientes
-            //                            where !(from p in entity.PrestamoAmbiente
-            //                                    where p.Fecha == fecha && p.HoraRecibio>=horaInicio
-            //                                    select p.IdAmbiente).Contains(i.IdAmbiente)
-            //                            select i).ToList();
+            var AmbientesDisponibles = (from i in ambientes
+                                        where !(from p in entity.PrestamoAmbiente
+                                                where p.Fecha == fecha && p.HoraEntrego <= horaI
+                                                select p.IdAmbiente).Contains(i.IdAmbiente)
+                                        select i).ToList();
 
 
-            return ambientes.OrderBy(x => x.Piso).ToList().OrderBy(x => int.Parse(x.Numero)).ToList();
+
+            return AmbientesDisponibles.OrderBy(x => x.Piso).ToList().OrderBy(x => int.Parse(x.Numero)).ToList();
         }
 
         public List<AmbienteDTO> GuardarPrestamoLLavesAmbientes(AmbienteDTO oAmbiente)
@@ -3627,7 +3664,7 @@ namespace LogicaNegocio.LogicaNegocio
 
                                      }).ToList();
 
-            if (idCoordinacion!=0)
+            if (idCoordinacion != 0)
             {
                 var coordinador = (from i in entity.Coordinacion
                                    where i.IdCoordinacion == idCoordinacion
@@ -3639,7 +3676,7 @@ namespace LogicaNegocio.LogicaNegocio
                                      where a.IdArea == coordinador.IdArea
                                      select p).ToList();
             }
-            
+
 
             foreach (var item in ProgramacionLista.Select((value, i) => new { i, value }))
             {
@@ -3696,12 +3733,29 @@ namespace LogicaNegocio.LogicaNegocio
 
         public void RegistrarProgramacionesPrestamoLLaves()
         {
+            Model1 entity = new Model1();
             var registros = AmbientesDisponibles();
-
-            foreach (var item in registros)
+            var oPrestamo = new PrestamoLlaves();
+            var FechaActual = DateTime.Now;
+            var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
+            TimeSpan Hora = TimeSpan.FromHours(FechaActual.Hour) + TimeSpan.FromMinutes(FechaActual.Minute);
+            if (Hora >= TimeSpan.Parse("22:59"))
             {
-                GuardarPrestamoLLaves(item);
+                foreach (var item in registros)
+                {
+                    oPrestamo.Recibio = false;
+                    oPrestamo.Entrego = false;
+                    oPrestamo.HoraRecibio = TimeSpan.Parse("00:00");
+                    oPrestamo.HoraEntrego = TimeSpan.Parse("00:00");
+                    oPrestamo.Observacion = "";
+                    oPrestamo.IdFicha_Ambiente = item.Id;
+                    oPrestamo.Fecha = DateTime.Now;
+
+                    entity.PrestamoLlaves.Add(oPrestamo);
+                    entity.SaveChanges();
+                }
             }
+
         }
 
         public List<Ficha_AmbienteDTO> ConsultarLLavesEditar()
@@ -3753,55 +3807,57 @@ namespace LogicaNegocio.LogicaNegocio
                                         RecibioLLaves = item.Recibio,
                                         EntregoLLaves = item.Entrego
                                     }).FirstOrDefault();
+                if (programacion != null)
+                {
 
 
-                if (programacion.Lunes == true)
-                {
-                    programacion.DiasProgramados += "Lunes -";
-                }
-                if (programacion.Martes == true)
-                {
-                    programacion.DiasProgramados += "Martes -";
-                }
-                if (programacion.Miercoles == true)
-                {
-                    programacion.DiasProgramados += "Miercoles -";
-                }
-                if (programacion.Jueves == true)
-                {
-                    programacion.DiasProgramados += "Jueves -";
-                }
-                if (programacion.Viernes == true)
-                {
-                    programacion.DiasProgramados += "Viernes -";
-                }
-                if (programacion.Jornada == "2")
-                {
-                    programacion.DiasProgramados += "Sábado -";
-                }
-                if (programacion.Jornada == "3")
-                {
-                    programacion.DiasProgramados += "Domingo -";
-                }
-
-                if (programacion.HoraFin > item.HoraEntrego)
-                {
-                    if (programacion.HoraFin >= Hora)
+                    if (programacion.Lunes == true)
                     {
-                        if (item.HoraRecibio2 == null)
+                        programacion.DiasProgramados += "Lunes -";
+                    }
+                    if (programacion.Martes == true)
+                    {
+                        programacion.DiasProgramados += "Martes -";
+                    }
+                    if (programacion.Miercoles == true)
+                    {
+                        programacion.DiasProgramados += "Miercoles -";
+                    }
+                    if (programacion.Jueves == true)
+                    {
+                        programacion.DiasProgramados += "Jueves -";
+                    }
+                    if (programacion.Viernes == true)
+                    {
+                        programacion.DiasProgramados += "Viernes -";
+                    }
+                    if (programacion.Jornada == "2")
+                    {
+                        programacion.DiasProgramados += "Sábado -";
+                    }
+                    if (programacion.Jornada == "3")
+                    {
+                        programacion.DiasProgramados += "Domingo -";
+                    }
+
+                    if (programacion.HoraFin > item.HoraEntrego)
+                    {
+                        if (programacion.HoraFin >= Hora)
                         {
-                            programacion.RecibioLLaves = false;
-                        }
-                        if (item.HoraEntrego2 == TimeSpan.Parse("00:00") || item.HoraEntrego2 == null)
-                        {
-                            programacion.EntregoLLaves = false;
-                            listaProgramacion.Add(programacion);
+                            if (item.HoraRecibio2 == null)
+                            {
+                                programacion.RecibioLLaves = false;
+                            }
+                            if (item.HoraEntrego2 == TimeSpan.Parse("00:00") || item.HoraEntrego2 == null)
+                            {
+                                programacion.EntregoLLaves = false;
+                                listaProgramacion.Add(programacion);
+                            }
+
                         }
 
                     }
-
                 }
-
 
             }
 

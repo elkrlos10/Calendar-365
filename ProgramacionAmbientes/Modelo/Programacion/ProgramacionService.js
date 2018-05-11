@@ -59,14 +59,14 @@
         };
 
         service.ConsultarProgramacion = function (IdArea, callback) {
-            
+            waitingDialog.show();
             var item = {
                 Parametro1: IdArea
             };
-
             $http.post(URLServices + "Programacion/ConsultarProgramacion/", item)
                 .success(function (response) {
                     callback(response);
+                    waitingDialog.hide();
                 });
         };
 
@@ -96,6 +96,7 @@
 
 
         service.FiltrarAmbiente = function (IdAmbiente, jornada, callback) {
+            waitingDialog.show();
             var Item = {
                 Parametro1: IdAmbiente,
                 Parametro2: jornada
@@ -103,6 +104,7 @@
             $http.post(URLServices + "Programacion/FiltrarAmbiente", Item)
                 .success(function (response) {
                     callback(response);
+                    waitingDialog.hide();
                 });
         };
 
@@ -347,10 +349,11 @@
               })
         };
 
-        service.FiltroProgramacionxCoordinador = function (IdCoordinador, jornada, Ambiente, callback) {
+        service.FiltroProgramacionxCoordinador = function ( jornada, Ambiente, callback) {
             waitingDialog.show();
+            //waitingDialog.hide();
             var Item = {
-                Parametro1: IdCoordinador,
+               
                 Parametro2: jornada,
                 Parametro3: Ambiente
             };
@@ -386,7 +389,8 @@
         };
 
 
-        service.GenerarReporte = function (fechas,IdCoordinador, callback) {
+        service.GenerarReporte = function (fechas, IdCoordinador, callback) {
+            waitingDialog.show();
             var Item = {
                 Parametro1: fechas.FechaInicio,
                 Parametro2: fechas.FechaFin,
@@ -395,6 +399,7 @@
             $http.post(URLServices + "Programacion/GenerarReporte", Item)
                 .success(function (response) {
                     callback(response);
+                    waitingDialog.hide();
                 });
         };
 
