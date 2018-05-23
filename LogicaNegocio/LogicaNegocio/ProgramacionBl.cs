@@ -1324,7 +1324,7 @@ namespace LogicaNegocio.LogicaNegocio
                          select i).ToList();
 
             var fechaMayor = (from i in Datos
-                     where i.FechaInicio >= fecha 
+                     where i.FechaInicio > fecha 
                      orderby i.FechaInicio
                      select i).ToList();
 
@@ -3720,7 +3720,10 @@ namespace LogicaNegocio.LogicaNegocio
                 Programacion.HoraFin = item.HoraFin;
                 Programacion.Competencia = "Prestamo Especial";
                 Programacion.Observacion = item.Observacion;
-
+                //if (item.HoraFin == null)
+                //{
+                Programacion.HoraEntrego = item.HoraFin;
+                Programacion.DiferenciaHoras = TimeSpan.Parse("00:00");
                 ProgramacionLista.Add(Programacion);
             }
 
