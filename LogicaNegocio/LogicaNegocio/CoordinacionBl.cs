@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace LogicaNegocio.LogicaNegocio
 {
     public class CoordinacionBl
@@ -17,6 +16,7 @@ namespace LogicaNegocio.LogicaNegocio
         public IQueryable<Coordinacion> ConsultarCoordinacion()
         {
             var Datos = from i in entity.Coordinacion
+                        orderby i.Nombre_Coordinacion
                         select i;
             return Datos;
         }

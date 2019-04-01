@@ -138,6 +138,7 @@ namespace LogicaNegocio.LogicaNegocio
         {
             var Item = (from i in entity.Competencia
                         where i.IdPrograma == IdPrograma
+                        orderby i.Nombre
                         select i).ToList();
             return Item;
         }

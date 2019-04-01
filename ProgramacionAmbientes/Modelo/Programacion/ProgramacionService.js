@@ -486,15 +486,21 @@
               })
         };
 
-        service.AmbientesDisponibles = function (callback) {
-            $http.post(URLServices + "Programacion/AmbientesDisponibles/")
+        service.AmbientesDisponibles = function (Id, callback) {
+            item = {
+                Parametro1: Id,
+            };
+            $http.post(URLServices + "Programacion/AmbientesDisponibles/", item)
               .success(function (response) {
                   callback(response);
               })
         };
 
-        service.RegresarLlavesAmbientesDisponibles = function (callback) {
-            $http.post(URLServices + "Programacion/RegresarLlavesAmbientesDisponibles/")
+        service.RegresarLlavesAmbientesDisponibles = function (Id,callback) {
+            item = {
+                Parametro1: Id,
+            };
+            $http.post(URLServices + "Programacion/RegresarLlavesAmbientesDisponibles/", item)
               .success(function (response) {
                   callback(response);
               })
@@ -507,10 +513,11 @@
               })
         };
 
-        service.AmbientesSinProgramacion = function (horas, callback) {
+        service.AmbientesSinProgramacion = function (horas,Id, callback) {
             var item = {
                 Parametro1: horas.Inicio,
-                Parametro2:horas.Fin
+                Parametro2: horas.Fin,
+                Parametro3: Id
             }
             $http.post(URLServices + "Programacion/AmbientesSinProgramacion/", item)
               .success(function (response) {
@@ -539,8 +546,11 @@
               })
         };
 
-        service.ConsultarLLavesEditar = function (callback) {
-            $http.post(URLServices + "Programacion/ConsultarLLavesEditar/")
+        service.ConsultarLLavesEditar = function (id, callback) {
+            var item = {
+                Parametro1: id
+            };
+            $http.post(URLServices + "Programacion/ConsultarLLavesEditar/", item)
               .success(function (response) {
                   callback(response);
               })

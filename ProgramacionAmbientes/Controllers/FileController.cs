@@ -144,7 +144,6 @@ namespace CORONA.ValidacionRef.Servicios.Controllers
             }
         }
 
-
         public IHttpActionResult UploadFileCompetencia()
         {
             try
@@ -257,7 +256,6 @@ namespace CORONA.ValidacionRef.Servicios.Controllers
                 return Ok(new { success = false, message = exc.Message });
             }
         }
-
 
         public IHttpActionResult UploadFileArea()
         {
@@ -600,7 +598,6 @@ namespace CORONA.ValidacionRef.Servicios.Controllers
                 return Ok(new { success = false, message = exc.Message });
             }
         }
-
 
         public IHttpActionResult UploadFileResultado()
         {

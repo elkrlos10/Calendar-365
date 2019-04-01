@@ -16,6 +16,7 @@ namespace LogicaNegocio.LogicaNegocio
         public IQueryable<Area> ConsultarListasAreas()
         {
             var Datos = from i in entity.Area
+                        orderby i.Nombre
                         select i;
             return Datos;
         }
@@ -121,6 +122,7 @@ namespace LogicaNegocio.LogicaNegocio
         {
             Model1 entity = new Model1();
             var Datos = (from i in entity.Coordinacion
+                         orderby i.Nombre_Coordinacion
                          select i).ToList();
             return Datos;
         }

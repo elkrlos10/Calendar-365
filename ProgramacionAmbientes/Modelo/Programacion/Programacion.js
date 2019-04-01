@@ -82,7 +82,6 @@
                 $("#transversal").hide();
             }
 
-
             $scope.UsuarioConsulta = $rootScope.globals.currentUser.tipousuario;
 
             // Variables y metodos para la paginación----------------------
@@ -188,7 +187,6 @@
                 }
             };
 
-        
             ProgramacionService.ConsultarSedes(function (response) {
                 if (response.success == true) {
                     $scope.Sede1 = response.datos;
@@ -327,7 +325,6 @@
                     }
                 });
             };
-
 
             //Consulta de todas las sede---------------------------------------------
             ProgramacionService.ConsultarSedes(function (response) {
@@ -2880,32 +2877,34 @@
                             });
                         }
                     }
+                    if (DIAS != null) {
+                        Cortada = DIAS.split(",");
 
-                    Cortada = DIAS.split(",");
-
-                    $.each(Cortada, function (index, value) {
-                        if (value == "Lunes") {
-                            $("#Lunes").hide();
-                        }
-                        if (value == "Martes") {
-                            $("#Martes").hide();
-                        }
-                        if (value == "Miércoles") {
-                            $("#Miercoles").hide();
-                        }
-                        if (value == "Jueves") {
-                            $("#Jueves").hide();
-                        }
-                        if (value == "Viernes") {
-                            $("#Viernes").hide();
-                        }
-                        if (value = "Sábado") {
-                            $("#Sabado").hide();
-                        }
-                        if (value == "Domingo") {
-                            $("#Domingo").hide();
-                        }
-                    });
+                        $.each(Cortada, function (index, value) {
+                            if (value == "Lunes") {
+                                $("#Lunes").hide();
+                            }
+                            if (value == "Martes") {
+                                $("#Martes").hide();
+                            }
+                            if (value == "Miércoles") {
+                                $("#Miercoles").hide();
+                            }
+                            if (value == "Jueves") {
+                                $("#Jueves").hide();
+                            }
+                            if (value == "Viernes") {
+                                $("#Viernes").hide();
+                            }
+                            if (value = "Sábado") {
+                                $("#Sabado").hide();
+                            }
+                            if (value == "Domingo") {
+                                $("#Domingo").hide();
+                            }
+                        });
+                    }
+                   
                 });
 
                 //if ((parseInt(hora2) - parseInt(hora1)) == 2) {
@@ -3569,7 +3568,6 @@
             }
             //--------------------------------------------------------------------------------------------------------------------
 
-
             //----------------------------------------------------REPORTE DE PROGRAMACIÓN ---------------------------------------------
 
             //#region Reporte de progrmacion 
@@ -3745,6 +3743,7 @@
                
                 ProgramacionService.GuardarPrestamoLLaves($scope.progrmacionSelec, function (response) {
                     if (response.success) {
+                        $("#eliminarPrestamo").show();
                         $scope.datalists = response.datos;
                         $.each($scope.datalists, function (index, value) {
 
@@ -3774,15 +3773,13 @@
                 })
             }
 
-
-
             $scope.AmbientesDisponibles = function () {
                 //$("#Filtro").show();
                 $("#BuscarCedulaInstructor").hide();
                 $(".filtroCedula").show();
                 $("#eliminarPrestamo").hide();
                 $scope.cedula = "";
-                ProgramacionService.AmbientesDisponibles(function (response) {
+                ProgramacionService.AmbientesDisponibles($rootScope.globals.currentUser.id,function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
                         $scope.ListaCompleta = response.datos;
@@ -3821,7 +3818,6 @@
                 //daysOfWeekDisabled: [0]
             });
 
-
             $scope.Fechas1 = {
                 FechaInicio: "",
                 FechaFin: ""
@@ -3847,7 +3843,7 @@
                     });
                     return;
                 }
-                ProgramacionService.ReporteLlaves($scope.Fechas1, $rootScope.globals.currentUser.idpersona, function (response) {
+                ProgramacionService.ReporteLlaves($scope.Fechas1, $rootScope.globals.currentUser.id, function (response) {
 
                     if (response.success == true) {
                         $scope.Llaves = response.datos;
@@ -3869,7 +3865,7 @@
                                 $scope.ProgramacionFichaExport.push({
                                     Nombre_Instructor: value.NombreInstructor, Cedula: value.CedulaIns,
                                     Ficha: parseInt(value.Ficha),
-                                    Ambiente: value.Ambiente, Fecha: fechaIini[0],
+                                    Sede: value.Sede, Ambiente: value.Ambiente, Fecha: fechaIini[0],
                                     Hora_Recibio: value.HoraInicio, Hora_Entrego: value.HoraEntrego, HoraFin_Formación: value.HoraFin, Diferencia: value.DiferenciaHoras,
                                     Competencia: value.Competencia, Observacion: value.Observacion, Hora_Recibio2: value.HoraRecibio2, Hora_Entrego2: value.HoraEntrego2,
                                 });
@@ -3885,7 +3881,7 @@
                 $("#eliminarPrestamo").show();
                 $(".filtroCedula").show();
                 $scope.cedula = "";
-                ProgramacionService.RegresarLlavesAmbientesDisponibles(function (response) {
+                ProgramacionService.RegresarLlavesAmbientesDisponibles($rootScope.globals.currentUser.id,function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
                         $scope.ListaCompleta = response.datos;
@@ -3975,12 +3971,11 @@
                 })
             }
 
-
             $scope.ConsultarLLavesEditar = function () {
                 $("#BuscarCedulaInstructor").hide();
                 $(".filtroCedula").show();
                 $("#eliminarPrestamo").hide();
-                ProgramacionService.ConsultarLLavesEditar(function (response) {
+                ProgramacionService.ConsultarLLavesEditar($rootScope.globals.currentUser.id, function (response) {
                     if (response.success) {
                         $scope.datalists = response.datos;
                         $scope.ListaCompleta = response.datos;
@@ -4003,7 +3998,7 @@
             }
 
             $scope.ReporteAmbientesAdmin = function () {
-                ProgramacionService.ConsultarLLavesEditar(function (response) {
+                ProgramacionService.ConsultarLLavesEditar($rootScope.globals.currentUser.id,function (response) {
 
                     if (response.success == true) {
 
@@ -4029,11 +4024,9 @@
             //#endregion 
 
             //#region entrega de llaves ambientes sin progragramcaión
-
             $scope.AbrirModalHoras = function () {
                 $("#HorasDisponible").modal("show")
             }
-
 
             $scope.ModalPrestamoAmbiente = function (posicion, opc) {
                 $scope.Ob.Observacion = null;
@@ -4093,7 +4086,6 @@
                 }
             }
 
-
             $scope.AmbientesEntregarLlaves = function () {
                 ProgramacionService.AmbientesEntregarLlaves(function (response) {
                     if (response) {
@@ -4123,7 +4115,7 @@
                 $scope.Hora.Inicio = $("#HoraInicioA").val();
                 $scope.Hora.Fin = $("#HoraFinA").val();
                 if ($rootScope.globals.currentUser.tipousuario == 4) {
-                    ProgramacionService.AmbientesSinProgramacion($scope.Hora, function (response) {
+                    ProgramacionService.AmbientesSinProgramacion($scope.Hora, $rootScope.globals.currentUser.id, function (response) {
                         if (response.success) {
                             $scope.datalists = response.datos;
                             $scope.ListaCompleta = response.datos;
@@ -4135,7 +4127,7 @@
                         }
                     })
                 } else {
-                    ProgramacionService.AmbientesSinProgramacion($scope.Hora, function (response) {
+                    ProgramacionService.AmbientesSinProgramacion($scope.Hora, $rootScope.globals.currentUser.id, function (response) {
                         if (response.success) {
                             $scope.AmbientesExport = [];
                             if (response.datos.length>0) {
@@ -4168,13 +4160,14 @@
                 }
             }
 
-                $scope.OcultarTablaAmbientes = function () {
+            $scope.OcultarTablaAmbientes = function () {
                     $("#panel3").hide();
                     $("#panel2").show();
                     $scope.datalists = "";
                     $scope.ListaCompleta = "";
                 }
-                $scope.FilterAmbiente1 = function (e) {
+
+            $scope.FilterAmbiente1 = function (e) {
                     var Busqueda = $("#Buscar2").val();
                     var exp = new RegExp(Busqueda);
                     var Programaciones = [];

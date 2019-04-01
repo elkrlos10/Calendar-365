@@ -9,8 +9,9 @@
             } else {
                 $(".Principal").css("width", "95%");
             }
-         
+
             $("#atras").hide();
+            $("#Users").hide();
 
             $scope.UploadFileWeb = function () {
                 $("#fileUploadWeb").trigger('click');
@@ -35,7 +36,7 @@
                         }
                     });
                     $("#fileUploadWeb").replaceWith($("#fileUploadWeb").val('').clone(true));
-                  
+
                     //waitingDialog.hide();
                     return false;
 
@@ -101,8 +102,6 @@
                 }
             };
 
-
-
             $scope.Sede = {
                 IdSede: "",
                 Nombre_Sede: "",
@@ -112,32 +111,36 @@
                 TipoSede: ""
             };
 
+            $scope.UsuarioSede = {
+                IdUsuario: "",
+                NombreUsuario: "",
+                Password: "",
+                TipoUsuario: "",
+            };
 
             $scope.Departamento = {
                 IdDepartamento: "",
                 NombrDepartamento: ""
-               
+
             };
-     
+
             $scope.Municipio = {
                 IdMunicipo: "",
                 NombrDepartamento: "",
                 IdDepartamento: ""
             };
 
-      
-
             $scope.AbrirModal = function () {
-               // $scope.VaciarCampos();
+                // $scope.VaciarCampos();
                 $("#ModalSede").modal("show");
-               
+
                 SedeService.CodigoSede(function (response) {
                     if (response.success == true) {
-                       
+
                         $scope.Sede.Codigo = response.datos.Codigo + 1;
                     }
                 })
-             
+
             };
 
             SedeService.ConsultarDepartamentos(function (response) {
@@ -149,11 +152,11 @@
             });
 
             $scope.ConsultarMunicipiosDepartamento = function (IdDepartamento) {
-                
+
                 $.each($scope.Departamento, function (index, value) {
                     if (value.IdDepartamento == IdDepartamento) {
 
-                       
+
                         SedeService.ConsultarMunicipios(value.IdDepartamento, function (response) {
 
                             if (response.success == true) {
@@ -164,8 +167,8 @@
 
                 });
 
-                
-             
+
+
             };
 
             $scope.colegio = function () {
@@ -184,17 +187,17 @@
 
             //Función para guardar un sede
             $scope.Guardar = function () {
-                
+
                 $.each($scope.Municipio, function (index, value) {
                     if (value.IdMunicipio == $scope.Municipio.IdMunicipio) {
 
                         $scope.Sede.IdMunicipio = value.IdMunicipio;
-                      
+
                     }
 
                 });
 
-              
+
                 if ($scope.Sede.Nombre_Sede != "" || $scope.Sede.Direccion != "" || $scope.Sede.IdMunicipio != "" || $scope.Sede.Codigo != "" || $scope.TipoSede != "") {
 
                     SedeService.GuardarSede($scope.Sede, function (response) {
@@ -246,7 +249,6 @@
                 }
             };
 
-
             $scope.MostrarColegios = function () {
                 SedeService.ConsultarColegios(function (response) {
                     if (response.success == true) {
@@ -278,12 +280,12 @@
                 //$scope.departamento.IdDepartamento = "";
                 $scope.Municipio.IdMunicipio = "";
                 $scope.departamento = "";
-              
+
             }
 
             //Función para consultar las areas
             SedeService.ConsultarSedes(function (response) {
-                
+
                 if (response.success == true) {
 
                     $scope.curPage = 0;
@@ -298,10 +300,9 @@
                 }
             });
 
-
             //Función para Seleccionar todos las registros de la tabla
             $scope.SeleccionarTodos = function () {
-                
+
                 contador = (($scope.curPage + 1) * 3) - 3;
                 var item = (($scope.curPage + 1) * 3) - 3;
                 var items1 = (($scope.curPage + 1) * 3);
@@ -324,8 +325,6 @@
 
             };
 
-
-      
             //Función 1 para el borrado de las areas
             $scope.CambiarEstadoSeleccionados = function () {
                 var UsariosBorrar = $scope.datalists.filter(function (item) {
@@ -352,7 +351,7 @@
 
             //Función 2 para el borrado de las areas
             $scope.inhabilitar = function () {
-                
+
                 var SedeBorrar = $scope.datalists.filter(function (item) {
                     return item.Seleccionado === true;
                 });
@@ -399,66 +398,93 @@
 
             //Función 1 para editar las areas
             $scope.Modificar = function () {
-                
+
+                var esVisible = $("#Users").is(":visible");
                 var SedeModificar = $scope.datalists.filter(function (item) {
                     return item.Seleccionado === true;
 
                 });
 
+                if (!esVisible) {
+                    if (SedeModificar.length == 1) {
 
-                if (SedeModificar.length == 1) {
+                        SedeService.ModificarSede(SedeModificar, function (response) {
 
-                    SedeService.ModificarSede(SedeModificar, function (response) {
+                            if (response.success == true) {
 
-                        if (response.success == true) {
+                                $scope.Sede.IdSede = response.sede.IdSede;
+                                $scope.Sede.Nombre_Sede = response.sede.Nombre_Sede;
+                                $scope.Sede.Direccion = response.sede.Direccion;
+                                $scope.Sede.IdMunicipio = response.sede.IdMunicipio;
+                                $scope.Sede.Codigo = response.sede.Codigo;
+                                $scope.Sede.TipoSede = response.sede.TipoSede;
+                                $("#TipoSede > option[value='" + $scope.Sede.TipoSede + "']").attr('selected', 'selected');
 
-                            $scope.Sede.IdSede = response.sede.IdSede;
-                            $scope.Sede.Nombre_Sede = response.sede.Nombre_Sede;
-                            $scope.Sede.Direccion = response.sede.Direccion;
-                            $scope.Sede.IdMunicipio = response.sede.IdMunicipio;
-                            $scope.Sede.Codigo = response.sede.Codigo;
-                            $scope.Sede.TipoSede = response.sede.TipoSede;
-                            $("#TipoSede > option[value='" + $scope.Sede.TipoSede + "']").attr('selected', 'selected');
+                                SedeService.consultarDepartamentoxMunicipio($scope.Sede.IdMunicipio, function (response) {
 
-                            SedeService.consultarDepartamentoxMunicipio($scope.Sede.IdMunicipio, function (response) {
+                                    if (response.success == true) {
+                                        $("#departamento > option[value='" + response.datos.IdDepartamento + "']").attr('selected', 'selected');
 
-                                if (response.success == true) {
-                                    $("#departamento > option[value='" + response.datos.IdDepartamento + "']").attr('selected', 'selected');
-                                    
-                                    
+                                        SedeService.ConsultarMunicipios(response.datos.IdDepartamento, function (response) {
+
+                                            if (response.success == true) {
+
+                                                $scope.Municipio = response.datos;
+
+                                                setTimeout(function () {
+                                                    $("#municipio > option[value='" + $scope.Sede.IdMunicipio + "']").attr('selected', 'selected');
+                                                }, 1000)
+                                            }
+                                        });
+                                    }
+                                });
 
 
-                                    SedeService.ConsultarMunicipios(response.datos.IdDepartamento, function (response) {
+                                $("#ModalEditar").modal("show");
+                            }
+                        });
+                    } else {
 
-                                        if (response.success == true) {
-
-                                            $scope.Municipio = response.datos;
-
-                                            setTimeout(function () {
-                                                $("#municipio > option[value='" + $scope.Sede.IdMunicipio + "']").attr('selected', 'selected');
-                                            }, 1000)
-                                        }
-                                    });
+                        bootbox.dialog({
+                            title: "Editar",
+                            message: "Debe seleccionar una sede",
+                            buttons: {
+                                success: {
+                                    label: "Cerrar",
+                                    className: "btn-primary",
                                 }
-                            });
-
-
-                            $("#ModalEditar").modal("show");
-                        }
-                    });
+                            }
+                        });
+                    }
                 } else {
 
-                    bootbox.dialog({
-                        title: "Editar",
-                        message: "Debe seleccionar una sede",
-                        buttons: {
-                            success: {
-                                label: "Cerrar",
-                                className: "btn-primary",
+                    if (SedeModificar.length == 1) {
+
+                        var IdUser = SedeModificar[0].IdUsuario;
+                        $scope.UsuarioSede.IdUsuario = IdUser;
+                        var NombreUser = SedeModificar[0].NombreUsuario;
+                        $scope.UsuarioSede.NombreUsuario = NombreUser;
+                        var pass = SedeModificar[0].Password;
+                        $scope.UsuarioSede.Password = pass;
+                        $("#ModalUser").modal("show");
+
+
+                    } else {
+
+                        bootbox.dialog({
+                            title: "Editar",
+                            message: "Debe seleccionar una sede",
+                            buttons: {
+                                success: {
+                                    label: "Cerrar",
+                                    className: "btn-primary",
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
+
+               
             }
 
             //Función 2 para editar las areas
@@ -486,7 +512,7 @@
                                 }
                             });
                             $("#ModalEditar").modal("hide");
-                           // $scope.VaciarCampos();
+                            // $scope.VaciarCampos();
                             SedeService.ConsultarSedes(function (response) {
                                 if (response.success == true) {
                                     $scope.datalists = response.datos;
@@ -507,6 +533,36 @@
                         }
                     });
                 }
+            }
+
+            //Función para editar los usuarios 
+            $scope.GuardarEdicionUser = function ()
+            {
+                if ($scope.UsuarioSede.NombreUsuario != "" || $scope.UsuarioSede.Password != "" ) {
+                    SedeService.ModificarUsuario($scope.UsuarioSede, function (response) {
+
+                        if (response.success == true) {
+
+                            //$scope.UsuarioSede = response.sede;
+                            $scope.datalists = response.datos;
+                            $scope.ListaCompleta = response.datos;
+
+                            $("#ModalUser").modal("hide");
+                        }
+                    });
+                } else {
+                    bootbox.dialog({
+                        title: "Información",
+                        message: "Debe diligenciar todos los campos",
+                        buttons: {
+                            success: {
+                                label: "Cerrar",
+                                className: "btn-primary",
+                            }
+                        }
+                    });
+                }
+               
             }
 
             //Función 1 para filtrar la tabla
@@ -552,6 +608,32 @@
                 $scope.datalists = Sede;
                 //Variable para setear la paginación 
                 $scope.curPage = 0;
+            };
+
+
+            $scope.MostrarUser = function () {
+
+                var esVisible = $("#Users").is(":visible");
+                if (esVisible) {
+
+                    SedeService.ConsultarSedes(function (response) {
+                        if (response.success == true) {
+                            $scope.datalists = response.datos;
+                            $scope.ListaCompleta = response.datos;
+                        }
+                    });
+                    $("#Users").hide();
+                    $("#sedes").show();
+                } else {
+                    SedeService.ConsultarUsuarioSede(function (response) {
+                        if (response.success == true) {
+                            $scope.datalists = response.datos;
+                            $scope.ListaCompleta = response.datos;
+                        }
+                    });
+                    $("#Users").show();
+                    $("#sedes").hide();
+                }
             };
 
         }]);

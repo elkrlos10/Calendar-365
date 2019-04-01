@@ -29,5 +29,7 @@ namespace Datos.Modelo
 
         public int TipoSede { get; set; }
 
+        public int? IdUsuario { get; set; }
+
     }
 }

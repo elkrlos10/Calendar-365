@@ -14,13 +14,9 @@
                 Cedula: ""
             };
 
-
-
             $scope.AbrirModalRecuperar = function () {
                 $("#ModalRecuperar").modal("show");
             };
-
-
 
             $scope.IniciarSesion = function () {
                 $(".items-menu-principal").css("display", "block");

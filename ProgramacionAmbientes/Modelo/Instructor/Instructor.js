@@ -808,7 +808,7 @@
                     else if (exp.test(item.Email.toLowerCase()) || exp.test(item.Email.toUpperCase())) {
                         return item;
                     }
-                    else if (exp.test(item.Telefono.toLowerCase()) || exp.test(item.Telefono.toUpperCase())) {
+                    else if (exp.test(item.Telefono) || exp.test(item.Telefono)) {
                         return item;
                     }
                     else if (exp.test(item.NombreTipoContrato.toLowerCase()) || exp.test(item.NombreTipoContrato.toUpperCase())) {

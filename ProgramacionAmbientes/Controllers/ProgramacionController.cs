@@ -137,8 +137,6 @@ namespace ProgramacionAmbientes.Controllers
             }
         }
 
-
-
         [HttpPost]
         public IHttpActionResult GuardarProgramacionTrasversal(Ficha_Ambiente oFicha_Ambiente)
         {
@@ -291,8 +289,7 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc = exc.Message });
             }
         }
-
-
+        
         [HttpPost]
         public IHttpActionResult ConsultarProgramacionxInstructor(ParametrosDTO oParametrosDTO)
         {
@@ -371,7 +368,6 @@ namespace ProgramacionAmbientes.Controllers
             }
         }
 
-
         [HttpPost]
         public IHttpActionResult EnviarProgramacion(List<Ficha_AmbienteDTO> oFicha_AmbienteDTO)
         {
@@ -387,8 +383,7 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc.Message });
             }
         }
-
-
+        
         [HttpPost]
 
         public IHttpActionResult ConsultarAmbientesxSede(ParametrosDTO oParametrosDTO)
@@ -423,7 +418,6 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc.Message });
             }
         }
-
 
         [HttpPost]
 
@@ -490,12 +484,12 @@ namespace ProgramacionAmbientes.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult AmbientesDisponibles()
+        public IHttpActionResult AmbientesDisponibles(ParametrosDTO oParametrosDTO)
         {
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.AmbientesDisponibles();
+                var datos = oProgramacionBl.AmbientesDisponibles(int.Parse(oParametrosDTO.Parametro1));
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)
@@ -505,12 +499,12 @@ namespace ProgramacionAmbientes.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult RegresarLlavesAmbientesDisponibles()
+        public IHttpActionResult RegresarLlavesAmbientesDisponibles(ParametrosDTO oParametrosDTO)
         {
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.RegresarLlavesAmbientesDisponibles();
+                var datos = oProgramacionBl.RegresarLlavesAmbientesDisponibles(int.Parse(oParametrosDTO.Parametro1));
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)
@@ -540,7 +534,7 @@ namespace ProgramacionAmbientes.Controllers
             try
             {
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.AmbientesSinProgramacion(oParametrosDTO.Parametro1, oParametrosDTO.Parametro2);
+                var datos = oProgramacionBl.AmbientesSinProgramacion(oParametrosDTO.Parametro1, oParametrosDTO.Parametro2,int.Parse(oParametrosDTO.Parametro3));
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)
@@ -598,12 +592,22 @@ namespace ProgramacionAmbientes.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult ConsultarLLavesEditar()
+        public IHttpActionResult ConsultarLLavesEditar(ParametrosDTO oPametrosDTO)
         {
             try
             {
+                var datos = new List<Ficha_AmbienteDTO>();
                 ProgramacionBl oProgramacionBl = new ProgramacionBl();
-                var datos = oProgramacionBl.ConsultarLLavesEditar();
+                if (int.Parse(oPametrosDTO.Parametro1) == 0)
+                {
+                     datos = oProgramacionBl.ConsultarLLavesEditar();
+                }
+                else
+                {
+                     datos = oProgramacionBl.ConsultarLLavesEditar(int.Parse(oPametrosDTO.Parametro1));
+                }
+               
+                
                 return Ok(new { success = true, datos });
             }
             catch (Exception exc)

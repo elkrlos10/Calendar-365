@@ -12,7 +12,6 @@
                     <div class="col-md-3" style="float:right;">
                         <!--<button ng-click="BorrarSeleccionados()">Eliminar</button>-->
                         <input class="form-control" id="Buscar" ng-keyup="Filter($event)" />
-
                     </div>
                     <input id="fileUploadWeb" type="file" accept=".xlsx" style="display: none;" />
                     <button class="btn btn-default" id="excel" ng-click="UploadFileWeb()" title="Subir Archivo Excel " style="height: 34px;">
@@ -30,9 +29,12 @@
                     <button class="btn btn-default" type="button" id="atras" ng-click="atras()" title="Atrás" style="height: 34px;">
                         <i class="glyphicon glyphicon-arrow-left"></i>
                     </button>
+                    <button class="btn btn-default" type="button" id="most" ng-click="MostrarUser()" title="Usuarios de sedes para prestamo llaves" style="height: 34px;">
+                        <i class="glyphicon glyphicon glyphicon-user"></i>
+                    </button>
                     <br />
                     <br />
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="sedes">
                         <thead>
                             <tr>
                                 <th style="width:20px"></th>
@@ -47,6 +49,26 @@
                                 <td>{{ datalist.Parametro3 | uppercase}}</td>
                                 <td>{{ datalist.Parametro4 | uppercase}}</td>
                                 <td>{{ datalist.Parametro2 | uppercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <table class="table table-bordered" id="Users">
+                        <thead>
+                            <tr>
+                                <th style="width:20px"></th>
+                                <th class="paginationclass" style="font-weight:bold;">Sede</th>
+                                <th class="paginationclass" style="font-weight:bold;">Usuario</th>
+                                <th class="paginationclass" style="font-weight:bold;">Contraseña</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            <tr class="paginationclass" ng-repeat="datalist in datalists | pagination: curPage * pageSize | limitTo: pageSize">
+                                <td><input ng-model="datalist.Seleccionado" type="checkbox" id="{{datalist.Id}}" /></td>
+                                <td>{{ datalist.NombreUsuario | uppercase}}</td>
+                                <td>{{ datalist.NombreUsuario | uppercase}}</td>
+                                <td>{{ datalist.Password | uppercase}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -251,6 +273,47 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" ng-click="GuardarEdicionSede()">Guardar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModalUser" role="dialog" style="margin-top:-2%;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:50px; padding:5px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 style="font-weight: bold;">Editar Usuario Sede</h4></center>
+            </div>
+            <div class="modal-body" style="height:180px;">
+                <form name="user" id="user">
+                    <div class="form-group">
+                        <div ng-class="{'has-error':user.nombreUsuario.$invalid && user.nombreUsuario.$touched, 'has-error2':user.nombreUsuario.$error.maxlength}">
+                            <label>Nombre Usuario</label>
+                            <input type="text" name="nombreUsuario" id="nombreUsuario" ng-required="true" class="form-control" ng-maxlength="10" ng-model="UsuarioSede.NombreUsuario" />
+                            <span ng-hide="user.nombreUsuario.$error.maxlength">
+                                <span ng-if="user.nombreUsuario.$invalid && user.nombreUsuario.$dirty" class="help-block">Ingrese el código de la sede</span>
+                            </span>
+                            <span ng-if="user.nombreUsuario.$error.maxlength" class="help-block">El código puede tener máximo 10 caracteres </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div ng-class="{'has-error':user.password.$invalid && user.password.$touched, 'has-error2':user.password.$error.maxlength}">
+                            <label>Contraseña</label>
+                            <input type="text" name="password" id="password" ng-required="true" class="form-control" ng-maxlength="50" ng-model="UsuarioSede.Password" />
+                            <span ng-hide="user.password.$error.maxlength">
+                                <span ng-if="user.password.$invalid && user.password.$dirty" class="help-block">Ingrese el nombre de la sede</span>
+                            </span>
+                            <span ng-if="user.password.$error.maxlength" class="help-block">El nombre de la sede puede tener máximo 50 caracteres</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="GuardarEdicionUser()">Guardar</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>

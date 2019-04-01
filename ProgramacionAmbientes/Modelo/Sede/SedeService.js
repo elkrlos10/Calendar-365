@@ -123,6 +123,20 @@
                 });
         };
 
+        service.ConsultarUsuarioSede = function (callback) {
+            $http.post(URLServices + "Sede/ConsultarUsuarioSede/")
+                .success(function (response) {
+                    callback(response);
+                });
+        };
+
+        service.ModificarUsuario = function (Usuario,callback) {
+            $http.post(URLServices + "Sede/ModificarUsuario/", Usuario)
+                .success(function (response) {
+                    callback(response);
+                });
+        };
+
         return service;
 
     }]);

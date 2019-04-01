@@ -131,7 +131,7 @@ namespace LogicaNegocio.LogicaNegocio
             {
                 var Asunto = "Recupetación de Contraseña";
                 var Plantilla = "Sr(a) " + oPersonaDTO.Nombre + " " + oPersonaDTO.Apellido + ".<br/> La Contraseña de su cuenta de usuario es " + Contraseña;
-                SendMail.SendMailMessage(Asunto, Plantilla, Email);
+                SendMail.SendMailMessage1(Asunto, Plantilla, Email);
                 return Email;
             }
             else

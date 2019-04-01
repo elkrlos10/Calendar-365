@@ -261,5 +261,43 @@ namespace ProgramacionAmbientes.Controllers
             }
 
         }
+
+        [HttpPost]
+
+        public IHttpActionResult ConsultarUsuarioSede()
+        {
+            try
+            {
+                SedeBl oSedeBl = new SedeBl();
+                var Sede = oSedeBl.ConsultarUsuarioSede();
+
+                return Ok(new { success = true, datos = Sede });
+            }
+            catch (Exception exc)
+            {
+                return Ok(new { success = false, exc = exc.Message });
+            }
+
+        }
+
+        [HttpPost]
+
+        public IHttpActionResult ModificarUsuario(Usuario oUsuario)
+        {
+            try
+            {
+                SedeBl oSedeBl = new SedeBl();
+                var users = oSedeBl.ModificarUsuario(oUsuario);
+
+                return Ok(new { success = true, datos = users });
+            }
+            catch (Exception exc)
+            {
+                return Ok(new { success = false, exc = exc.Message });
+            }
+
+        }
+
+
     }
 }

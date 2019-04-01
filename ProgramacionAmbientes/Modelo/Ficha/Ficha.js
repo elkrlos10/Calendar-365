@@ -98,8 +98,6 @@
                 }
             };
 
-
-
             $scope.AbrirModal = function () {
                 $("#ModalFicha").modal("show");
                 $scope.VaciarCampos();
@@ -160,9 +158,6 @@
             $scope.curPage = 0;
             $scope.pageSize = 5;
 
-
-
-
             $scope.SeleccionarNivelAcademico = function (programa) {
 
                 $.each($scope.Programa, function (index, value) {
@@ -174,7 +169,6 @@
                     }
                 });
             }
-
 
             $scope.Guardar = function () {
 
@@ -295,8 +289,6 @@
                 }
             };
 
-
-
             if ($rootScope.globals.currentUser.tipousuario == 2) {
 
                 //$("#boton").hide();
@@ -346,7 +338,6 @@
                 });
             }
 
-
             $scope.FichasInactivas = function () {
                 FichaService.ConsultarFichasInactivas(function (response) {
 
@@ -375,7 +366,6 @@
                 $("#atras").show();
 
             }
-
 
             $scope.atras = function () {
 
@@ -424,7 +414,6 @@
                 }
 
             };
-
 
             $scope.SeleccionarTodos = function () {
                 $.each($scope.Datos, function (index, value) {
@@ -557,13 +546,18 @@
             };
 
             $scope.GuardarEdicionFicha = function () {
-                $.each($scope.Programa, function (index, value) {
+                
+                //$.each($scope.Programa, function (index, value) {
 
-                    if (value.NombrePrograma == $scope.Programa.NombrePrograma) {
+                //    if (value.NombrePrograma == $scope.Programa.NombrePrograma) {
+                //        alert();
+                //        $scope.Ficha.IdPrograma = value.IdPrograma;
+                //        console.log($scope.Ficha.IdPrograma);
+                //        console.log(value.NombrePrograma);
+                //    }
+                //});
 
-                        $scope.Ficha.IdPrograma = value.IdPrograma
-                    }
-                });
+                $scope.Ficha.IdPrograma =$scope.Programa.IdPrograma;
 
                 if ($scope.Ficha.Ficha1 == "" || $scope.Ficha.NumAprendices == "" || $scope.Ficha.IdPrograma == "" || $scope.Ficha.TipoFormacion == "" ||
                     $scope.Ficha.FechaInicio == "" || $scope.Ficha.FechaFin == "" || $scope.Ficha.Jornada == "") {
@@ -651,8 +645,6 @@
             //    $("#descargar").hide();
             //}
 
-
-
             $scope.DescargarReporte = function () {
 
                 $scope.ProgramasExport = [];
@@ -711,8 +703,6 @@
                     });
                 }
             };
-
-
 
             $scope.Filter = function (e) {
 
@@ -816,8 +806,6 @@
                 }
             });
 
-
-
             $scope.ConsultarProgramaxArea = function (IdArea) {
                 FichaService.ConsultarProgramaxArea(IdArea, function (response) {
 
@@ -827,9 +815,7 @@
                 });
 
             }
-
-
-
+            
             ///-------------------------------------------------------Reporte de progamación por ficha------------------------------------------
 
 
