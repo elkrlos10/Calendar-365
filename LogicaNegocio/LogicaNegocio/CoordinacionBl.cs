@@ -92,12 +92,21 @@ namespace LogicaNegocio.LogicaNegocio
             var Item = (from i in entity.Coordinacion
                         where i.IdCoordinacion == oCoordinacion.IdCoordinacion
                         select i).FirstOrDefault();
+
+            var usuario = (from i in entity.Usuario
+                           where i.IdUsuario == Item.IdUsuario
+                           select i).FirstOrDefault();
+
+            var Encriptar = SecurityEncode.SecurityEncode.Encriptar(oCoordinacion.Cedula);
             Item.Nombre_Coordinacion = oCoordinacion.Nombre_Coordinacion;
             Item.Cedula = oCoordinacion.Cedula;
             Item.Nombre = oCoordinacion.Nombre;
             Item.Apellido = oCoordinacion.Apellido;
             Item.Telefono = oCoordinacion.Telefono;
             Item.Correo = oCoordinacion.Correo;
+            usuario.NombreUsuario = oCoordinacion.Cedula;
+            usuario.Password = Encriptar;
+
             entity.SaveChanges();
         }
 

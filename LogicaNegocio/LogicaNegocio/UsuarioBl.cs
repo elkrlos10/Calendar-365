@@ -17,11 +17,21 @@ namespace LogicaNegocio.LogicaNegocio
         {
             var Encriptar = SecurityEncode.SecurityEncode.Encriptar(Password);
             PersonaDTO oPersonaDTO = new PersonaDTO();
+            
             var Datos = (from i in entity.Usuario
+                         where i.NombreUsuario == Usuario
+                         && i.Password == Encriptar && i.TipoUsuario==2
+                         select i).FirstOrDefault();
+
+            if (Datos == null)
+            {
+                Datos = (from i in entity.Usuario
                          where i.NombreUsuario == Usuario
                          && i.Password == Encriptar
                          select i).FirstOrDefault();
+            }
 
+           
             if (Datos == null)
             {
                 return null;
