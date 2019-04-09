@@ -90,7 +90,6 @@ namespace ProgramacionAmbientes.Controllers
             }
         }
 
-
         [HttpPost]
         public IHttpActionResult EliminarProgramacion(Ficha_Ambiente oFicha_Ambiente)
         {
@@ -120,7 +119,6 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc = exc.Message });
             }
         }
-
 
         [HttpPost]
         public IHttpActionResult ConsultarAmbienteSolicitado(ParametrosDTO oParametrosDTO)
@@ -211,7 +209,6 @@ namespace ProgramacionAmbientes.Controllers
                 return Ok(new { success = false, exc = exc.Message });
             }
         }
-
 
         [HttpPost]
         public IHttpActionResult ConsultarResultados(ParametrosDTO oParametrosDTO)

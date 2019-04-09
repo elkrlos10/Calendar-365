@@ -19,7 +19,7 @@ namespace LogicaNegocio.Mail
         {
 
             var fromAddress = "programacionambientessena@gmail.com";
-            const string fromPassword = "programacionsena";
+            const string fromPassword = "Calendar365";
             MailAddress fromAddress1 = new MailAddress(fromAddress);
             MailAddress toAddress = new MailAddress(to);
             var smtp = new SmtpClient();
@@ -38,7 +38,7 @@ namespace LogicaNegocio.Mail
                 IsBodyHtml = true,
             })
             {
-                smtp.Send(message);
+                smtp.Send(message); 
             }
         }
 
@@ -47,7 +47,7 @@ namespace LogicaNegocio.Mail
             try
             {
                 var fromAddress = "programacionambientessena@gmail.com";
-                const string fromPassword = "programacionsena";
+                const string fromPassword = "Calendar365";
                 MailAddress fromAddress1 = new MailAddress(fromAddress);
                 MailAddress toAddress = new MailAddress(to);
                 var smtp = new SmtpClient();

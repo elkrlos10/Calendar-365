@@ -80,7 +80,7 @@ namespace LogicaNegocio.LogicaNegocio
             if (Instructor == null && Coordinador == null)
             {
                 oPersonaDTO.IdUsuario = 0;
-                oPersonaDTO.Nombre = "Consultas";
+                oPersonaDTO.Nombre = Datos.NombreUsuario;
                 oPersonaDTO.Apellido = "";
                 oPersonaDTO.Cedula = "";
                 oPersonaDTO.TipoUsuario = Datos.TipoUsuario;

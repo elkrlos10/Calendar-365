@@ -22,22 +22,22 @@
                 $(".items-menu-principal").css("display", "block");
                 $(".not-coor").css("display", "block");
                 $(".not-admin").css("display", "block");
-                if ($scope.Usuario.NombreUsuario == Admin && $scope.Usuario.Password == Password) {
-                    $rootScope.globals = {
-                        currentUser: {
-                            id: "0",
-                            nombre: "Administrador",
-                            apellido: " ",
-                            cedula: " ",
-                            tipousuario: 1,
-                            idpersona: 0
-                        }
-                    };
-                    $cookies.putObject("username", $rootScope.globals);
-                    $location.url('/Programacion');
-                    $(".not-admin").css("display", "none");
-                    return;
-                }
+                //if ($scope.Usuario.NombreUsuario == Admin && $scope.Usuario.Password == Password) {
+                //    $rootScope.globals = {
+                //        currentUser: {
+                //            id: "0",
+                //            nombre: "Administrador",
+                //            apellido: " ",
+                //            cedula: " ",
+                //            tipousuario: 1,
+                //            idpersona: 0
+                //        }
+                //    };
+                //    $cookies.putObject("username", $rootScope.globals);
+                //    $location.url('/Programacion');
+                //    $(".not-admin").css("display", "none");
+                //    return;
+                //}
                 LoginService.IniciarSesion($scope.Usuario, function (response) {
                     if (response.success == true) {
                         if (response.resp == 1) {
@@ -51,6 +51,23 @@
                                     }
                                 }
                             });
+                            return;
+                        }
+
+                        if (response.usuario.TipoUsuario==1) {
+                            $rootScope.globals = {
+                                currentUser: {
+                                    id: "0",
+                                    nombre: "Administrador",
+                                    apellido: " ",
+                                    cedula: " ",
+                                    tipousuario: 1,
+                                    idpersona: 0
+                                }
+                            };
+                            $cookies.putObject("username", $rootScope.globals);
+                            $location.url('/Programacion');
+                            $(".not-admin").css("display", "none");
                             return;
                         }
                         $rootScope.globals = {

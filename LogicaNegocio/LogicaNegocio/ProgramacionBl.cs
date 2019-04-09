@@ -3865,19 +3865,12 @@ namespace LogicaNegocio.LogicaNegocio
                                      where a.IdSede == UserSede.IdSede
                                      select p).ToList();
             }
-            //else
-            //{
-
-               
-            //}
-
-
+        
             foreach (var item in ProgramacionLista.Select((value, i) => new { i, value }))
             {
                 ProgramacionLista[item.i].DiferenciaHoras = TimeSpan.Parse(item.value.HoraFin.ToString()).Subtract(TimeSpan.Parse(item.value.HoraEntrego.ToString()));
 
             }
-
 
             var reporteAmbientes = (from i in entity.PrestamoAmbiente
                                     join a in entity.Ambiente on i.IdAmbiente equals a.IdAmbiente
@@ -3900,25 +3893,47 @@ namespace LogicaNegocio.LogicaNegocio
                                         Fecha = i.Fecha
                                     }).ToList();
 
-
             foreach (var item in reporteAmbientes)
             {
                 var Programacion = new Ficha_AmbienteDTO();
+                if (UserSede != null)
+                {
+                    Programacion.NombreInstructor = "Prestamo Especial";
+                    Programacion.CedulaIns = "Prestamo Especial";
+                    Programacion.Ficha = "0000";
+                    Programacion.Ambiente = item.Numero;
+                    Programacion.FechaInicio = item.Fecha;
+                    Programacion.HoraInicio = item.HoraInicio;
+                    Programacion.HoraFin = item.HoraFin;
+                    Programacion.Competencia = "Prestamo Especial";
+                    Programacion.Observacion = item.Observacion;
+                    Programacion.Sede = UserSede.Nombre_Sede;
+                    Programacion.HoraEntrego = item.HoraFin;
+                    Programacion.DiferenciaHoras = TimeSpan.Parse("00:00");
+                    ProgramacionLista.Add(Programacion);
+                }
+                else
+                {
+                    var sede = (from i in entity.Sede
+                                join a in entity.Ambiente on i.IdSede equals a.IdSede
+                                where a.IdAmbiente == item.IdAmbiente
+                                select i).First();
 
-                Programacion.NombreInstructor = "Prestamo Especial";
-                Programacion.CedulaIns = "Prestamo Especial";
-                Programacion.Ficha = "0000";
-                Programacion.Ambiente = item.Numero;
-                Programacion.FechaInicio = item.Fecha;
-                Programacion.HoraInicio = item.HoraInicio;
-                Programacion.HoraFin = item.HoraFin;
-                Programacion.Competencia = "Prestamo Especial";
-                Programacion.Observacion = item.Observacion;
-                //if (item.HoraFin == null)
-                //{
-                Programacion.HoraEntrego = item.HoraFin;
-                Programacion.DiferenciaHoras = TimeSpan.Parse("00:00");
-                ProgramacionLista.Add(Programacion);
+                    Programacion.NombreInstructor = "Prestamo Especial";
+                    Programacion.CedulaIns = "Prestamo Especial";
+                    Programacion.Ficha = "0000";
+                    Programacion.Ambiente = item.Numero;
+                    Programacion.FechaInicio = item.Fecha;
+                    Programacion.HoraInicio = item.HoraInicio;
+                    Programacion.HoraFin = item.HoraFin;
+                    Programacion.Competencia = "Prestamo Especial";
+                    Programacion.Observacion = item.Observacion;
+                    Programacion.Sede = sede.Nombre_Sede;
+                    Programacion.HoraEntrego = item.HoraFin;
+                    Programacion.DiferenciaHoras = TimeSpan.Parse("00:00");
+                    ProgramacionLista.Add(Programacion);
+                }
+          
             }
 
             return ProgramacionLista;

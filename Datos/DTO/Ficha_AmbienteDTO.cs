@@ -94,5 +94,6 @@ namespace Datos.DTO
         public TimeSpan? HoraEntrego { get; set; }
         public TimeSpan? DiferenciaHoras { get; set; }
         public int opc { get; set; }
+      
     }
 }

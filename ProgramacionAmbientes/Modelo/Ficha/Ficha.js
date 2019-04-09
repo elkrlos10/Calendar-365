@@ -546,19 +546,11 @@
             };
 
             $scope.GuardarEdicionFicha = function () {
-                
-                //$.each($scope.Programa, function (index, value) {
-
-                //    if (value.NombrePrograma == $scope.Programa.NombrePrograma) {
-                //        alert();
-                //        $scope.Ficha.IdPrograma = value.IdPrograma;
-                //        console.log($scope.Ficha.IdPrograma);
-                //        console.log(value.NombrePrograma);
-                //    }
-                //});
-
-                $scope.Ficha.IdPrograma =$scope.Programa.IdPrograma;
-
+               
+                setTimeout(function () {
+                    $scope.Ficha.IdPrograma = $scope.Programa.IdPrograma;
+                }, 3000);
+               
                 if ($scope.Ficha.Ficha1 == "" || $scope.Ficha.NumAprendices == "" || $scope.Ficha.IdPrograma == "" || $scope.Ficha.TipoFormacion == "" ||
                     $scope.Ficha.FechaInicio == "" || $scope.Ficha.FechaFin == "" || $scope.Ficha.Jornada == "") {
                     bootbox.dialog({
