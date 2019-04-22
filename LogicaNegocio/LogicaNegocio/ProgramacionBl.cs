@@ -4017,9 +4017,18 @@ namespace LogicaNegocio.LogicaNegocio
                                         RecibioLLaves = item.Recibio,
                                         EntregoLLaves = item.Entrego
                                     }).FirstOrDefault();
+
+                var proTranversal = (from i in entity.Ficha_Ambiente
+                                     where i.ProgramacionPrincipal == programacion.Id
+                                     select i).FirstOrDefault();
+
+                if (proTranversal != null)
+                {
+                    continue;
+                }
+
                 if (programacion != null)
                 {
-
 
                     if (programacion.Lunes == true)
                     {
@@ -4090,6 +4099,8 @@ namespace LogicaNegocio.LogicaNegocio
                             where i.IdUsuario == IdUser
                             select i).FirstOrDefault();
 
+           
+
             foreach (var item in prestamos)
             {
                 var programacion = (from i in entity.Ficha_Ambiente
@@ -4128,6 +4139,16 @@ namespace LogicaNegocio.LogicaNegocio
                                         RecibioLLaves = item.Recibio,
                                         EntregoLLaves = item.Entrego
                                     }).FirstOrDefault();
+
+                var proTranversal = (from i in entity.Ficha_Ambiente
+                                     where i.ProgramacionPrincipal == programacion.Id
+                                     select i).FirstOrDefault();
+
+                if (proTranversal != null)
+                {
+                    continue;
+                }
+
                 if (programacion != null)
                 {
 
