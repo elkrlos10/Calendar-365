@@ -3691,6 +3691,11 @@ namespace LogicaNegocio.LogicaNegocio
             var sede = (from i in entity.Sede
                         where i.IdUsuario == IdUsuario
                         select i).FirstOrDefault();
+            var Idsede = 0;
+            if (sede != null)
+            {
+                Idsede = sede.IdSede;
+            }
             var fecha = DateTime.Parse((DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString()).ToString());
             var horaI = TimeSpan.Parse(horafin);
             var ambientes = entity.Database.SqlQuery<AmbienteDTO>("AmbientesLibres @fecha_ini, @fecha_Fin, @HoraInicio, @HoraFin, @lunes, @martes, @miercoles, @jueves, @viernes, @jornada,@IdSede",
@@ -3704,7 +3709,7 @@ namespace LogicaNegocio.LogicaNegocio
                                                                                     new SqlParameter("jueves", Jueves),
                                                                                     new SqlParameter("viernes", Viernes),
                                                                                     new SqlParameter("jornada", jornada),
-                                                                                    new SqlParameter("IdSede", sede.IdSede)).ToList();
+                                                                                    new SqlParameter("IdSede", Idsede)).ToList();
 
             var AmbientesDisponibles = (from i in ambientes
                                         where !(from p in entity.PrestamoAmbiente
@@ -3714,7 +3719,7 @@ namespace LogicaNegocio.LogicaNegocio
 
 
 
-            return AmbientesDisponibles.OrderBy(x => x.Piso).ToList().OrderBy(x => int.Parse(x.Numero)).ToList();
+            return AmbientesDisponibles.OrderBy(x => x.NombreSede).ToList().OrderBy(x => x.Piso).ToList().OrderBy(x => int.Parse(x.Numero)).ToList();
         }
 
         public List<AmbienteDTO> GuardarPrestamoLLavesAmbientes(AmbienteDTO oAmbiente)
